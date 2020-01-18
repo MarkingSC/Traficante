@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+    <record id="view_stock_quant_tree_editable_optional_value_inherit" model="ir.ui.view">
+      <field name="name">stock.quant.tree.editable.optional.value.inherit</field>
+      <field name="model">stock.quant</field>
+      <field name="inherit_id" ref="stock_account.view_stock_quant_tree_editable_inherit"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='value']" position="replace">
+          <field name="value" optional="show"/>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
