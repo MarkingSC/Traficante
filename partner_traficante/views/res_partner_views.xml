@@ -1,0 +1,31 @@
+<odoo>
+  <record id="partner_traficante_form" model="ir.ui.view">
+        <field name="name">res.partner.traficante.form</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="partner_business_name.partner_business_name_form" />
+        <field name="arch" type="xml">
+            <xpath expr="..//field[@name='business_name']/.." position="after">
+              <field name="zone" placeholder="Zone"/>
+            </xpath>
+        </field>
+  </record>
+
+  <record id="account_view_partner_property_form_delivery_times" model="ir.ui.view">
+        <field name="name">account.view.partner.property.form.delivery.times</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="account.view_partner_property_form" />
+        <field name="arch" type="xml">
+            <group name="sale" position="inside">
+                <field name="default_journal_id" widget="selection"/>
+            </group>
+            <xpath expr="..//field[@name='property_supplier_payment_term_id']/.." position="after">
+                <group string="Delivery time">
+                    <field string="From" name="start_delivery_time" widget="float_time"></field>
+                    <field string="To" name="finish_delivery_time" widget="float_time"></field>
+                </group>
+            </xpath>
+        </field>
+  </record>
+</odoo>

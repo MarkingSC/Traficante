@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+        <record id="view_move_form_traficante" model="ir.ui.view">
+            <field name="name">view.move.form.traficante</field>
+            <field name="model">account.move</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <xpath expr="..//group[@name='payments_info_group']" position="before">
+                    <group string="Logistics" name="logistics_info_group">
+                        <field name="delivery_status" placeholder="Delivered, Cancelled..."/>
+                        <field name="delivery_notes" placeholder="Add a delivery or inventory note..."/>
+                        <field name="delivery_date"></field>
+                        <field name="invoice_file"></field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

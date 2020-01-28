@@ -7,6 +7,7 @@
 
     'description': """
         - Modifica el campo 'valor' del reporte de inventario para volverlo opcional en la vista.
+        - Crea registros de categorías de productos propios de Traficante.
     """,
 
     'author': "Marco Martinez",
@@ -19,13 +20,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock'],
+    'depends': ['base', 'stock', 'account_traficante'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
+        'data/product_category_data.xml',
         'views/stock_quant_views.xml',
-        'views/templates.xml',
+        'views/stock_picking_views.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

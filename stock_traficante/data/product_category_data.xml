@@ -1,0 +1,414 @@
+<odoo>
+    <data>
+
+        <!-- CHILD OF product_category_all -->
+        <record id="traficante_product_category_aconte" model="product.category">
+            <field name="name">Aconte</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_alianza" model="product.category">
+            <field name="name">Alianza</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_amores" model="product.category">
+            <field name="name">Amores</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_bajalupano" model="product.category">
+            <field name="name">Bajalupano</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_bancanora" model="product.category">
+            <field name="name">Bancanora</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_bodegas_alianza" model="product.category">
+            <field name="name">Bodegas Alianza</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_cerveza" model="product.category">
+            <field name="name">Cerveza</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_gin" model="product.category">
+            <field name="name">Gin</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_ginebra" model="product.category">
+            <field name="name">Ginebra</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_gintol" model="product.category">
+            <field name="name">Gintol</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_gracias_a_dios" model="product.category">
+            <field name="name">Gracias a Dios</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_hikma" model="product.category">
+            <field name="name">Hikma Mezcal 750ml</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_licor" model="product.category">
+            <field name="name">Licor</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_licores" model="product.category">
+            <field name="name">Licores</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_local" model="product.category">
+            <field name="name">Local</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_lagrimas" model="product.category">
+            <field name="name">Lágrimas de Dolores</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_marca_negra" model="product.category">
+            <field name="name">Marca Negra</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_mg" model="product.category">
+            <field name="name">MG</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_montelobos" model="product.category">
+            <field name="name">Montelobos</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_pox" model="product.category">
+            <field name="name">POX</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_puntagave" model="product.category">
+            <field name="name">Puntagave</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_pangea" model="product.category">
+            <field name="name">Pangea Premium</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_pintor" model="product.category">
+            <field name="name">Pintor</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_sr_maguey" model="product.category">
+            <field name="name">Señor Maguey</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_social_club" model="product.category">
+            <field name="name">Social Club</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_soda" model="product.category">
+            <field name="name">Sodas Premium</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_sotol" model="product.category">
+            <field name="name">Sotol</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_tequila" model="product.category">
+            <field name="name">Tequila</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_tuxca" model="product.category">
+            <field name="name">Tuxca</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_vinos" model="product.category">
+            <field name="name">Vinos</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_kruger" model="product.category">
+            <field name="name">Vinos Kruger</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_vodka" model="product.category">
+            <field name="name">Vodka</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_wahaka" model="product.category">
+            <field name="name">Wahaka</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_zake" model="product.category">
+            <field name="name">Zake</field>
+            <field name="parent_id" ref="product.product_category_all"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_aconte -->
+        <record id="traficante_product_category_aconte_ron" model="product.category">
+            <field name="name">Ron</field>
+            <field name="parent_id" ref="traficante_product_category_aconte"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_amores-->
+        <record id="traficante_product_category_amores_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="traficante_product_category_amores"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_bajalupano-->
+        <record id="traficante_product_category_bajalupano_vino" model="product.category">
+            <field name="name">Vino</field>
+            <field name="parent_id" ref="traficante_product_category_bajalupano"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_bancanora-->
+        <record id="traficante_product_category_bancanora_aguamiel" model="product.category">
+            <field name="name">AguaMiel Ready to Drink</field>
+            <field name="parent_id" ref="traficante_product_category_bancanora"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_cerveza-->
+        <record id="traficante_product_category_cerveza_allende" model="product.category">
+            <field name="name">Allende</field>
+            <field name="parent_id" ref="traficante_product_category_cerveza"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_cerveza_charro" model="product.category">
+            <field name="name">Charro</field>
+            <field name="parent_id" ref="traficante_product_category_cerveza"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_cerveza_tresele" model="product.category">
+            <field name="name">Tres Ele</field>
+            <field name="parent_id" ref="traficante_product_category_cerveza"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_gin-->
+        <record id="traficante_product_category_gin_botanic" model="product.category">
+            <field name="name">Botanic</field>
+            <field name="parent_id" ref="traficante_product_category_gin"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_gin_bobbys" model="product.category">
+            <field name="name">bobby´s</field>
+            <field name="parent_id" ref="traficante_product_category_gin"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_gintol-->
+        <record id="traficante_product_category_gintol_sotol" model="product.category">
+            <field name="name">Sotol</field>
+            <field name="parent_id" ref="traficante_product_category_gintol"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_gracias_a_dios-->
+        <record id="traficante_product_category_gracias_a_dios_gin" model="product.category">
+            <field name="name">Gin</field>
+            <field name="parent_id" ref="traficante_product_category_gracias_a_dios"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_gracias_a_dios_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="traficante_product_category_gracias_a_dios"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_lagrimas-->
+        <record id="traficante_product_category_lagrimas_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="traficante_product_category_lagrimas"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_licor-->
+        <record id="traficante_product_category_licor_ancho" model="product.category">
+            <field name="name">Ancho Reyes</field>
+            <field name="parent_id" ref="traficante_product_category_licor"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_licor_corajito" model="product.category">
+            <field name="name">Corajito</field>
+            <field name="parent_id" ref="traficante_product_category_licor"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_licor_joyitas" model="product.category">
+            <field name="name">Joyitas</field>
+            <field name="parent_id" ref="traficante_product_category_licor"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_licor_siete_rayas" model="product.category">
+            <field name="name">Siete Rayas</field>
+            <field name="parent_id" ref="traficante_product_category_licor"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_licor_xila" model="product.category">
+            <field name="name">Xila</field>
+            <field name="parent_id" ref="traficante_product_category_licor"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_licores-->
+        <record id="traficante_product_category_licores_casa" model="product.category">
+            <field name="name">Casa D´Aristi</field>
+            <field name="parent_id" ref="traficante_product_category_licores"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_licores_marmelo" model="product.category">
+            <field name="name">Marmelo</field>
+            <field name="parent_id" ref="traficante_product_category_licores"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_local-->
+        <record id="traficante_product_category_local_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="traficante_product_category_local"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_marca_negra-->
+        <record id="traficante_product_category_marca_negra_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="traficante_product_category_marca_negra"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_mezcal-->
+        <record id="traficante_product_category_mezcal_herodes" model="product.category">
+            <field name="name">HERODES</field>
+            <field name="parent_id" ref="traficante_product_category_mezcal"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_mezcal_legendario" model="product.category">
+            <field name="name">Legendario Domingo</field>
+            <field name="parent_id" ref="traficante_product_category_mezcal"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_mg-->
+        <record id="traficante_product_category_mg_mezcal_gin" model="product.category">
+            <field name="name">Mezcal Gin</field>
+            <field name="parent_id" ref="traficante_product_category_mg"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_montelobos-->
+        <record id="traficante_product_category_montelobos_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="traficante_product_category_montelobos"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_pangea-->
+        <record id="traficante_product_category_pangea_bitters" model="product.category">
+            <field name="name">Bitters</field>
+            <field name="parent_id" ref="traficante_product_category_pangea"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_social_club-->
+        <record id="traficante_product_category_social_club_ron" model="product.category">
+            <field name="name">Ron</field>
+            <field name="parent_id" ref="traficante_product_category_social_club"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_sr_maguey-->
+        <record id="traficante_product_category_sr_maguey_agave" model="product.category">
+            <field name="name">Agave</field>
+            <field name="parent_id" ref="traficante_product_category_sr_maguey"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_sotol-->
+        <record id="traficante_product_category_sotol_chonteco" model="product.category">
+            <field name="name">Chonteco</field>
+            <field name="parent_id" ref="traficante_product_category_sotol"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_sotol_sotomayor" model="product.category">
+            <field name="name">Sotomayor</field>
+            <field name="parent_id" ref="traficante_product_category_sotol"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_tequila-->
+        <record id="traficante_product_category_tequila_curado" model="product.category">
+            <field name="name">Curado</field>
+            <field name="parent_id" ref="traficante_product_category_tequila"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_tequila_revolucion" model="product.category">
+            <field name="name">Revolución</field>
+            <field name="parent_id" ref="traficante_product_category_tequila"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_vinos-->
+        <record id="traficante_product_category_vinos_corona" model="product.category">
+            <field name="name">Corona del Valle</field>
+            <field name="parent_id" ref="traficante_product_category_vinos"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+        <record id="traficante_product_category_vinos_torres" model="product.category">
+            <field name="name">Torres Alegre</field>
+            <field name="parent_id" ref="traficante_product_category_vinos"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_wahaka-->
+        <record id="traficante_product_category_wahaka_mezcal" model="product.category">
+            <field name="name">Mezcal</field>
+            <field name="parent_id" ref="traficante_product_category_wahaka"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <!-- CHILD OF traficante_product_category_zake-->
+        <record id="traficante_product_category_hattori" model="product.category">
+            <field name="name">Hattori</field>
+            <field name="parent_id" ref="traficante_product_category_zake"></field>
+            <field name="property_cost_method">standard</field>
+        </record>
+    </data>
+</odoo>

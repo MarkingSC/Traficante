@@ -3,9 +3,9 @@
 # from odoo import models, fields, api
 
 
-# class stock_traficante(models.Model):
-#     _name = 'stock_traficante.stock_traficante'
-#     _description = 'stock_traficante.stock_traficante'
+# class crm_traficante(models.Model):
+#     _name = 'crm_traficante.crm_traficante'
+#     _description = 'crm_traficante.crm_traficante'
 
 #     name = fields.Char()
 #     value = fields.Integer()

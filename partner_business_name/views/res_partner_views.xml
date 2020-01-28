@@ -1,0 +1,28 @@
+<odoo>
+    <record id="partner_business_name_form" model="ir.ui.view">
+          <field name="name">res.partner.business_name.form</field>
+          <field name="model">res.partner</field>
+          <field name="type">form</field>
+          <field name="inherit_id" ref="base.view_partner_form" />
+          <field name="arch" type="xml">
+              <xpath expr="..//field[@name='name']/.." position="after">
+                  <h1>
+                    <field name="business_name" placeholder="Business name"
+                           attrs="{'invisible': [('is_company','=', False)]}"/>
+                  </h1>
+              </xpath>
+          </field>
+    </record>
+
+    <record id="view_res_partner_business_name_filter" model="ir.ui.view">
+        <field name="name">res.partner.business_name.select</field>
+        <field name="model">res.partner</field>
+        <field name="type">search</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="business_name"></field>
+            </xpath>
+        </field>
+    </record>
+</odoo>

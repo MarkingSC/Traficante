@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+        <record id="account_payment_term_8days" model="account.payment.term">
+            <field name="name">8 Días</field>
+            <field name="note">Plazo de pago: 8 días.</field>
+            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 8, 'option': 'day_after_invoice_date'})]"/>
+        </record>
+        <record id="account_payment_term_10days" model="account.payment.term">
+            <field name="name">10 Días</field>
+            <field name="note">Plazo de pago: 10 días.</field>
+            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 10, 'option': 'day_after_invoice_date'})]"/>
+        </record>
+        <record id="account.account_payment_term_2months" model="account.payment.term">
+            <field name="name">60 Días</field>
+            <field name="note">Plazo de pago: 60 días.</field>
+            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 10, 'option': 'day_after_invoice_date'})]"/>
+        </record>
+    </data>
+</odoo>

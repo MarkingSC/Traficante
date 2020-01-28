@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record id="crm_traficante_utm_source_0" model="utm.source">
+            <field name="name">Página Web</field>
+        </record>
+        <record id="crm_traficante_utm_source_1" model="utm.source">
+            <field name="name">Correo electrónico</field>
+        </record>
+    </data>
+</odoo>

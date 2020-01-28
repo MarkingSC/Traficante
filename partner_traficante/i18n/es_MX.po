@@ -1,0 +1,124 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* partner_traficante
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20191226\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-20 19:22+0000\n"
+"PO-Revision-Date: 2020-01-20 13:23-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es_MX\n"
+"X-Generator: Poedit 2.2.4\n"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: partner_traficante
+#: model_terms:ir.actions.act_window,help:partner_traficante.res_partner_zone_action_tree
+msgid "Create a new zone for customers."
+msgstr "Cree una nueva zona para los clientes."
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.account_view_partner_property_form_delivery_times
+msgid "Delivery time"
+msgstr "Horario de entrega"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__description
+msgid "Description of the Zone"
+msgstr "Descripción de la zona"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__finish_delivery_time
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__finish_delivery_time
+msgid "Finish delivery time"
+msgstr "Hora final de entrega"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.account_view_partner_property_form_delivery_times
+msgid "From"
+msgstr "Desde"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__id
+msgid "ID"
+msgstr "Id"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__default_journal_id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__default_journal_id
+msgid "Journal"
+msgstr "Diario (Método)"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone____last_update
+msgid "Last Modified on"
+msgstr "Última modificación"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__write_uid
+msgid "Last Updated by"
+msgstr "Modificado por"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__write_date
+msgid "Last Updated on"
+msgstr "Modificado el"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__name
+msgid "Name of zone"
+msgstr "Nombre de la zona"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__start_delivery_time
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__start_delivery_time
+msgid "Start delivery time"
+msgstr "Hora inicial de entrega"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.account_view_partner_property_form_delivery_times
+msgid "To"
+msgstr "Hasta"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__zone
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__zone
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Zone"
+msgstr "Zona"
+
+#. module: partner_traficante
+#: model:ir.actions.act_window,name:partner_traficante.res_partner_zone_action_tree
+#: model:ir.ui.menu,name:partner_traficante.res_partner_zone_menu
+msgid "Zones"
+msgstr "Zonas"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner_zone
+msgid "res.partner.zone"
+msgstr ""
