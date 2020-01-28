@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+        <record id="view_account_payment_search_traficante" model="ir.ui.view">
+            <field name="inherit_id" ref="account.view_account_payment_search"></field>
+            <field name="name">account.payment.search.traficante</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='transfers_filter']" position="after">
+                    <filter
+                        string="En efectivo de clientes esta semana"
+                        name="efectively_customer_this_week"
+                        domain="['&amp;', '&amp;', '&amp;',
+                            ('partner_type', '=', 'customer'),
+                            ('journal_id.type', '=', 'cash'),
+                            ('payment_date','&gt;=',(context_today()+relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                            ('payment_date','&lt;',(context_today()+relativedelta(weekday=6)).strftime('%Y-%m-%d'))]"/>
+                    <filter
+                        string="En efectivo a proveedores esta semana"
+                        name="efectively_supplier_this_week"
+                        domain="['&amp;', '&amp;', '&amp;',
+                            ('partner_type', '=', 'supplier')
+                            ('journal_id.type', '=', 'cash'),
+                            ('payment_date','&gt;=',(context_today()+relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                            ('payment_date','&lt;',(context_today()+relativedelta(weekday=6)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Por" name="group_by_week" context="{'group_by':'payment_date:week'}"></filter>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account.action_account_payments" model="ir.actions.act_window">
+            <field name="context">{
+                'default_payment_type': 'inbound',
+                'default_partner_type': 'customer',
+                'search_default_efectively_customer_this_week': 1,
+                'search_default_group_by_week': 1,
+                'res_partner_search_mode': 'customer',
+            }</field>
+        </record>
+
+        <record id="account.action_account_payments_payable" model="ir.actions.act_window">
+            <field name="context">{
+                 'default_payment_type': 'outbound',
+                'default_partner_type': 'supplier',
+                'search_default_efectively_supplier_this_week': 1,
+                'search_default_group_by_week': 1,
+                'res_partner_search_mode': 'supplier',
+            }</field>
+        </record>
+    </data>
+</odoo>

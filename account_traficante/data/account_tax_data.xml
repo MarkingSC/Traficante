@@ -71,7 +71,7 @@
         <!-- IEPS BEDIDAS SABORIZADAS VOLUMENES PERSONALIZADOS -->
             <!-- COMPRA -->
             <record id="account_tax_ieps_saborizadas_6_6_lts_purchase" model="account.tax">
-                <field name="name">IEPS (6.6L)</field>
+                <field name="name">IEPS (6.6L) COMPRAS</field>
                 <field name="amount_type">fixed</field>
                 <field name="include_base_amount" eval="True"></field>
                 <field name="type_tax_use">purchase</field>
@@ -80,16 +80,25 @@
             </record>
 
             <record id="account_tax_ieps_saborizadas_3_lts_purchase" model="account.tax">
-                <field name="name">IEPS (3L)</field>
+                <field name="name">IEPS (3L) COMPRAS</field>
                 <field name="amount_type">fixed</field>
                 <field name="include_base_amount" eval="True"></field>
                 <field name="type_tax_use">purchase</field>
                 <field name="amount">3.7848</field>
                 <field name="description">IEPS 3 Lts</field>
             </record>
+
+            <record id="account_tax_ieps_saborizadas_500_ml_purchase" model="account.tax">
+                <field name="name">IEPS (500ml) COMPRAS</field>
+                <field name="amount_type">fixed</field>
+                <field name="include_base_amount" eval="True"></field>
+                <field name="type_tax_use">purchase</field>
+                <field name="amount">0.6308</field>
+                <field name="description">IEPS 500ml</field>
+            </record>
             <!-- VENTA -->
             <record id="account_tax_ieps_saborizadas_6_6_lts_sale" model="account.tax">
-                <field name="name">IEPS (6.6L)</field>
+                <field name="name">IEPS (6.6L) VENTAS</field>
                 <field name="amount_type">fixed</field>
                 <field name="include_base_amount" eval="True"></field>
                 <field name="type_tax_use">sale</field>
@@ -99,12 +108,21 @@
             </record>
 
             <record id="account_tax_ieps_saborizadas_3_lts_sale" model="account.tax">
-                <field name="name">IEPS (3L)</field>
+                <field name="name">IEPS (3L) VENTAS</field>
                 <field name="amount_type">fixed</field>
                 <field name="include_base_amount" eval="True"></field>
                 <field name="type_tax_use">sale</field>
                 <field name="amount">3.7848</field>
                 <field name="description">IEPS 3 Lts</field>
+                <field name="price_include" eval="True"></field>
+            </record>
+            <record id="account_tax_ieps_saborizadas_500_ml_purchase" model="account.tax">
+                <field name="name">IEPS (500ml) VENTAS</field>
+                <field name="amount_type">fixed</field>
+                <field name="include_base_amount" eval="True"></field>
+                <field name="type_tax_use">sale</field>
+                <field name="amount">0.6308</field>
+                <field name="description">IEPS 500ml</field>
                 <field name="price_include" eval="True"></field>
             </record>
 

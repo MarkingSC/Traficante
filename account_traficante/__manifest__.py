@@ -26,6 +26,7 @@
         # 'security/ir.model.access.csv',
         'data/account_payment_term_data.xml',
         'data/account_tax_data.xml',
+        'views/account_payment_views.xml',
         'views/account_move_views.xml',
         'views/templates.xml',
     ],

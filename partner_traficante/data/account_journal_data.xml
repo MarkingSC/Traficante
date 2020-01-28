@@ -1,7 +1,7 @@
 <odoo>
     <data>
         <record id="account_journal_check" model="account.journal">
-            <field name="name">Check</field>
+            <field name="name">Cheque</field>
             <field name="type">bank</field>
             <field name="code">Check</field>
             <field name="inbound_payment_method_ids" eval="[(6, 0, [ref('account.account_payment_method_manual_in')])]"></field>
