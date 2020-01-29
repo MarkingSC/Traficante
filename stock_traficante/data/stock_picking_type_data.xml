@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <record id="stock_picking_degustacion_agitadora" model="stock.picking.type">
+            <field name="name">Salidas a degustación</field>
+            <field name="sequence_code">DEG</field>
+            <field name="warehouse_id" ref="stock.warehouse0"></field>
+            <field name="code">outgoing</field>
+        </record>
+
+        <record id="stock_picking_degustacion_primusoda" model="stock.picking.type">
+            <field name="name">Salidas a degustación</field>
+            <field name="sequence_code">DEG</field>
+            <field name="warehouse_id" ref="warehouse1"></field>
+            <field name="code">outgoing</field>
+        </record>
+    </data>
+</odoo>
