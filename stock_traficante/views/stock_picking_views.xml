@@ -17,5 +17,110 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="action_on_delivery_route" model="ir.actions.server">
+            <field name="name">Mandar a ruta</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = model.action_set_delivery_route_date()
+            </field>
+        </record>
+
+        <record id="stock_picking_delivery_route_date_multi" model="ir.ui.view">
+            <field name="name">stock.picking.delivery.route.date.multi</field>
+            <field name="model">stock.picking.route.register</field>
+            <field name="arch" type="xml">
+                <form string="Fecha para la ruta">
+                    <field name="scheduled_date" widget="date"></field>
+                    <footer>
+                        <button string="Agregar a ruta" name="add_to_route" type="object" class="oe_highlight"></button>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel"></button>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_picking_internal_search_traficante" model="ir.ui.view">
+            <field name="inherit_id" ref="stock.view_picking_internal_search"></field>
+            <field name="name">view.picking.internal.search.traficante</field>
+            <field name="model">stock.picking</field>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_transfers']" position="after">
+                    <filter
+                            name="todays_route"
+                            string="Ruta de hoy"
+                            domain="[('scheduled_date', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                            ('on_delivery_route', '=', True), '|',
+                            ('state','=', 'assigned'), ('state', '=', 'confirmed')]">
+                    </filter>
+                    <filter
+                            name="next_route"
+                            string="Ruta de mañana"
+                            domain="[('scheduled_date', '=', (context_today()+relativedelta(days=1)).strftime('%Y-%m-%d')),
+                            ('on_delivery_route', '=', True), '|',
+                            ('state','=', 'assigned'), ('state', '=', 'confirmed')]">
+                    </filter>
+                </xpath>
+            </field>
+        </record>
+
+         <record id="stock_picking_on_route_list_view" model="ir.ui.view">
+            <field name="name">stock.picking.on.route.list.view</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <tree string="Ruta de salida" create="false" multi_edit="1" default_order="scheduled_date">
+                    <field name="name"></field>
+                    <field name="partner_id"></field>
+                    <field name="partner_delivery_time"></field>
+                    <field name="scheduled_date"></field>
+                    <field name="partner_zone_id"></field>
+                    <field name="invoice_ids"></field>
+                    <field name="state"></field>
+                    <field name="note"></field>
+                    <field name="company_id"></field>
+                </tree>
+            </field>
+        </record>
+
+        <record id="stock_picking_on_route_calendar_view" model="ir.ui.view">
+            <field name="name">stock.picking.on.route.calendar.view</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <calendar
+                    string="Ruta de salida"
+                    date_start="scheduled_date"
+                    mode="week"
+                    quick_add="False">
+                    <field name="partner_id"></field>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="on_route_action" model="ir.actions.act_window">
+            <field name="name">Ruta de salida</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,calendar</field>
+            <field name="domain">[('on_delivery_route', '=', True), '|', ('state', '=', 'assigned'),('state', '=', 'confirmed')]</field>
+            <field name="context">{'default_state': 'confirmed', 'default_company_id': allowed_company_ids[0], 'search_default_next_route': 1}</field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="view_ids" eval="[(5,0,0),
+                (0,0, {'view_mode': 'tree', 'view_id': ref('stock_picking_on_route_list_view')}),
+                (0,0, {'view_mode': 'calendar', 'view_id': ref('stock_picking_on_route_calendar_view')})]"></field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Mueva transferencias a ruta desde el menú de acción en Operaciones/Transferencias.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="on_route_menu" name="Ruta de salida" parent="stock.menu_stock_warehouse_mgmt" sequence="0" action="on_route_action"></menuitem>
+        <menuitem id="on_route_menu_account" name="Ruta de salida" parent="sale.sale_order_menu" sequence="2" action="on_route_action"></menuitem>
+
     </data>
 </odoo>

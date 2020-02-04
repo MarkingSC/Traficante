@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="sales_team.team_sales_department" model="crm.team">
+            <field name="name">Traficante</field>
+            <field name="member_ids" eval="[(6, 0, [
+                ref('traficante_settings.res_user_sale_agent_1'),
+                ref('traficante_settings.res_user_sale_agent_2'),
+                ref('traficante_settings.res_user_sale_agent_3'),
+                ref('traficante_settings.res_user_sale_agent_4'),
+                ref('traficante_settings.res_user_full_access_1')])]"></field>
+            <field name="user_id" ref="traficante_settings.res_user_full_access_1"></field>
+        </record>
+    </data>
+</odoo>

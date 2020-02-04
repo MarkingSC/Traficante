@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+        <template id="report_picking_signatures" inherit_id="stock.report_picking">
+            <xpath expr="//h1[@t-field='o.name']" position="after">
+                <br/>
+                <br/>
+                <br/>
+                <h3>Facturas:
+                    <t t-set="invoices" t-value="o.invoice_ids.filtered(lambda r: r.invoice_payment_state == 'paid')"/>
+                    <t t-foreach="invoices" t-as="invoice">
+                        <span t-field="invoice.name"></span>,
+                    </t>
+                </h3>
+            </xpath>
+            <xpath expr="(//table)[position()=last()]" position="after">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div class="row">
+                    <div class="col-4 offset-1 border-top border-dark text-center">
+                    Entrega
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-4 border-top border-dark text-center">
+                    Recibe
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="report_delivery_document_signatures" inherit_id="stock.report_delivery_document">
+            <xpath expr="//span[@t-field='o.name']/.." position="after">
+                <br/>
+                <h3>Facturas:
+                    <t t-set="invoices" t-value="o.invoice_ids.filtered(lambda r: r.invoice_payment_state == 'paid')"/>
+                    <t t-foreach="invoices" t-as="invoice">
+                        <span t-field="invoice.name"></span>,
+                    </t>
+                </h3>
+            </xpath>
+            <xpath expr="(//table)[position()=last()]" position="after">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div class="row">
+                    <div class="col-4 offset-1 border-top border-dark text-center">
+                    Entrega
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-4 border-top border-dark text-center">
+                    Recibe
+                    </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

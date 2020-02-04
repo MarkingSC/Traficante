@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="partner_business_name.partner_business_name_form" />
         <field name="arch" type="xml">
             <xpath expr="..//field[@name='business_name']/.." position="after">
-              <field name="zone" placeholder="Zone"/>
+              <field name="zone_id" placeholder="Zone"/>
             </xpath>
         </field>
   </record>

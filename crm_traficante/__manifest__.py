@@ -20,13 +20,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'crm'],
+    'depends': ['base', 'crm', 'traficante_settings'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'data/crm_stage_data.xml',
         'data/utm_source_data.xml',
+        'data/crm_team_data.xml',
         'views/views.xml',
         'views/templates.xml',
     ],
