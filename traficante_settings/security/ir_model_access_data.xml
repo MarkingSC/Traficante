@@ -141,8 +141,8 @@
         <record model="ir.model.access" id="stock.access_stock_move_line_all">
             <field name="name">stock.move.line all users</field>
             <field name="perm_read" eval="True"></field>
-            <field name="perm_write" eval="False"></field>
-            <field name="perm_create" eval="False"></field>
+            <field name="perm_write" eval="True"></field>
+            <field name="perm_create" eval="True"></field>
             <field name="perm_unlink" eval="False"></field>
         </record>
 
@@ -175,6 +175,16 @@
             <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="True"></field>
             <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
+        <record model="ir.model.access" id="access_account_move_stock_user">
+            <field name="name">	account_move stock_user</field>
+            <field name="model_id" ref="account.model_account_move"></field>
+            <field name="group_id" ref="stock.group_stock_user"></field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="False"></field>
+            <field name="perm_create" eval="False"></field>
             <field name="perm_unlink" eval="False"></field>
         </record>
 

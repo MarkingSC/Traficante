@@ -52,14 +52,16 @@
                     <filter
                             name="todays_route"
                             string="Ruta de hoy"
-                            domain="[('scheduled_date', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                            domain="[('scheduled_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                            ('scheduled_date', '&lt;', (context_today()+relativedelta(days=1)).strftime('%Y-%m-%d')),
                             ('on_delivery_route', '=', True), '|',
                             ('state','=', 'assigned'), ('state', '=', 'confirmed')]">
                     </filter>
                     <filter
                             name="next_route"
                             string="Ruta de mañana"
-                            domain="[('scheduled_date', '=', (context_today()+relativedelta(days=1)).strftime('%Y-%m-%d')),
+                            domain="[('scheduled_date', '&gt;=', (context_today()+relativedelta(days=1)).strftime('%Y-%m-%d')),
+                            ('scheduled_date', '&lt;=', (context_today()+relativedelta(days=2)).strftime('%Y-%m-%d')),
                             ('on_delivery_route', '=', True), '|',
                             ('state','=', 'assigned'), ('state', '=', 'confirmed')]">
                     </filter>

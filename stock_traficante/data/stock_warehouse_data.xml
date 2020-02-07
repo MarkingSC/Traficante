@@ -4,8 +4,8 @@
             <field name="name">Agitadora</field>
             <field name="code">AGT</field>
             <field name="partner_id" ref="base.main_company"></field>
-            <field name="reception_steps">two_steps</field>
-            <field name="delivery_steps">pick_ship</field>
+            <field name="reception_steps">one_step</field>
+            <field name="delivery_steps">ship_only</field>
             <field name="buy_to_resupply" eval="True"></field>
         </record>
 
@@ -13,8 +13,8 @@
             <field name="name">Primusoda</field>
             <field name="code">PSD</field>
             <field name="partner_id" ref="base.main_company"></field>
-            <field name="reception_steps">two_steps</field>
-            <field name="delivery_steps">pick_ship</field>
+            <field name="reception_steps">one_step</field>
+            <field name="delivery_steps">ship_only</field>
             <field name="buy_to_resupply" eval="True"></field>
         </record>
     </data>

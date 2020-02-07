@@ -28,7 +28,7 @@
         'data/crm_stage_data.xml',
         'data/utm_source_data.xml',
         'data/crm_team_data.xml',
-        'views/views.xml',
+        'views/sale_order_views.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

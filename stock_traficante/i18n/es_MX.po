@@ -1,15 +1,174 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
+# 	* stock_traficante
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20191226\n"
+"Project-Id-Version: Odoo Server 13.0-20200205\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-19 00:37+0000\n"
-"PO-Revision-Date: 2020-01-19 00:37+0000\n"
+"POT-Creation-Date: 2020-02-07 20:41+0000\n"
+"PO-Revision-Date: 2020-02-07 14:44-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: es_MX\n"
+"X-Generator: Poedit 2.2.4\n"
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_delivery_route_date_multi
+msgid "Agregar a ruta"
+msgstr ""
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_delivery_route_date_multi
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.report_delivery_document_signatures
+#: model_terms:ir.ui.view,arch_db:stock_traficante.report_picking_signatures
+msgid "Entrega"
+msgstr ""
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.report_delivery_document_signatures
+#: model_terms:ir.ui.view,arch_db:stock_traficante.report_picking_signatures
+msgid "Facturas:"
+msgstr ""
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_delivery_route_date_multi
+msgid "Fecha para la ruta"
+msgstr ""
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__id
+msgid "ID"
+msgstr ""
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.view_picking_form_traficante
+msgid "Invoices"
+msgstr "Facturas"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: stock_traficante
+#: model:ir.actions.server,name:stock_traficante.action_on_delivery_route
+msgid "Mandar a ruta"
+msgstr ""
+
+#. module: stock_traficante
+#: model_terms:ir.actions.act_window,help:stock_traficante.on_route_action
+msgid ""
+"Mueva transferencias a ruta desde el menú de acción en "
+"Operaciones/Transferencias."
+msgstr ""
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__on_delivery_route
+msgid "On delivery route"
+msgstr "En ruta de entrega"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_delivery_time
+msgid "Partner Delivery Time"
+msgstr "Horario de entrega"
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.report_delivery_document_signatures
+#: model_terms:ir.ui.view,arch_db:stock_traficante.report_picking_signatures
+msgid "Recibe"
+msgstr ""
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.view_picking_internal_search_traficante
+msgid "Ruta de hoy"
+msgstr ""
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.view_picking_internal_search_traficante
+msgid "Ruta de mañana"
+msgstr ""
+
+#. module: stock_traficante
+#: model:ir.actions.act_window,name:stock_traficante.on_route_action
+#: model:ir.ui.menu,name:stock_traficante.on_route_menu
+#: model:ir.ui.menu,name:stock_traficante.on_route_menu_account
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_calendar_view
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_list_view
+msgid "Ruta de salida"
+msgstr ""
+
+#. module: stock_traficante
+#: model:stock.picking.type,name:stock_traficante.stock_picking_degustacion_agitadora
+#: model:stock.picking.type,name:stock_traficante.stock_picking_degustacion_primusoda
+msgid "Salidas a degustación"
+msgstr ""
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__scheduled_date
+msgid "Scheduled Date"
+msgstr "Fecha programada"
+
+#. module: stock_traficante
+#: code:addons/stock_traficante/models/stock_picking.py:0
+#, python-format
+msgid "Set delivery route date"
+msgstr "Establecer fecha de entrega"
+
+#. module: stock_traficante
+#: model:ir.model,name:stock_traficante.model_stock_picking_route_register
+msgid "Set route date"
+msgstr "Establecer fecha de la ruta"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__stock_picking_ids
+msgid "Stock moves"
+msgstr "Movimientos de inventario"
+
+#. module: stock_traficante
+#: model:ir.model,name:stock_traficante.model_stock_picking
+msgid "Transfer"
+msgstr "Albarán"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_zone_id
+msgid "Zone"
+msgstr "Zona"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__invoice_ids
+msgid "invoices"
+msgstr "Facturas"
