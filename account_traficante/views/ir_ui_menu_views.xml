@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <record id="account.account_account_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+
+        <record id="payment.payment_acquirer_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+    </data>
+</odoo>

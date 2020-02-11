@@ -6,7 +6,8 @@
     Configuraciones y adecuaciones de contabilidad para Traficante""",
 
     'description': """
-        - Creaación de elementos de plazos de pago
+        - Creaación de elementos de plazos de pago.
+        - Desasociación de menú de contabilidad
     """,
 
     'author': "Marco Martinez",
@@ -28,7 +29,7 @@
         'data/account_tax_data.xml',
         'views/account_payment_views.xml',
         'views/account_move_views.xml',
-        'views/templates.xml',
+        'views/ir_ui_menu_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -8,6 +8,53 @@
             <field name="perm_unlink" eval="False"></field>
         </record>
 
+
+        <record model="ir.model.access" id="access_account_move_stock_user">
+            <field name="name">account_move stock_user</field>
+            <field name="model_id" ref="account.model_account_move"></field>
+            <field name="group_id" ref="stock.group_stock_user"></field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="False"></field>
+            <field name="perm_create" eval="False"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
+        <!-- Permiso sobre facturas usuario de compras -->
+        <record model="ir.model.access" id="purchase.access_account_move_purchase">
+            <field name="name">account_move purchase</field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="False"></field>
+            <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
+        <!-- Permiso sobre facturas usuario de ventas -->
+         <record model="ir.model.access" id="sale.access_account_move_salesman">
+            <field name="name">account_move salesman</field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="False"></field>
+            <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
+        <!-- Permiso sobre lineas de factura usuario de compras -->
+        <record model="ir.model.access" id="purchase.access_account_move_line">
+            <field name="name">account.move.line</field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="False"></field>
+            <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
+        <!-- Permiso sobre lineas de factura usuario de ventas -->
+         <record model="ir.model.access" id="sale.access_account_move_line_salesman">
+            <field name="name">account_move_line salesman</field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="False"></field>
+            <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
         <record model="ir.model.access" id="crm.access_crm_lost_reason_salesman">
             <field name="name">crm.lost.reason.salesman</field>
             <field name="perm_read" eval="True"></field>
@@ -27,7 +74,7 @@
         </record>
 
         <record model="ir.model.access" id="sale_stock.access_product_packaging_user">
-            <field name="name">	product.packaging.user</field>
+            <field name="name">product.packaging.user</field>
             <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="False"></field>
             <field name="perm_create" eval="False"></field>
@@ -35,7 +82,7 @@
         </record>
 
         <record model="ir.model.access" id="stock.access_product_pricelist_item_stock_manager">
-            <field name="name">	product.pricelist.item stock_manager</field>
+            <field name="name">product.pricelist.item stock_manager</field>
             <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="False"></field>
             <field name="perm_create" eval="False"></field>
@@ -51,7 +98,7 @@
         </record>
 
         <record model="ir.model.access" id="purchase.access_product_pricelist_item_purchase_manager">
-            <field name="name">	product.pricelist.item purchase_manager</field>
+            <field name="name">product.pricelist.item purchase_manager</field>
             <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="False"></field>
             <field name="perm_create" eval="False"></field>
@@ -67,7 +114,7 @@
         </record>
 
         <record model="ir.model.access" id="account.access_product_product_account_manager">
-            <field name="name">	product.product.account.manager</field>
+            <field name="name">product.product.account.manager</field>
             <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="False"></field>
             <field name="perm_create" eval="False"></field>
@@ -75,7 +122,7 @@
         </record>
 
         <record model="ir.model.access" id="sale.access_product_supplierinfo_sale_manager">
-            <field name="name">	product.supplierinfo salemanager</field>
+            <field name="name">product.supplierinfo salemanager</field>
             <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="False"></field>
             <field name="perm_create" eval="False"></field>
@@ -83,8 +130,8 @@
         </record>
 
         <record model="ir.model.access" id="sale.access_product_supplierinfo_user">
-            <field name="name">	product.supplierinfo.user</field>
-            <field name="perm_read" eval="True  "></field>
+            <field name="name">product.supplierinfo.user</field>
+            <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="False"></field>
             <field name="perm_create" eval="False"></field>
             <field name="perm_unlink" eval="False"></field>
@@ -92,7 +139,7 @@
 
         <record model="ir.model.access" id="product.access_product_supplierinfo_user">
             <field name="name">product.supplierinfo.user</field>
-            <field name="perm_read" eval="False"></field>
+            <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="False"></field>
             <field name="perm_create" eval="False"></field>
             <field name="perm_unlink" eval="False"></field>
@@ -121,6 +168,15 @@
             <field name="perm_create" eval="True"></field>
             <field name="perm_unlink" eval="False"></field>
         </record>
+
+        <record model="ir.model.access" id="purchase.access_res_partner_purchase_user">
+            <field name="name">res.partner purchase</field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="True"></field>
+            <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
 
         <record model="ir.model.access" id="account.access_res_partner_group_account_manager">
             <field name="name">res_partner group_account_manager</field>
@@ -178,15 +234,6 @@
             <field name="perm_unlink" eval="False"></field>
         </record>
 
-        <record model="ir.model.access" id="access_account_move_stock_user">
-            <field name="name">	account_move stock_user</field>
-            <field name="model_id" ref="account.model_account_move"></field>
-            <field name="group_id" ref="stock.group_stock_user"></field>
-            <field name="perm_read" eval="True"></field>
-            <field name="perm_write" eval="False"></field>
-            <field name="perm_create" eval="False"></field>
-            <field name="perm_unlink" eval="False"></field>
-        </record>
 
     </data>
 </odoo>

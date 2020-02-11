@@ -18,7 +18,7 @@
                         string="En efectivo a proveedores esta semana"
                         name="efectively_supplier_this_week"
                         domain="['&amp;', '&amp;', '&amp;',
-                            ('partner_type', '=', 'supplier')
+                            ('partner_type', '=', 'supplier'),
                             ('journal_id.type', '=', 'cash'),
                             ('payment_date','&gt;=',(context_today()+relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
                             ('payment_date','&lt;',(context_today()+relativedelta(weekday=6)).strftime('%Y-%m-%d'))]"/>

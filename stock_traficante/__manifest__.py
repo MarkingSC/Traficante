@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock', 'account_traficante', 'partner_traficante'],
+    'depends': ['base', 'stock', 'account_traficante', 'partner_traficante', 'purchase'],
 
     # always loaded
     'data': [
@@ -30,6 +30,7 @@
         'data/stock_picking_type_data.xml',
         'views/stock_quant_views.xml',
         'views/stock_picking_views.xml',
+        'views/product_template_views.xml',
         'report/stock_reports.xml'
     ],
     # only loaded in demonstration mode

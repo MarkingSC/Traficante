@@ -36,7 +36,7 @@
         <!-- Stock user -->
         <record id="res_user_stock_user_1" model="res.users">
             <field name="login">jaime.torres@tsmo.com.mx</field>
-            <field name="name">Jasser Arias Rosas</field>
+            <field name="name">Jaime Torres</field>
             <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_user')])]"></field>
         </record>
 
