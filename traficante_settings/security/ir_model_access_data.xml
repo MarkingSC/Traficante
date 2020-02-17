@@ -197,7 +197,7 @@
         </record>
 
         <record model="ir.model.access" id="access_res_partner_erp_manager">
-            <field name="name">res_partner stock_user</field>
+            <field name="name">res_partner erp_manager</field>
             <field name="model_id" ref="base.model_res_partner"></field>
             <field name="group_id" ref="base.group_erp_manager"></field>
             <field name="perm_read" eval="True"></field>
