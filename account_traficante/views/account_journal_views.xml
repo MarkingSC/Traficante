@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_account_journal_form_traficante_inherit">
+            <field name="inherit_id" ref="account.view_account_journal_form"></field>
+            <field name="type">form</field>
+            <field name="model">account.journal</field>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='advanced_settings']" position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_account_bank_journal_form_traficante_inherit">
+            <field name="inherit_id" ref="account.view_account_bank_journal_form"></field>
+            <field name="type">form</field>
+            <field name="model">account.journal</field>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='advanced_info']" position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

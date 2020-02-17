@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="stock.menu_action_rules_form">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+        <record model="ir.ui.menu" id="stock.menu_routes_config">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+        <record model="ir.ui.menu" id="stock.menu_putaway">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+        <record model="ir.ui.menu" id="stock.menu_forecast_inventory">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+        <record model="ir.ui.menu" id="stock.menu_pickingtype">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+        <record model="ir.ui.menu" id="stock.all_picking">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+    </data>
+</odoo>

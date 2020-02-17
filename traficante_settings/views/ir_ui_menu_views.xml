@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="base.menu_action_res_company_form">
+            <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
+        </record>
+        <record model="ir.ui.menu" id="base.menu_users">
+            <field name="name">Usuarios</field>
+        </record>
+    </data>
+</odoo>

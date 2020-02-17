@@ -4,6 +4,8 @@
             <field name="name">Salidas a degustación</field>
             <field name="sequence_code">DEG</field>
             <field name="warehouse_id" ref="stock.warehouse0"></field>
+            <field name="show_operations" eval="False"></field>
+            <field name="use_create_lots" eval="False"></field>
             <field name="code">outgoing</field>
         </record>
 
@@ -11,7 +13,14 @@
             <field name="name">Salidas a degustación</field>
             <field name="sequence_code">DEG</field>
             <field name="warehouse_id" ref="warehouse1"></field>
+            <field name="show_operations" eval="False"></field>
+            <field name="use_create_lots" eval="False"></field>
             <field name="code">outgoing</field>
+        </record>
+
+        <!-- stock.lovation.route -->
+        <record model="stock.location.route" id="stock.route_warehouse0_mto">
+            <field name="active" eval="False"></field>
         </record>
     </data>
 </odoo>

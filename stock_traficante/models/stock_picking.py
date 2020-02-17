@@ -24,7 +24,10 @@ class StockPicking(models.Model):
 
     def get_invoices(self):
         for move in self:
-            move.invoice_ids = self.env['account.move'].search([('invoice_origin', '=', move.origin)]).ids
+            if move.origin:
+                move.invoice_ids = self.env['account.move'].search([('invoice_origin', '=', move.origin)]).ids
+            else:
+                move.invoice_ids = []
 
     invoice_ids = fields.Many2many('account.move', ondelete='restrict', string='invoices', compute=get_invoices)
 
@@ -56,7 +59,10 @@ class pickingRouteRegister(models.TransientModel):
 
     @api.model
     def default_get(self, fields):
+        if not self.env.user.tz:
+            raise exceptions.UserError("Es necesario establecer una zona horaria desde las preferencias su usuario.")
         tz = pytz.timezone(str(self.env.user.tz))
+
         rec = super(pickingRouteRegister, self).default_get(fields)
 
         rec['scheduled_date'] = tz.fromutc(odoo.fields.Datetime.now()).date() + timedelta(days=1)
@@ -73,10 +79,10 @@ class pickingRouteRegister(models.TransientModel):
             else:
                 raise exceptions.UserError("Solo pueden salir a ruta pedidos con facturas pagadas.")
 
-        # Check all invoices a  re open
-        if any(move.state != 'confirmed' and move.state != 'assigned' for
+        # check if moves are in right state
+        if any(move.state != 'assigned' for
                move in moves):
-            raise exceptions.UserError("Solo pueden salir a ruta pedidos pendientes.")
+            raise exceptions.UserError("Solo pueden salir a ruta pedidos preparados.")
 
         if 'stock_picking_ids' not in rec:
             rec['stock_picking_ids'] = [(6, 0, moves.ids)]
