@@ -28,4 +28,14 @@
             </xpath>
         </field>
   </record>
+
+    <record model="ir.ui.view" id="view_res_partner_filter_inherit_reference">
+        <field name="inherit_id" ref="base.view_res_partner_filter"></field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="filter_domain">['|', '|', ('display_name', 'ilike', self), ('ref', 'ilike', self), ('email', 'ilike', self)]</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
