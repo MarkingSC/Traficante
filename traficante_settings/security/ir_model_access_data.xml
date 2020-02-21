@@ -46,7 +46,7 @@
             <field name="perm_unlink" eval="False"></field>
         </record>
 
-        <!-- Permiso sobre lineas de factura usuario de ventas -->
+        <!-- Permiso sobre lineas de factura usuario de  ventas -->
          <record model="ir.model.access" id="sale.access_account_move_line_salesman">
             <field name="name">account_move_line salesman</field>
             <field name="perm_read" eval="True"></field>
