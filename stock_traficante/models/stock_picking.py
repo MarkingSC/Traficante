@@ -18,9 +18,23 @@ class StockPicking(models.Model):
         finish = '{0:02.0f}:{1:02.0f}'.format(*divmod(self.partner_id.finish_delivery_time * 60, 60))
         self.partner_delivery_time = start + ' - ' + finish
 
+    @api.depends('partner_id')
+    def get_delivery_address(self):
+        partner = self.partner_id
+        addressList = [partner.street,
+                       partner.street2,
+                       partner.city,
+                       partner.state_id.name,
+                       partner.country_id.name]
+
+        self.partner_address = ",".join(map(str, addressList))
+
     on_delivery_route = fields.Boolean(string="On delivery route", default = False)
-    partner_delivery_time = fields.Char(String="Customer receiving times", readonly=True, compute=get_delivery_times)
-    partner_zone_id = fields.Many2one('res.partner.zone', String="Customer zone", related='partner_id.zone_id', readonly=True)
+    partner_delivery_time = fields.Char(string="Customer receiving times", readonly=True, compute=get_delivery_times)
+    partner_zone_id = fields.Many2one('res.partner.zone', string="Customer zone", related='partner_id.zone_id', readonly=True)
+    partner_address =fields.Char(string="Delivery address", compute=get_delivery_address)
+    partner_business_name = fields.Char(string="Business name", store=True, related='partner_id.business_name')
+    partner_zip_code = fields.Char(string="Business name", store=True, related='partner_id.zip')
 
     def get_invoices(self):
         for move in self:
@@ -71,13 +85,6 @@ class pickingRouteRegister(models.TransientModel):
         if not active_ids:
             return rec
         moves = self.env['stock.picking'].browse(active_ids)
-
-        for move in moves:
-            _logger.debug('elemento: ' + move.state)
-            if move.invoice_ids.filtered(lambda r: r.invoice_payment_state == 'paid'):
-                continue
-            else:
-                raise exceptions.UserError("Solo pueden salir a ruta pedidos con facturas pagadas.")
 
         # check if moves are in right state
         if any(move.state != 'assigned' for

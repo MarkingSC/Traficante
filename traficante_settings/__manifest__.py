@@ -30,4 +30,6 @@
         'data/res_company_data.xml',
         'security/ir_model_access_data.xml',
     ],
+
+    'qweb': ["static/src/xml/base.xml"],
 }

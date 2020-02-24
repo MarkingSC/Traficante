@@ -20,8 +20,11 @@
             <group name="sale" position="inside">
                 <field name="default_journal_id" widget="selection"/>
             </group>
+            <group name="sale" position="attributes">
+                <attribute name="groups">sales_team.group_sale_salesman,account.group_account_invoice</attribute>
+            </group>
             <xpath expr="..//field[@name='property_supplier_payment_term_id']/.." position="after">
-                <group string="Delivery time">
+                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice">
                     <field string="From" name="start_delivery_time" widget="float_time"></field>
                     <field string="To" name="finish_delivery_time" widget="float_time"></field>
                 </group>

@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record model="uom.uom" id="uom.product_uom_unit">
+            <field name="name">Piezas</field>
+        </record>
+
+        <record model="uom.uom" id="uom_uom_box_24">
+            <field name="name">Cajas 24pz</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"></field>
+            <field name="uom_type">bigger</field>
+            <field name="factor_inv">24</field>
+            <field name="rounding">0.01</field>
+        </record>
+        <record model="uom.uom" id="uom_uom_box_12">
+            <field name="name">Cajas 12pz</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"></field>
+            <field name="uom_type">bigger</field>
+            <field name="factor_inv">12</field>
+            <field name="rounding">0.01</field>
+        </record>
+        <record model="uom.uom" id="uom_uom_box_6">
+            <field name="name">Cajas 6pz</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"></field>
+            <field name="uom_type">bigger</field>
+            <field name="factor_inv">6</field>
+            <field name="rounding">0.01</field>
+        </record>
+    </data>
+</odoo>

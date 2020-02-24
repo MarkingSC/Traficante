@@ -6,5 +6,8 @@
         <record id="crm_traficante_utm_source_1" model="utm.source">
             <field name="name">Correo electrónico</field>
         </record>
+        <record model="utm.source" id="utm_source_mailing">
+            <field name="name">Oportunidad retomada</field>
+        </record>
     </data>
 </odoo>

@@ -8,6 +8,7 @@
     'description': """
         - Creaación de elementos de plazos de pago.
         - Desasociación de menú de contabilidad
+        - Creación de elementos de impuestos
     """,
 
     'author': "Marco Martinez",

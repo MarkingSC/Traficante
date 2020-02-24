@@ -16,5 +16,9 @@
             <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
         </record>
 
+        <record id="crm.res_partner_menu_customer" model="ir.ui.menu">
+            <field name="action" ref="account.res_partner_action_customer"></field>
+        </record>
+
     </data>
 </odoo>

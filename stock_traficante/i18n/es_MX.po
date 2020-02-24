@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0-20200205\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-07 20:41+0000\n"
-"PO-Revision-Date: 2020-02-07 14:44-0600\n"
+"POT-Creation-Date: 2020-02-24 06:23+0000\n"
+"PO-Revision-Date: 2020-02-24 00:26-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,9 +23,35 @@ msgid "Agregar a ruta"
 msgstr ""
 
 #. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_business_name
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_zip_code
+msgid "Business name"
+msgstr "Razón social"
+
+#. module: stock_traficante
+#: model:uom.uom,name:stock_traficante.uom_uom_box_12
+msgid "Cajas 12pz"
+msgstr ""
+
+#. module: stock_traficante
+#: model:uom.uom,name:stock_traficante.uom_uom_box_24
+msgid "Cajas 24pz"
+msgstr ""
+
+#. module: stock_traficante
+#: model:uom.uom,name:stock_traficante.uom_uom_box_6
+msgid "Cajas 6pz"
+msgstr ""
+
+#. module: stock_traficante
 #: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_delivery_route_date_multi
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_list_view
+msgid "Cliente"
+msgstr ""
 
 #. module: stock_traficante
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__create_uid
@@ -36,6 +62,21 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__create_date
 msgid "Created on"
 msgstr "Creado en"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_delivery_time
+msgid "Customer receiving times"
+msgstr "Horario de recepción"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_zone_id
+msgid "Customer zone"
+msgstr "Zona"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_address
+msgid "Delivery address"
+msgstr "Dirección de entrega"
 
 #. module: stock_traficante
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__display_name
@@ -91,9 +132,7 @@ msgstr ""
 
 #. module: stock_traficante
 #: model_terms:ir.actions.act_window,help:stock_traficante.on_route_action
-msgid ""
-"Mueva transferencias a ruta desde el menú de acción en "
-"Operaciones/Transferencias."
+msgid "Mueva transferencias a ruta desde las órdenes de entrega."
 msgstr ""
 
 #. module: stock_traficante
@@ -102,9 +141,9 @@ msgid "On delivery route"
 msgstr "En ruta de entrega"
 
 #. module: stock_traficante
-#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_delivery_time
-msgid "Partner Delivery Time"
-msgstr "Horario de entrega"
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_list_view
+msgid "Razón social"
+msgstr ""
 
 #. module: stock_traficante
 #: model_terms:ir.ui.view,arch_db:stock_traficante.report_delivery_document_signatures
@@ -126,6 +165,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:stock_traficante.on_route_action
 #: model:ir.ui.menu,name:stock_traficante.on_route_menu
 #: model:ir.ui.menu,name:stock_traficante.on_route_menu_account
+#: model:ir.ui.menu,name:stock_traficante.on_route_menu_sales
 #: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_calendar_view
 #: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_list_view
 msgid "Ruta de salida"
@@ -134,6 +174,7 @@ msgstr ""
 #. module: stock_traficante
 #: model:stock.picking.type,name:stock_traficante.stock_picking_degustacion_agitadora
 #: model:stock.picking.type,name:stock_traficante.stock_picking_degustacion_primusoda
+#: model:stock.picking.type,name:stock_traficante.stock_picking_degustacion_psdagt
 msgid "Salidas a degustación"
 msgstr ""
 
@@ -162,11 +203,6 @@ msgstr "Movimientos de inventario"
 #: model:ir.model,name:stock_traficante.model_stock_picking
 msgid "Transfer"
 msgstr "Albarán"
-
-#. module: stock_traficante
-#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_zone_id
-msgid "Zone"
-msgstr "Zona"
 
 #. module: stock_traficante
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__invoice_ids

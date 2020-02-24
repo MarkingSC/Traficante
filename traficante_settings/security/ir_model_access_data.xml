@@ -267,13 +267,28 @@
         </record>
 
         <record model="ir.model.access" id="stock.access_stock_rule_user">
-            <field name="name">	stock_rule user</field>
+            <field name="name">stock_rule user</field>
             <field name="perm_read" eval="True"></field>
             <field name="perm_write" eval="True"></field>
             <field name="perm_create" eval="True"></field>
             <field name="perm_unlink" eval="False"></field>
         </record>
 
+        <record model="ir.model.access" id="calendar.access_calendar_event_type_all">
+            <field name="name">calendar.event.type.all</field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="True"></field>
+            <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="False"></field>
+        </record>
+
+        <record model="ir.model.access" id="crm.access_calendar_event_type_sale_manager">
+            <field name="name">calendar.event.type.manager</field>
+            <field name="perm_read" eval="True"></field>
+            <field name="perm_write" eval="True"></field>
+            <field name="perm_create" eval="True"></field>
+            <field name="perm_unlink" eval="True"></field>
+        </record>
 
     </data>
 </odoo>

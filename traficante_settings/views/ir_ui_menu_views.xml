@@ -1,10 +1,18 @@
 <odoo>
     <data>
+        <!-- Restricción a menú de gestión de compañías-->
         <record model="ir.ui.menu" id="base.menu_action_res_company_form">
             <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
         </record>
+
+        <!-- Cambio de nombre a mené de usuarios y compañías-->
         <record model="ir.ui.menu" id="base.menu_users">
             <field name="name">Usuarios</field>
+        </record>
+
+        <!-- Acceso a menú de informes de ventas para admin de compras -->
+        <record model="ir.ui.menu" id="sale.menu_sale_report">
+            <field name="groups_id" eval="[(6,0,[ref('sales_team.group_sale_manager'), ref('purchase.group_purchase_manager')])]"></field>
         </record>
     </data>
 </odoo>

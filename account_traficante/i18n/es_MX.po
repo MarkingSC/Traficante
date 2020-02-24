@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0-20200205\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-11 04:41+0000\n"
-"PO-Revision-Date: 2020-02-10 22:41-0600\n"
+"POT-Creation-Date: 2020-02-23 19:00+0000\n"
+"PO-Revision-Date: 2020-02-23 13:01-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -25,6 +25,11 @@ msgstr ""
 #. module: account_traficante
 #: model:account.payment.term,name:account_traficante.account_payment_term_8days
 msgid "8 Días"
+msgstr ""
+
+#. module: account_traficante
+#: model:account.payment.term,name:account_traficante.account_payment_term_consigna
+msgid "Consigna"
 msgstr ""
 
 #. module: account_traficante
@@ -71,3 +76,15 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_traficante.view_account_payment_search_traficante
 msgid "Por"
 msgstr ""
+
+#. module: account_traficante
+#: model:account.payment.term,note:account_traficante.account_payment_term_consigna
+msgid ""
+"Una sola factura para pagos diferidos indefinidos sobre las cantidades "
+"vendidas por mes."
+msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.view_account_invoice_filter_traficante_inherit
+msgid "Unpaid"
+msgstr "Pendientes de pago"

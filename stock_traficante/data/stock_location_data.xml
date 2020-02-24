@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="stock.stock_location_locations_partner" model="stock.location">
+            <field name="name">Ubicaciones de contactos</field>
+        </record>
+        <record id="stock.stock_location_suppliers" model="stock.location">
+            <field name="name">Proveedores</field>
+        </record>
+        <record id="stock.stock_location_customers" model="stock.location">
+            <field name="name">Clientes</field>
+        </record>
+    </data>
+</odoo>

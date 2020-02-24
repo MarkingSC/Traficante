@@ -25,6 +25,8 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
+        'data/uom_uom_data.xml',
+        'data/stock_location_data.xml',
         'data/product_category_data.xml',
         'data/stock_warehouse_data.xml',
         'data/stock_picking_type_data.xml',

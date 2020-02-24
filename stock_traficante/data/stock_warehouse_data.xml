@@ -17,5 +17,23 @@
             <field name="delivery_steps">ship_only</field>
             <field name="buy_to_resupply" eval="True"></field>
         </record>
+
+        <record id="warehouse_0_1" model="stock.warehouse">
+            <field name="name">AGT+PSD</field>
+            <field name="code">A+P</field>
+            <field name="partner_id" ref="base.main_company"></field>
+            <field name="reception_steps">one_step</field>
+            <field name="delivery_steps">ship_only</field>
+            <field name="buy_to_resupply" eval="False"></field>
+        </record>
+
+        <record id="warehouse_3" model="stock.warehouse">
+            <field name="name">Muestras</field>
+            <field name="code">ALEX</field>
+            <field name="partner_id" ref="base.main_company"></field>
+            <field name="reception_steps">one_step</field>
+            <field name="delivery_steps">ship_only</field>
+            <field name="buy_to_resupply" eval="False"></field>
+        </record>
     </data>
 </odoo>

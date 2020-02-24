@@ -18,5 +18,8 @@
         <record model="ir.ui.menu" id="stock.all_picking">
             <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"></field>
         </record>
+        <record model="ir.ui.menu" id="stock.menu_warehouse_report">
+            <field name="groups_id" eval="[(6,0,[ref('stock.group_stock_user')])]"></field>
+        </record>
     </data>
 </odoo>
