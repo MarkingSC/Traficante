@@ -1,7 +1,7 @@
 <odoo>
     <data>
          <record model="crm.stage" id="stage_lead1">
-            <field name="name">Nuevo</field>
+            <field name="name">Prospección</field>
             <field name="sequence">1</field>
              <field name="is_won">False</field>
         </record>

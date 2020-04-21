@@ -7,11 +7,15 @@
 
     'description': """
         - Creación del modelo zona para asociarlas a los contactos.
-        - Modificación del modelo de contactos para agregar Zona, y Horarios de entrega
+        - Modificación del modelo de contactos para agregar Zona, Horarios de entrega y resultados de clasificación.
+        - Adición de vistas de resolución de test de clasificación.
+        - Adición de paneles de gestión de preguntas y resultados de tests.
+        - Adición de funcionamiento de clasificación de clientes a partir de tests
+        
     """,
 
     'author': "Marco Martinez",
-    'website': "http://www.yourcompany.com",
+    'website': "www.linkedin.com/in/marco-alejandro-martínez-26b68616b",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
@@ -28,6 +32,7 @@
         'data/account_journal_data.xml',
         'views/res_partner_views.xml',
         'views/res_partner_zone_views.xml',
+        'views/res_partner_test_question_views.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode
