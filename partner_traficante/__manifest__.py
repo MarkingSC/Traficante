@@ -10,7 +10,10 @@
         - Modificación del modelo de contactos para agregar Zona, Horarios de entrega y resultados de clasificación.
         - Adición de vistas de resolución de test de clasificación.
         - Adición de paneles de gestión de preguntas y resultados de tests.
-        - Adición de funcionamiento de clasificación de clientes a partir de tests
+        - Adición de funcionamiento de clasificación de clientes a partir de tests.
+        - Adición de calculo de promedio mensual facturado.
+        - Adición de CRON diario para calculo de promedio.
+        - Adición de acción para asignación de tamaños de establecimiento
         
     """,
 
@@ -29,10 +32,16 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+
         'data/account_journal_data.xml',
+        'data/res_partner_test_question_data.xml',
+        'data/res_partner_test_result_data.xml',
+
         'views/res_partner_views.xml',
-        'views/res_partner_zone_views.xml',
         'views/res_partner_test_question_views.xml',
+        'views/res_partner_establishment_category_views.xml',
+        'views/res_partner_size_views.xml',
+        'views/res_partner_zone_views.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

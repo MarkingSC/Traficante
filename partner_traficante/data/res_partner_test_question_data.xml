@@ -1,0 +1,277 @@
+<odoo>
+    <!-- Options for Payment questions -->
+    <record model="res.partner.test.option" id="test_option_1_1">
+        <field name="name">Contado</field>
+        <field name="points">5</field>
+        <!--<field name="question_id" ref="test_question_payment_1"></field>-->
+        <field name="sequence">1</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_1_2">
+        <field name="name">Crédito puntual</field>
+        <field name="points">3</field>
+        <!--<field name="question_id" ref="test_question_payment_1"></field>-->
+        <field name="sequence">2</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_1_3">
+        <field name="name">Crédito retrasado</field>
+        <field name="points">1</field>
+        <!--<field name="question_id" ref="test_question_payment_1"></field>-->
+        <field name="sequence">3</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_1_4">
+        <field name="name">Hay que insistir para que pague</field>
+        <field name="points">0</field>
+        <!--<field name="question_id" ref="test_question_payment_1"></field>-->
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_1_5">
+        <field name="name">No paga</field>
+        <field name="points">-1</field>
+        <!--<field name="question_id" ref="test_question_payment_1"></field>-->
+        <field name="sequence">5</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_2_1">
+        <field name="name">Cero</field>
+        <field name="points">5</field>
+        <!--<field name="question_id" ref="test_question_payment_2"></field>-->
+        <field name="sequence">1</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_2_2">
+        <field name="name">De 7 a 14 días</field>
+        <field name="points">3</field>
+        <!--<field name="question_id" ref="test_question_payment_2"></field>-->
+        <field name="sequence">2</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_2_3">
+        <field name="name">De 15 a 30 días</field>
+        <field name="points">1</field>
+        <!--<field name="question_id" ref="test_question_payment_2"></field>-->
+        <field name="sequence">3</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_2_4">
+        <field name="name">Más de 31 días</field>
+        <field name="points">0</field>
+        <!--<field name="question_id" ref="test_question_payment_2"></field>-->
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_2_5">
+        <field name="name">No pagó crédito</field>
+        <field name="points">-1</field>
+        <!--<field name="question_id" ref="test_question_payment_2"></field>-->
+        <field name="sequence">5</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_3_1">
+        <field name="name">Automático, transferencia bancaria</field>
+        <field name="points">5</field>
+        <!--<field name="question_id" ref="test_question_payment_3"></field>-->
+        <field name="sequence">1</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_3_2">
+        <field name="name">Burocracia por mail, transf. bancaria</field>
+        <field name="points">3</field>
+        <!--<field name="question_id" ref="test_question_payment_3"></field>-->
+        <field name="sequence">2</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_3_3">
+        <field name="name">Burocracia presencial, transf. bancaria</field>
+        <field name="points">1</field>
+        <!--<field name="question_id" ref="test_question_payment_3"></field>-->
+        <field name="sequence">3</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_3_4">
+        <field name="name">Burocracia presencial, pago con cheque</field>
+        <field name="points">0</field>
+        <!--<field name="question_id" ref="test_question_payment_3"></field>-->
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_3_5">
+        <field name="name">No pagó</field>
+        <field name="points">-1</field>
+        <!--<field name="question_id" ref="test_question_payment_3"></field>-->
+        <field name="sequence">5</field>
+    </record>
+
+    <!-- Payment questions -->
+    <record model="res.partner.test.question" id="test_question_payment_1">
+        <field name="name">¿Cómo paga?</field>
+        <field name="sequence">1</field>
+        <field name="calculate_field">payment</field>
+        <field name="option_ids" eval="[(6,0,[
+            ref('test_option_1_1'),
+            ref('test_option_1_2'),
+            ref('test_option_1_3'),
+            ref('test_option_1_4'),
+            ref('test_option_1_5')
+        ])]"></field>
+    </record>
+    <record model="res.partner.test.question" id="test_question_payment_2">
+        <field name="name">¿De cuántos días es su crédito?</field>
+        <field name="sequence">2</field>
+        <field name="calculate_field">payment</field>
+        <field name="option_ids" eval="[(6,0,[
+            ref('test_option_2_1'),
+            ref('test_option_2_2'),
+            ref('test_option_2_3'),
+            ref('test_option_2_4'),
+            ref('test_option_2_5')
+        ])]"></field>
+    </record>
+    <record model="res.partner.test.question" id="test_question_payment_3">
+        <field name="name">¿Cómo es el proceso de pago?</field>
+        <field name="sequence">3</field>
+        <field name="calculate_field">payment</field>
+        <field name="option_ids" eval="[(6,0,[
+            ref('test_option_3_1'),
+            ref('test_option_3_2'),
+            ref('test_option_3_3'),
+            ref('test_option_3_4'),
+            ref('test_option_3_5')
+        ])]"></field>
+    </record>
+
+
+    <!-- Options for purchase questions -->
+
+    <record model="res.partner.test.option" id="test_option_purchase_1_1">
+        <field name="name">2 o más veces por semana</field>
+        <field name="points">5</field>
+        <!--<field name="question_id" ref="test_question_purchase_1"></field>-->
+        <field name="sequence">1</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_1_2">
+        <field name="name">1 vez al mes</field>
+        <field name="points">3</field>
+        <!--<field name="question_id" ref="test_question_purchase_1"></field>-->
+        <field name="sequence">2</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_1_3">
+        <field name="name">1 vez esporádicamente y sin ritmo</field>
+        <field name="points">1</field>
+        <!--<field name="question_id" ref="test_question_purchase_1"></field>-->
+        <field name="sequence">3</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_1_4">
+        <field name="name">No compra a menos que se le recuerde</field>
+        <field name="points">0</field>
+        <!--<field name="question_id" ref="test_question_purchase_1"></field>-->
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_2_1">
+        <field name="name">De $5,001 pesos en adelante</field>
+        <field name="points">5</field>
+        <!--<field name="question_id" ref="test_question_purchase_2"></field>-->
+        <field name="sequence">1</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_2_2">
+        <field name="name">De $3,001 a $5,000 pesos</field>
+        <field name="points">3</field>
+        <!--<field name="question_id" ref="test_question_purchase_2"></field>-->
+        <field name="sequence">2</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_2_3">
+        <field name="name">De $1,001 a $3,000 pesos</field>
+        <field name="points">1</field>
+        <!--<field name="question_id" ref="test_question_purchase_2"></field>-->
+        <field name="sequence">3</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_2_4">
+        <field name="name">Menos de $1,000 pesos</field>
+        <field name="points">0</field>
+        <!--<field name="question_id" ref="test_question_purchase_2"></field>-->
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_3_1">
+        <field name="name">De $50 pesos en adelante</field>
+        <field name="points">5</field>
+        <!--<field name="question_id" ref="test_question_purchase_3"></field>-->
+        <field name="sequence">1</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_3_2">
+        <field name="name">De $30 a $49 pesos</field>
+        <field name="points">3</field>
+        <!--<field name="question_id" ref="test_question_purchase_3"></field>-->
+        <field name="sequence">2</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_3_3">
+        <field name="name">De $10 a $29 pesos</field>
+        <field name="points">1</field>
+        <!--<field name="question_id" ref="test_question_purchase_3"></field>-->
+        <field name="sequence">3</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_3_4">
+        <field name="name">Menos de $10</field>
+        <field name="points">0</field>
+        <!--<field name="question_id" ref="test_question_purchase_3"></field>-->
+        <field name="sequence">4</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_4_1">
+        <field name="name">De 9 etiquetas en adelante</field>
+        <field name="points">5</field>
+        <!--<field name="question_id" ref="test_question_purchase_4"></field>-->
+        <field name="sequence">1</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_4_2">
+        <field name="name">De 5 a 8 etiquetas</field>
+        <field name="points">3</field>
+        <!--<field name="question_id" ref="test_question_purchase_4"></field>-->
+        <field name="sequence">2</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_4_3">
+        <field name="name">De 2 a 4 etiquetas</field>
+        <field name="points">1</field>
+        <!--<field name="question_id" ref="test_question_purchase_4"></field>-->
+        <field name="sequence">3</field>
+    </record>
+    <record model="res.partner.test.option" id="test_option_purchase_4_4">
+        <field name="name">1 etiqueta</field>
+        <field name="points">0</field>
+        <!--<field name="question_id" ref="test_question_purchase_4"></field>-->
+        <field name="sequence">4</field>
+    </record>
+
+    <!-- Purchase questions -->
+    <record model="res.partner.test.question" id="test_question_purchase_1">
+        <field name="name">¿Cada cuánto compra?</field>
+        <field name="sequence">1</field>
+        <field name="calculate_field">purchase</field>
+        <field name="option_ids" eval="[(6, 0, [
+            ref('test_option_purchase_1_1'),
+            ref('test_option_purchase_1_2'),
+            ref('test_option_purchase_1_3'),
+            ref('test_option_purchase_1_4')
+        ])]"></field>
+    </record>
+    <record model="res.partner.test.question" id="test_question_purchase_2">
+        <field name="name">¿Qué monto compra al mes?</field>
+        <field name="sequence">2</field>
+        <field name="calculate_field">purchase</field>
+        <field name="option_ids" eval="[(6, 0, [
+            ref('test_option_purchase_2_1'),
+            ref('test_option_purchase_2_2'),
+            ref('test_option_purchase_2_3'),
+            ref('test_option_purchase_2_4')
+        ])]"></field>
+    </record>
+    <record model="res.partner.test.question" id="test_question_purchase_3">
+        <field name="name">¿Qué monto per cápita compra al mes?</field>
+        <field name="sequence">3</field>
+        <field name="calculate_field">purchase</field>
+        <field name="option_ids" eval="[(6, 0, [
+            ref('test_option_purchase_3_1'),
+            ref('test_option_purchase_3_2'),
+            ref('test_option_purchase_3_3'),
+            ref('test_option_purchase_3_4')
+        ])]"></field>
+    </record>
+    <record model="res.partner.test.question" id="test_question_purchase_4">
+        <field name="name">¿Cuántas etiquetas nos compran?</field>
+        <field name="sequence">4</field>
+        <field name="calculate_field">purchase</field>
+        <field name="option_ids" eval="[(6, 0, [
+            ref('test_option_purchase_4_1'),
+            ref('test_option_purchase_4_2'),
+            ref('test_option_purchase_4_3'),
+            ref('test_option_purchase_4_4')
+        ])]"></field>
+    </record>
+</odoo>

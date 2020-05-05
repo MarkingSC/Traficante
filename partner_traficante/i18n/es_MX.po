@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20191226\n"
+"Project-Id-Version: Odoo Server 13.0-20200205\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-20 19:22+0000\n"
-"PO-Revision-Date: 2020-03-05 13:11-0600\n"
+"POT-Creation-Date: 2020-04-30 17:24+0000\n"
+"PO-Revision-Date: 2020-05-01 13:08-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,94 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__amount
+msgid "Amount"
+msgstr "Monto"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__option_id
+msgid "Answer"
+msgstr "Respuesta"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__payment_answer_ids
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__purchase_answer_ids
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__payment_answer_ids
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__purchase_answer_ids
+msgid "Answer the questions"
+msgstr "Responda las preguntas"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__average
+msgid "Average"
+msgstr "Promedio"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__capacity
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__capacity
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Capacity"
+msgstr "Aforo"
+
+#. module: partner_traficante
+#: model:ir.ui.menu,name:partner_traficante.res_partner_est_categories_menu
+msgid "Categories"
+msgstr "Categorías"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__est_category_id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__est_category_id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__est_category_id
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_size_search_view
+#: model_terms:ir.ui.view,arch_db:partner_traficante.view_res_partner_filter_inherit_reference
+msgid "Category"
+msgstr "Categoría"
+
+#. module: partner_traficante
+#: model:ir.model.fields,help:partner_traficante.field_res_partner_size__est_category_id
+msgid "Category which this record belongs to"
+msgstr "Categoría a la que pertenece el registro"
+
+#. module: partner_traficante
+#: model:ir.ui.menu,name:partner_traficante.res_partner_test_menu
+msgid "Clasification tests"
+msgstr "Tests de clasificación"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__partner_id
+msgid "Client"
+msgstr "Cliente"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Compras"
+msgstr "Compras"
+
+#. module: partner_traficante
 #: model:ir.model,name:partner_traficante.model_res_partner
 msgid "Contact"
 msgstr "Contacto"
+
+#. module: partner_traficante
+#: model_terms:ir.actions.act_window,help:partner_traficante.res_partner_category_establishment_action
+msgid "Create a new category to clasify partners."
+msgstr "Crea una nueva categoría para clasificar a los contactos."
+
+#. module: partner_traficante
+#: model_terms:ir.actions.act_window,help:partner_traficante.res_partner_test_question_action_tree
+msgid "Create a new question for Purchases or Payment test."
+msgstr "Crea una nueva pregunta para tests de compras o pagos."
+
+#. module: partner_traficante
+#: model_terms:ir.actions.act_window,help:partner_traficante.res_partner_test_result_action_tree
+msgid "Create a new result for Purchases or Payment test."
+msgstr "Crea un nuevo resultado para los tests de compras o pagos"
+
+#. module: partner_traficante
+#: model_terms:ir.actions.act_window,help:partner_traficante.res_partner_size_action
+msgid "Create a new size for partner establishments"
+msgstr "Crea un nuevo tamaño para los establecimientos de clientes"
 
 #. module: partner_traficante
 #: model_terms:ir.actions.act_window,help:partner_traficante.res_partner_zone_action_tree
@@ -28,14 +113,33 @@ msgid "Create a new zone for customers."
 msgstr "Cree una nueva zona para los clientes."
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__create_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__create_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__create_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__create_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__create_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__create_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__create_uid
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__create_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__create_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__create_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__create_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__create_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__create_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__create_date
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__date
+msgid "Date"
+msgstr "Fecha"
 
 #. module: partner_traficante
 #: model_terms:ir.ui.view,arch_db:partner_traficante.account_view_partner_property_form_delivery_times
@@ -43,14 +147,51 @@ msgid "Delivery time"
 msgstr "Horario de entrega"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__description
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__description
 msgid "Description of the Zone"
 msgstr "Descripción de la zona"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__display_name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__display_name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__display_name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__display_name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__display_name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__display_name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__display_name
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.view_res_partner_filter_inherit_reference
+msgid "Distributors"
+msgstr "Distribuidores"
+
+#. module: partner_traficante
+#: model:ir.actions.act_window,name:partner_traficante.res_partner_category_establishment_action
+msgid "Establishment Categories"
+msgstr "Categorías de establecimiento"
+
+#. module: partner_traficante
+#: model:ir.actions.act_window,name:partner_traficante.res_partner_size_action
+msgid "Establishment sizes"
+msgstr "Tamaños de establecimiento"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__calculate_field
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__calculate_field
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__res_field
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_question_search_view
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_search_view
+msgid "Field"
+msgstr "Campo"
 
 #. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner__finish_delivery_time
@@ -64,35 +205,311 @@ msgid "From"
 msgstr "Desde"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__id
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__id
 msgid "ID"
 msgstr "Id"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__inf_limit
+msgid "Inferior Limit"
+msgstr "Límite inferior"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__inf_limit
+msgid "Inferior limit"
+msgstr "Límite inferior"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__is_distributor
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__is_distributor
+msgid "Is distributor"
+msgstr "Es distribuidor"
+
+#. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner__default_journal_id
 #: model:ir.model.fields,field_description:partner_traficante.field_res_users__default_journal_id
 msgid "Journal"
-msgstr "Método de pago"
+msgstr "Diario (Método)"
 
 #. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_account_move
+msgid "Journal Entries"
+msgstr "Asientos contables"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__name
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__name
+msgid "Label"
+msgstr "Leyenda"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg____last_update
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category____last_update
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size____last_update
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer____last_update
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option____last_update
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question____last_update
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result____last_update
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone____last_update
 msgid "Last Modified on"
 msgstr "Última modificación"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__write_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__write_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__write_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__write_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__write_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__write_uid
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__write_uid
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__write_uid
 msgid "Last Updated by"
 msgstr "Modificado por"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__write_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__write_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__write_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__write_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__write_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__write_date
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__write_date
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__write_date
 msgid "Last Updated on"
 msgstr "Modificado el"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__pmf
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__pmf
+msgid "Monthly invoiced amount avg"
+msgstr "Promedio mensual facturado"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__pmfxp
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__pmfxp
+msgid "Monthly invoiced amount avg p/person"
+msgstr "Promedio mensual facturado per cápita"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_establishment_category__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_zone__name
 msgid "Name of zone"
 msgstr "Nombre de la zona"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_question_form
+msgid "Option"
+msgstr "Opción"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__option_ids
+msgid "Options Available"
+msgstr "Opciones disponibles"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Pagos"
+msgstr ""
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__partner_id
+msgid "Partner"
+msgstr "Contacto"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner_establishment_category
+msgid "Partner establishment category"
+msgstr "Categoría de establecimiento"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner_size
+msgid "Partner's establishment size"
+msgstr "Tamaño de establecimiento"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__payment_test_result
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__payment_test_result
+#: model:ir.model.fields.selection,name:partner_traficante.selection__res_partner_test_question__calculate_field__payment
+#: model:ir.model.fields.selection,name:partner_traficante.selection__res_partner_test_result__res_field__payment
+msgid "Payment"
+msgstr "Pago"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Payment Clas."
+msgstr "Clasif. de pago"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_kanban_view
+msgid "Payment clasification"
+msgstr "Clasif. de pago"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_question_search_view
+msgid "Payment questions"
+msgstr "Preguntas para pagos"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_search_view
+msgid "Payment results"
+msgstr "Resultados para pagos"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Payment test"
+msgstr "Test para pagos"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__points
+msgid "Points"
+msgstr "Puntos"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Purchase Clas."
+msgstr "Clasif. de compras"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_kanban_view
+msgid "Purchase clasification"
+msgstr "Clasif. de compras"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_question_search_view
+msgid "Purchase questions"
+msgstr "Preguntas para compras"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_search_view
+msgid "Purchase results"
+msgstr "Resultados para compras"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Purchase test"
+msgstr "Test para compras"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__purchase_test_result
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__purchase_test_result
+#: model:ir.model.fields.selection,name:partner_traficante.selection__res_partner_test_question__calculate_field__purchase
+#: model:ir.model.fields.selection,name:partner_traficante.selection__res_partner_test_result__res_field__purchase
+msgid "Purchases"
+msgstr "Compras"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__question_id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__question_id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__name
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_question_form
+msgid "Question"
+msgstr "Pregunta"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner_test_question
+msgid "Question for partner Purchases/Payment test"
+msgstr "Pregunta para test de compras / pagos"
+
+#. module: partner_traficante
+#: model:ir.model.fields,help:partner_traficante.field_res_partner_test_option__question_id
+msgid "Question which this option belongs to"
+msgstr "Pregunta a la que esta opción pertenece"
+
+#. module: partner_traficante
+#: model:ir.actions.act_window,name:partner_traficante.res_partner_test_question_action_tree
+#: model:ir.ui.menu,name:partner_traficante.res_partner_question_menu
+msgid "Questions"
+msgstr "Preguntas"
+
+#. module: partner_traficante
+#: model:ir.model.fields,help:partner_traficante.field_res_partner_test_answer__calculate_field
+#: model:ir.model.fields,help:partner_traficante.field_res_partner_test_question__calculate_field
+#: model:ir.model.fields,help:partner_traficante.field_res_partner_test_result__res_field
+msgid "Related test field"
+msgstr "Campo relacionado"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_form
+msgid "Result"
+msgstr "Resultado"
+
+#. module: partner_traficante
+#: model:ir.actions.act_window,name:partner_traficante.res_partner_test_result_action_description
+msgid "Result Description"
+msgstr "Descripción del resultado"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_description_form
+msgid "Result description"
+msgstr "Descripción del resultado"
+
+#. module: partner_traficante
+#: model:ir.ui.menu,name:partner_traficante.res_partner_result_menu
+msgid "Results"
+msgstr "Resultados"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner_test_result
+msgid "Results for Partner tests"
+msgstr "Resultados para tests"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_size_search_view
+msgid "Search Size"
+msgstr "Buscar tamaño"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_question_search_view
+msgid "Search questions"
+msgstr "Buscar preguntas"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.res_partner_test_result_search_view
+msgid "Search results"
+msgstr "Buscar resultados"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner_test_option
+msgid "Selectable options for test questions"
+msgstr "Opciones seleccionables para preguntas de test"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_answer__sequence
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_option__sequence
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_question__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: partner_traficante
+#: model:ir.actions.server,name:partner_traficante.daily_invoiced_avg_cron_ir_actions_server
+#: model:ir.cron,cron_name:partner_traficante.daily_invoiced_avg_cron
+#: model:ir.cron,name:partner_traficante.daily_invoiced_avg_cron
+msgid "Set daily invoiced avg"
+msgstr "Establecer promedio mensual facturado dirariamente"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__size_id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__size_id
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Size"
+msgstr "Tamaño"
+
+#. module: partner_traficante
+#: model:ir.ui.menu,name:partner_traficante.res_partner_size_menu
+msgid "Sizes"
+msgstr "Tamaños"
 
 #. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner__start_delivery_time
@@ -101,13 +518,48 @@ msgid "Start delivery time"
 msgstr "Hora inicial de entrega"
 
 #. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_test_result__sup_limit
+msgid "Superior Limit"
+msgstr "Límite superior"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__sup_limit
+msgid "Superior limit"
+msgstr "Límite superior"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Tags"
+msgstr "Etiquetas"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Tags..."
+msgstr "Etiquetas..."
+
+#. module: partner_traficante
+#: model:ir.actions.act_window,name:partner_traficante.res_partner_test_result_action_tree
+msgid "Test Results"
+msgstr "Resultados de test"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_res_partner_test_answer
+msgid "Test answer sheet for partners"
+msgstr "Hoja de respuestas de test"
+
+#. module: partner_traficante
+#: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
+msgid "Tests"
+msgstr "Tests"
+
+#. module: partner_traficante
 #: model_terms:ir.ui.view,arch_db:partner_traficante.account_view_partner_property_form_delivery_times
 msgid "To"
 msgstr "Hasta"
 
 #. module: partner_traficante
-#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__zone
-#: model:ir.model.fields,field_description:partner_traficante.field_res_users__zone
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__zone_id
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__zone_id
 #: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
 msgid "Zone"
 msgstr "Zona"
@@ -117,6 +569,11 @@ msgstr "Zona"
 #: model:ir.ui.menu,name:partner_traficante.res_partner_zone_menu
 msgid "Zones"
 msgstr "Zonas"
+
+#. module: partner_traficante
+#: model:ir.model,name:partner_traficante.model_account_invoice_avg
+msgid "account.invoice.avg"
+msgstr ""
 
 #. module: partner_traficante
 #: model:ir.model,name:partner_traficante.model_res_partner_zone

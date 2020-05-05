@@ -1,0 +1,28 @@
+<odoo>
+    <record id="res_partner_category_establishment_action" model="ir.actions.act_window">
+        <field name="name">Establishment Categories</field>
+        <field name="res_model">res.partner.establishment.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Create a new category to clasify partners.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="res_partner_establichment_category_tree_view">
+        <field name="name">res.partner.establishment.category.tree.view</field>
+        <field name="model">res.partner.establishment.category</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"></field>
+                <field name="description"></field>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem name="Categories" sequence="1" id="res_partner_est_categories_menu"
+              parent="contacts.res_partner_menu_config" action="res_partner_category_establishment_action"></menuitem>
+
+</odoo>

@@ -1,0 +1,68 @@
+<odoo>
+    <!-- results for payment test -->
+    <record model="res.partner.test.result" id="test_result_payment_a">
+        <field name="name">Excelente</field>
+        <field name="description">Tipo A</field>
+        <field name="res_field">payment</field>
+        <field name="sup_limit">15</field>
+        <field name="inf_limit">13</field>
+    </record>
+    <record model="res.partner.test.result" id="test_result_payment_b">
+        <field name="name">Bueno</field>
+        <field name="description">Tipo B</field>
+        <field name="res_field">payment</field>
+        <field name="sup_limit">12</field>
+        <field name="inf_limit">9</field>
+    </record>
+    <record model="res.partner.test.result" id="test_result_payment_c">
+        <field name="name">Regular</field>
+        <field name="description">Tipo C</field>
+        <field name="res_field">payment</field>
+        <field name="sup_limit">8</field>
+        <field name="inf_limit">6</field>
+    </record>
+    <record model="res.partner.test.result" id="test_result_payment_d">
+        <field name="name">Malo</field>
+        <field name="description">Tipo D</field>
+        <field name="res_field">payment</field>
+        <field name="sup_limit">5</field>
+        <field name="inf_limit">0</field>
+    </record>
+    <record model="res.partner.test.result" id="test_result_payment_x">
+        <field name="name">Vetado</field>
+        <field name="description">Vetado</field>
+        <field name="res_field">payment</field>
+        <field name="sup_limit">-1</field>
+        <field name="inf_limit">-1</field>
+    </record>
+
+    <!-- results for purchase test-->
+    <record model="res.partner.test.result" id="test_result_purchase_a">
+        <field name="name">Excelente</field>
+        <field name="description">Tipo A</field>
+        <field name="res_field">purchase</field>
+        <field name="sup_limit">20</field>
+        <field name="inf_limit">16</field>
+    </record>
+    <record model="res.partner.test.result" id="test_result_purchase_b">
+        <field name="name">Bueno</field>
+        <field name="description">Tipo B</field>
+        <field name="res_field">purchase</field>
+        <field name="sup_limit">15</field>
+        <field name="inf_limit">11</field>
+    </record>
+    <record model="res.partner.test.result" id="test_result_purchase_c">
+        <field name="name">Regular</field>
+        <field name="description">Tipo C</field>
+        <field name="res_field">purchase</field>
+        <field name="sup_limit">10</field>
+        <field name="inf_limit">6</field>
+    </record>
+    <record model="res.partner.test.result" id="test_result_purchase_d">
+        <field name="name">Malo</field>
+        <field name="description">Tipo D</field>
+        <field name="res_field">purchase</field>
+        <field name="sup_limit">5</field>
+        <field name="inf_limit">0</field>
+    </record>
+</odoo>

@@ -1,0 +1,44 @@
+<odoo>
+    <record model="ir.actions.act_window" id="res_partner_size_action">
+        <field name="name">Establishment sizes</field>
+        <field name="res_model">res.partner.size</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new size for partner establishments
+          </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="res_partner_size_tree_view">
+        <field name="name">res.partner.size.tree.view</field>
+        <field name="model">res.partner.size</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"></field>
+                <field name="est_category_id"></field>
+                <field name="inf_limit"></field>
+                <field name="sup_limit"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="res_partner_size_search_view" model="ir.ui.view">
+        <field name="name">res.partner.size.search.view</field>
+        <field name="model">res.partner.size</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Search Size">
+                 <filter
+                    name="group_by_est_category_id"
+                    string="Category"
+                    context="{'group_by':'est_category_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <menuitem name="Sizes" sequence="1" id="res_partner_size_menu"
+              parent="contacts.res_partner_menu_config" action="res_partner_size_action"></menuitem>
+
+</odoo>

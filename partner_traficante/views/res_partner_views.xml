@@ -5,11 +5,35 @@
         <field name="type">form</field>
         <field name="inherit_id" ref="partner_business_name.partner_business_name_form" />
         <field name="arch" type="xml">
+            <xpath expr="..//field[@name='is_company']/.." position="before">
+                <field name="customer_rank" invisible="1"></field>
+                <label for="payment_test_result" string="Payment Clas."/>
+                <field string="Pagos" name="payment_test_result" readonly="1" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"/>
+                |
+                <label for="purchase_test_result" string="Purchase Clas."/>
+                <field string="Compras" name="purchase_test_result" readonly="1" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"/>
+                <br/>
+            </xpath>
+            <xpath expr="//field[@name='company_type']" position="after">
+                <br/>
+                <field name="is_distributor" groups="account.group_account_invoice"></field>
+                <label for="is_distributor"/>
+            </xpath>
             <xpath expr="..//field[@name='business_name']/.." position="after">
               <field name="zone_id" placeholder="Zone"/>
             </xpath>
+            <xpath expr=".//field[@name='category_id']" position="replace">
+                <field name="est_category_id" string="Category" options="{'no_open': True}"></field>
+                <field name="capacity" string="Capacity"></field>
+                <field name="size_id" string="Size" readonly="1"></field>
+                <field name="category_id" string="Tags" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags..."/>
+            </xpath>
+            <xpath expr="//group[@name='sale']" position="inside">
+                <field name="pmf"></field>
+                <field name="pmfxp"></field>
+            </xpath>
             <xpath expr="..//page[@name='internal_notes']" position="after">
-                <page name="tests" string="Tests">
+                <page name="tests" string="Tests" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
                     <group name="payment" string="Payment test">
                         <field name="payment_answer_ids">
                             <form>
@@ -43,6 +67,41 @@
         </field>
   </record>
 
+    <record id="res_partner_test_result_kanban_view" model="ir.ui.view">
+        <field name="inherit_id" ref="base.res_partner_kanban_view"></field>
+        <field name="name">res.partner.test.result.kanban.view</field>
+        <field name="model">res.partner</field>
+        <field name="type">kanban</field>
+        <field name="arch" type="xml">
+            <field name="mobile" position="after">
+                <field name="customer_rank"></field>
+                <field name="payment_test_result"></field>
+                <field name="purchase_test_result"></field>
+            </field>
+            <div class="oe_kanban_partner_links" position="inside">
+                <span class="badge badge-pill" title="Payment clasification">
+                    <t t-esc="record.payment_test_result.value"/>
+                </span>
+                <span class="badge badge-pill" title="Purchase clasification">
+                    <t t-esc="record.purchase_test_result.value"/>
+                </span>
+            </div>
+        </field>
+    </record>
+
+    <record id="res_partner_test_inh_tree_view" model="ir.ui.view">
+        <field name="inherit_id" ref="base.view_partner_tree"></field>
+        <field name="name">res.partner.test.inh.tree.view</field>
+        <field name="model">res.partner</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <field name="display_name" position="after">
+                <field name="payment_test_result" optional="show"></field>
+                <field name="purchase_test_result" optional="show"></field>
+            </field>
+        </field>
+    </record>
+
   <record id="account_view_partner_property_form_delivery_times" model="ir.ui.view">
         <field name="name">account.view.partner.property.form.delivery.times</field>
         <field name="model">res.partner</field>
@@ -68,9 +127,57 @@
         <field name="inherit_id" ref="base.view_res_partner_filter"></field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
+            <xpath expr="..//filter[@name='type_company']" position="after">
+                <filter  name="distributors" string="Distributors" domain="[('is_distributor', '=', True)]"/>
+            </xpath>
             <xpath expr="//field[@name='name']" position="attributes">
                 <attribute name="filter_domain">['|', '|', ('display_name', 'ilike', self), ('ref', 'ilike', self), ('email', 'ilike', self)]</attribute>
             </xpath>
+            <xpath expr="//filter[@name='salesperson']" position="before">
+                <filter name="est_category" string="Category" context="{'group_by': 'est_category_id'}"></filter>
+            </xpath>
         </field>
     </record>
+
+
+    <!-- INVOICE AVERAGE CRON -->
+    <record model="ir.cron" id="daily_invoiced_avg_cron">
+        <field name="name">Set daily invoiced avg</field>
+        <field name="model_id" ref="model_account_invoice_avg"></field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"></field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True"></field>
+        <field name="state">code</field>
+        <field name="code">
+            model.update_all_daily_avg()
+        </field>
+    </record>
+
+    <!-- Size assignment for imported partners-->
+    <record model="ir.cron" id="size_assignment_for_imported_action">
+        <field name="name">Assign size to imported partner records</field>
+        <field name="model_id" ref="base.model_res_partner"></field>
+        <field name="active" eval="True"></field>
+        <field name="state">code</field>
+        <field name="code">
+            # Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - model: Odoo Model of the record on which the action is triggered; is a void recordset
+#  - record: record on which the action is triggered; may be void
+#  - records: recordset of all records on which the action is triggered in multi-mode; may be void
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {...}
+
+partners = env['res.partner'].search([])
+
+for partner in partners:
+  partner._onchange_get_est_size()
+            
+        </field>
+    </record>
+
 </odoo>
