@@ -7,12 +7,14 @@
         <field name="arch" type="xml">
             <xpath expr="..//field[@name='is_company']/.." position="before">
                 <field name="customer_rank" invisible="1"></field>
-                <label for="payment_test_result" string="Payment Clas."/>
-                <field string="Pagos" name="payment_test_result" readonly="1" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"/>
-                |
-                <label for="purchase_test_result" string="Purchase Clas."/>
-                <field string="Compras" name="purchase_test_result" readonly="1" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"/>
-                <br/>
+                <div attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
+                    <label for="payment_test_result" string="Payment Clas." />
+                    <field string="Pagos" name="payment_test_result" readonly="1"/>
+                    |
+                    <label for="purchase_test_result" string="Purchase Clas."/>
+                    <field string="Compras" name="purchase_test_result" readonly="1"/>
+                    <br/>
+                </div>
             </xpath>
             <xpath expr="//field[@name='company_type']" position="after">
                 <br/>
@@ -23,14 +25,15 @@
               <field name="zone_id" placeholder="Zone"/>
             </xpath>
             <xpath expr=".//field[@name='category_id']" position="replace">
-                <field name="est_category_id" string="Category" options="{'no_open': True}"></field>
-                <field name="capacity" string="Capacity"></field>
-                <field name="size_id" string="Size" readonly="1"></field>
+                <field name="est_category_id" string="Category" options="{'no_open': True}"
+                attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
+                <field name="capacity" string="Capacity" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
+                <field name="size_id" string="Size" readonly="1" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
                 <field name="category_id" string="Tags" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags..."/>
             </xpath>
             <xpath expr="//group[@name='sale']" position="inside">
-                <field name="pmf"></field>
-                <field name="pmfxp"></field>
+                <field name="pmf" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
+                <field name="pmfxp" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
             </xpath>
             <xpath expr="..//page[@name='internal_notes']" position="after">
                 <page name="tests" string="Tests" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
@@ -79,10 +82,10 @@
                 <field name="purchase_test_result"></field>
             </field>
             <div class="oe_kanban_partner_links" position="inside">
-                <span class="badge badge-pill" title="Payment clasification">
+                <span class="badge badge-pill" title="Payment clasification" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
                     <t t-esc="record.payment_test_result.value"/>
                 </span>
-                <span class="badge badge-pill" title="Purchase clasification">
+                <span class="badge badge-pill" title="Purchase clasification" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
                     <t t-esc="record.purchase_test_result.value"/>
                 </span>
             </div>
@@ -115,7 +118,8 @@
                 <attribute name="groups">sales_team.group_sale_salesman,account.group_account_invoice</attribute>
             </group>
             <xpath expr="..//field[@name='property_supplier_payment_term_id']/.." position="before">
-                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice">
+                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice"
+                attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
                     <field string="From" name="start_delivery_time" widget="float_time"></field>
                     <field string="To" name="finish_delivery_time" widget="float_time"></field>
                 </group>
