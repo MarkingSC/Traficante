@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20200205\n"
+"Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-30 17:24+0000\n"
-"PO-Revision-Date: 2020-05-01 13:08-0500\n"
+"POT-Creation-Date: 2020-05-07 18:12+0000\n"
+"PO-Revision-Date: 2020-05-07 13:14-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,13 @@ msgstr "Respuesta"
 #: model:ir.model.fields,field_description:partner_traficante.field_res_users__purchase_answer_ids
 msgid "Answer the questions"
 msgstr "Responda las preguntas"
+
+#. module: partner_traficante
+#: model:ir.actions.server,name:partner_traficante.size_assignment_for_imported_action_ir_actions_server
+#: model:ir.cron,cron_name:partner_traficante.size_assignment_for_imported_action
+#: model:ir.cron,name:partner_traficante.size_assignment_for_imported_action
+msgid "Assign size to imported partner records"
+msgstr "Asignar tamaños a contactos importados"
 
 #. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_account_invoice_avg__average
@@ -80,7 +87,7 @@ msgstr "Cliente"
 #. module: partner_traficante
 #: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
 msgid "Compras"
-msgstr "Compras"
+msgstr ""
 
 #. module: partner_traficante
 #: model:ir.model,name:partner_traficante.model_res_partner
@@ -225,6 +232,12 @@ msgstr "Límite inferior"
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner_size__inf_limit
 msgid "Inferior limit"
 msgstr "Límite inferior"
+
+#. module: partner_traficante
+#: model:ir.model.fields,field_description:partner_traficante.field_res_partner__invoice_avg_ids
+#: model:ir.model.fields,field_description:partner_traficante.field_res_users__invoice_avg_ids
+msgid "Invoice Avg"
+msgstr "Promedio de facturación"
 
 #. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner__is_distributor
@@ -497,7 +510,7 @@ msgstr "Secuencia"
 #: model:ir.cron,cron_name:partner_traficante.daily_invoiced_avg_cron
 #: model:ir.cron,name:partner_traficante.daily_invoiced_avg_cron
 msgid "Set daily invoiced avg"
-msgstr "Establecer promedio mensual facturado dirariamente"
+msgstr "Establecer promedio mensual facturado diariamente"
 
 #. module: partner_traficante
 #: model:ir.model.fields,field_description:partner_traficante.field_res_partner__size_id
@@ -550,7 +563,7 @@ msgstr "Hoja de respuestas de test"
 #. module: partner_traficante
 #: model_terms:ir.ui.view,arch_db:partner_traficante.partner_traficante_form
 msgid "Tests"
-msgstr "Tests"
+msgstr ""
 
 #. module: partner_traficante
 #: model_terms:ir.ui.view,arch_db:partner_traficante.account_view_partner_property_form_delivery_times
