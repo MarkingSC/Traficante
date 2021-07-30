@@ -2,18 +2,52 @@
     <data>
         <record id="base.main_company" model="res.company">
             <field name="name">Traficante</field>
-            <field name="street">Av. de la República 157</field>
-            <field name="street2">Tabacalera</field>
-            <field name="city">Cuauhtémoc</field>
+            <field name="street">Durango 272 A</field>
+            <field name="street2">Roma Norte</field>
+            <field name="city">Ciudad de México</field>
             <field name="state_id" ref="base.state_mx_df"></field>
-            <field name="zip">06030</field>
+            <field name="zip">06700</field>
             <field name="country_id" ref="base.mx"></field>
-            <field name="phone">(55) 7157 0986</field>
-            <field name="email">ventas@traficante.mx</field>
-            <field name="website">http://traficante.mx/</field>
+            <field name="phone">(55)5567290867/(55)67290866</field>
+            <field name="email">erp@traficante.mx</field>
+            <field name="website">www.traficante.mx/</field>
             <field name="vat">ACO1603033J5</field>
             <field name="favicon" type="base64" file="traficante_settings/static/img/logo-3.png"></field>
             <field name="logo" type="base64" file="traficante_settings/static/img/logo-2.png"></field>
         </record>
+        <data>
+            <record id="base.main_company" model="res.company">
+                <field name="name">PRIMUSODA, S.A. DE C.V.</field>
+                <field name="street">Durango 272 A</field>
+                <field name="street2">Roma Norte</field>
+                <field name="city">Ciudad de México</field>
+                <field name="state_id" ref="base.state_mx_df"></field>
+                <field name="zip">06700</field>
+                <field name="country_id" ref="base.mx"></field>
+                <field name="phone">(55)5567290867/(55)67290866</field>
+                <field name="email">erp@velvetsoda.com</field>
+                <field name="website">www.velvetsoda.com</field>
+                <field name="vat">PRI121210UG8</field>
+                <field name="favicon" type="base64" file="traficante_settings/static/img/logo-3.png"></field>
+                <field name="logo" type="base64" file="traficante_settings/static/img/primusoda.png"></field>
+            </record>
+        </data>
+        <data>
+            <record id="base.main_company" model="res.company">
+                <field name="name">AQUÍ PURA NETA, S.A. DE C.V</field>
+                <field name="street">Durango 272 A</field>
+                <field name="street2">Roma Norte</field>
+                <field name="city">Ciudad de México</field>
+                <field name="state_id" ref="base.state_mx_df"></field>
+                <field name="zip">06700</field>
+                <field name="country_id" ref="base.mx"></field>
+                <field name="phone">(55)5567290867/(55)67290866</field>
+                <field name="email">erp@netapromotores.com</field>
+                <field name="website">www.netapromotores.com</field>
+                <field name="vat">APN200923CZ1</field>
+                <field name="favicon" type="base64" file="traficante_settings/static/img/logo-3.png"></field>
+                <field name="logo" type="base64" file="traficante_settings/static/img/neta.png"></field>
+            </record>
+        </data>
     </data>
 </odoo>
