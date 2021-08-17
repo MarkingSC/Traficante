@@ -29,7 +29,7 @@
                 <field name="website">www.velvetsoda.com</field>
                 <field name="vat">PRI121210UG8</field>
                 <field name="favicon" type="base64" file="traficante_settings/static/img/logo-3.png"></field>
-                <field name="logo" type="base64" file="traficante_settings/static/img/primusoda.png"></field>
+                <field name="logo" type="base64" file="traficante_settings/static/img/Primusoda.png"></field>
             </record>
         
         
