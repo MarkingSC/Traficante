@@ -16,7 +16,7 @@
             <field name="logo" type="base64" file="traficante_settings/static/img/logo-2.png"></field>
         </record>
        
-            <record id="base.main_company2" model="res.company">
+            <record id="main_company2" model="res.company">
                 <field name="name">PRIMUSODA, S.A. DE C.V.</field>
                 <field name="street">Durango 272 A</field>
                 <field name="street2">Roma Norte</field>
@@ -33,7 +33,7 @@
             </record>
         
         
-            <record id="base.main_company3" model="res.company">
+            <record id="main_company3" model="res.company">
                 <field name="name">AQUÍ PURA NETA, S.A. DE C.V</field>
                 <field name="street">Durango 272 A</field>
                 <field name="street2">Roma Norte</field>
