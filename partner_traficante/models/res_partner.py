@@ -115,4 +115,4 @@ class ResPartner(models.Model):
 
 
     # Campos para resolver requerimientos de fase 2.1
-    customer_type = fields.Selection([(‘P’’Prospecto’),(’A’’Activo’)], string='Tipo',required=True)
+    customer_type = fields.Selection([(‘P’,’Prospecto’),(’A’,’Activo’)], string='Tipo',required=True)
