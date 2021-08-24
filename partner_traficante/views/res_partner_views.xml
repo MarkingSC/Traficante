@@ -67,6 +67,9 @@
                     </group>
                 </page>
             </xpath>
+            <xpath expr="..//field[@name='vat']" position="after">
+                <field name="customer_type"/>
+            </xpath>
         </field>
   </record>
 

@@ -17,6 +17,7 @@ class ResPartner(models.Model):
                                         tracking=True,
                                         domain="[('type', 'in', ('bank', 'cash')), ('company_id', '=', company_id)]")
 
+
     def _get_payment_answer_ids(self):
 
         partner_payment_answer_ids = self.payment_answer_ids
@@ -113,3 +114,5 @@ class ResPartner(models.Model):
     invoice_avg_ids = fields.One2many('account.invoice.avg', inverse_name='partner_id')
 
 
+    # Campos para resolver requerimientos de fase 2.1
+    customer_type = fields.Selection([(‘P’’Prospecto’),(’A’’Activo’)], string='Tipo',required=True)
