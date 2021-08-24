@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
                 _logger.debug("///// DIRECCIONES DE ENTREGA DEL CLIENTE delivAddresses: " + delivAddresses)
 
                 # Si no hay alguno de los dos tipos de direcciones
-                if len(pinvAddresses) = 0 or len(delivAddresses) = 0:
+                if len(pinvAddresses) == 0 or len(delivAddresses) == 0:
                     validFieldsFlag = False
 
             if validFieldsFlag:
