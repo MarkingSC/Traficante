@@ -63,7 +63,6 @@ class SaleOrder(models.Model):
             # Si todo sale bien guarda el pedido
         return super(SaleOrder, self).create(values)
 
-    @api.multi
     def write(self, values):
         for order in self:
             if 'partner_id' in values:
