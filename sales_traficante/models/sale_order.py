@@ -52,7 +52,7 @@ class SaleOrder(models.Model):
     def create(self, values):
 
         # Obtiene el objeto del cliente asociado al pedido
-        partnerId = values.partner_id
+        partnerId = values.get('partner_id')
         partners = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partner_id)])
 
         validFieldsFlag = self._validatePartnerInvDelivData(partners)
@@ -66,7 +66,7 @@ class SaleOrder(models.Model):
     def write(self, values):
         for order in self:
             if 'partner_id' in values:
-                partners = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', values['partner_id'])])
+                partners = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', values.get('partner_id'))])
                 validFieldsFlag = self._validatePartnerInvDelivData(partners)
 
                 if not validFieldsFlag:
