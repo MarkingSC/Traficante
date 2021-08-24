@@ -67,9 +67,58 @@
                     </group>
                 </page>
             </xpath>
+            
             <xpath expr="..//field[@name='vat']" position="after">
                 <field name="customer_type"/>
             </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                </xpath>
+       
+                <xpath expr="//field[@name='street']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                </xpath>
+       
+                <xpath expr="//field[@name='street2']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                </xpath>
+       
+                <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                </xpath>
+                   
+                <xpath expr="//field[@name='state_id']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                </xpath>
+                   
+                 <xpath expr="//field[@name='zip']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                 </xpath>
+       
+                 <xpath expr="//field[@name='country_id']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                 </xpath>
+       
+                           
+                 <xpath expr="//field[@name='mobile']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                 </xpath>      
+       
+                 <xpath expr="//field[@name='email']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                 </xpath>      
+       
+                 <xpath expr="//field[@name='start_delivery_time']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                 </xpath>  
+                 
+                 <xpath expr="//field[@name='finish_delivery_time']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                 </xpath>      
+                       
+                 <xpath expr="//field[@name='bank_ids']" position="attributes">
+                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                 </xpath> 
         </field>
   </record>
 
