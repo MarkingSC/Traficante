@@ -34,8 +34,8 @@ class SaleOrder(models.Model):
     def create(self, vals):
 
         # Obtiene el objeto del cliente asociado al pedido
-        partnerInvId = self.partner_invoice_id
-        partnerShipId = self.partner_shipping_id
+        partnerInvId = self.partner_invoice_id.id
+        partnerShipId = self.partner_shipping_id.id
 
         partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
         partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
@@ -54,6 +54,7 @@ class SaleOrder(models.Model):
     def write(self, vals):
         for order in self:
             if 'partner_invoice_id' in vals:
+                partnerInvId = self.partner_invoice_id.id
                 partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
                 validInvPartner = self._validatePartnerData(partnerInv)
 
@@ -61,6 +62,7 @@ class SaleOrder(models.Model):
                     raise exceptions.UserError("Capture todos los datos requeridos para la dirección de facturación.")
             
             if 'partner_shipping_id' in vals:
+                partnerShipId = self.partner_shipping_id.id
                 partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
                 validShipPartner = self._validatePartnerData(partnerShip)
 
