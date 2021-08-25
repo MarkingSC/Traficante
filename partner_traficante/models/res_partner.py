@@ -117,3 +117,21 @@ class ResPartner(models.Model):
     # Campos para resolver requerimientos de fase 2.1
     customer_type = fields.Selection(selection = [('P','Prospecto'),('A','Activo')], string='Tipo', default="P", required=True)
     establishment_status=fields.Selection(selection = [('A','Abierto'),('C','Cerrado')], string='Estado del Establecimiento', default="A")
+
+    def _update_customer_type_from_orders(self):
+        _logger.debug("**** INICIA _update_customer_type_from_orders con el cliente: " + self.id)
+
+        last_order = self.env['sale.order'].search([('partner_id', '=', self.id)], limit = 1, order ='date_order desc')
+        today_date = datetime.today()
+
+        _logger.debug("**** Fecha del ultimo pedido: " + str(last_order.date_order))
+        _logger.debug("**** Fecha de hoy: " + str(today_date))
+
+        if ((today_date - last_order.date_order).days/30.4) > 3:
+            _logger.debug("**** Cambia el cliente a Prospecto")
+            self.write({'customer_type': 'P'})
+            
+        _logger.debug("**** TERMINA _update_customer_type_from_orders")
+        return True
+
+
