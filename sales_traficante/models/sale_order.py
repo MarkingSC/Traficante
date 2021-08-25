@@ -10,13 +10,14 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    def _validatePartnerInvDelivData(partners):
+    def _validatePartnerData(partners):
         # Campos requeridos en el cliente para continuar con el pedido
-        reqInvDelivFields = ['street', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
-        reqFields = ['vat', 'start_delivery_time', 'finish_delivery_time', 'bank_ids']
+        reqFields = ['vat', 'start_delivery_time', 'finish_delivery_time', 'bank_ids','street', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
 
-        validInvDelivFlag = True
         validFieldsFlag = True
+
+        #partner_invoice_id
+        #partner_shipping_id
 
         for partner in partners:
             # Revisa si cuenta con todos los campos requeridos
@@ -24,53 +25,48 @@ class SaleOrder(models.Model):
                 if partner[reqField] is None:
                     validFieldsFlag = False
 
-            # Revisa si cuenta con todos los campos de facturación y entrega requeridos
-            for reqInvDelivField in reqInvDelivFields:
-                if partner[reqInvDelivField] is None:
-                    validInvDelivFlag = False
-
-            # Si no tiene todos los campos de facturación y entrega entonces busca direcciones asociadas
-            if not validInvDelivFlag:
-                # obtiene las direcciones de facturación y entrega registradas para el cliente
-                invAddresses = self.env['res.partner'].search([('parent_id', '=', partner.id), ('type', '=', 'invoice')])
-                delivAddresses = self.env['res.partner'].search([('parent_id', '=', partner.id), ('type', '=', 'delivery')])
-                _logger.debug("///// DIRECCIONES DE FACTURACION DEL CLIENTE invAddress: " + invAddresses)
-                _logger.debug("///// DIRECCIONES DE ENTREGA DEL CLIENTE delivAddresses: " + delivAddresses)
-
-                # Si no hay alguno de los dos tipos de direcciones
-                if len(pinvAddresses) == 0 or len(delivAddresses) == 0:
-                    validFieldsFlag = False
-
             if validFieldsFlag:
                 self.env['res.partner'].write({'customer_type', 'A'})
         return validFieldsFlag
             
                 
-
-
     @api.model
-    def create(self, values):
+    def create(self, vals):
 
         # Obtiene el objeto del cliente asociado al pedido
-        partnerId = values['partner_id']
-        partners = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partner_id)])
+        partnerInvId = self.partner_invoice_id
+        partnerShipId = self.partner_shipping_id
 
-        validFieldsFlag = self._validatePartnerInvDelivData(partners)
+        partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerInvId)])
+        partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerShipId)])
 
-        if not validFieldsFlag:
-            raise exceptions.UserError("Capture todos los datos del cliente requeridos para facturación.")
+        validInvPartner = self._validatePartnerData(partnerInv)
+        validShipPartner = self._validatePartnerData(partnerShip)
 
-            # Si todo sale bien guarda el pedido
+        if not validInvPartner:
+            raise exceptions.UserError("Capture todos los datos requeridos para la dirección de facturación.")
+        if not validShipPartner:
+            raise exceptions.UserError("Capture todos los datos requeridos para la dirección de entrega.")
+
+        # Si todo sale bien guarda el pedido
         return super(SaleOrder, self).create(values)
 
-    def write(self, values):
+    def write(self, vals):
         for order in self:
-            if 'partner_id' in values:
-                partners = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', values.['partner_id'])])
-                validFieldsFlag = self._validatePartnerInvDelivData(partners)
+            if 'partner_invoice_id' in vals:
+                partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerInvId)])
+                validInvPartner = self._validatePartnerData(partnerInv)
 
-                if not validFieldsFlag:
-                    raise exceptions.UserError("Capture todos los datos del cliente requeridos para facturación.") 
+                if not validInvPartner:
+                    raise exceptions.UserError("Capture todos los datos requeridos para la dirección de facturación.")
+            
+            if 'partner_shipping_id' in vals:
+                partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerShipId)])
+                validShipPartner = self._validatePartnerData(partnerShip)
+
+                if not validShipPartner:
+                    raise exceptions.UserError("Capture todos los datos requeridos para la dirección de entrega.")
+            
 
         return super(SaleOrder, self).write(values)
         
