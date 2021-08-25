@@ -21,15 +21,15 @@ class SaleOrder(models.Model):
         #partner_shipping_id
         _logger.debug("**** reqFields: " + str(reqFields))
         for partner in partners:
-            _logger.debug("**** ITERA EL PARTNER: " + partner.id)
+            _logger.debug("**** ITERA EL PARTNER: " + str(partner.id))
             # Revisa si cuenta con todos los campos requeridos
             for reqField in reqFields:
-                _logger.debug("**** EVALUANDO EL CAMPO: " + reqField)
+                _logger.debug("**** EVALUANDO EL CAMPO: " + str(reqField))
                 if partner[reqField] is None:
                     _logger.debug("**** NO SE ENCONTRÓ EL CAMPO")
                     validFieldsFlag = False
 
-                _logger.debug("**** validFieldsFlag: " + validFieldsFlag)
+                _logger.debug("**** validFieldsFlag: " + str(validFieldsFlag))
                 
             if validFieldsFlag:
                 _logger.debug("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
