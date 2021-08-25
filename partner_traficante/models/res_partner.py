@@ -116,4 +116,4 @@ class ResPartner(models.Model):
 
     # Campos para resolver requerimientos de fase 2.1
     customer_type = fields.Selection(selection = [('P','Prospecto'),('A','Activo')], string='Tipo', default="P", required=True)
-    establishment_status=fields.Selection(selection = [('A','Abierto'),('C','Cerrado')], string='Estado de Establecimiento', default="A")
+    establishment_status=fields.Selection(selection = [('A','Abierto'),('C','Cerrado')], string='Estado del Establecimiento', default="A")

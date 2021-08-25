@@ -69,7 +69,7 @@
 
             <xpath expr="..//field[@name='vat']" position="after">
                 <field name="customer_type"/>
-                <field name="establishment_status" attrs={'invisible' : [('company_type', '=', 'person')]}/>
+                <field name="establishment_status" attrs="{'invisible' : [('company_type', '=', 'person')]}"/>
             </xpath>
             <xpath expr="//field[@name='vat']" position="attributes">
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
