@@ -173,6 +173,8 @@
                 <field name="customer_rank"></field>
                 <field name="payment_test_result"></field>
                 <field name="purchase_test_result"></field>
+                <field name="establishment_status"></field>
+                <field name="company_type"></field>
             </field>
             <div class="oe_kanban_partner_links" position="inside">
                 <span class="badge badge-pill" title="Payment clasification" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
