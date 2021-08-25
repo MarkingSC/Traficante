@@ -233,10 +233,9 @@
                 <filter name="est_category" string="Category" context="{'group_by': 'est_category_id'}"></filter>
             </xpath>
             <xpath expr="..//filter[@name='inactive']" position="before">
-                <separator>
                     <filter name="abierto" string="Abiertos" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'A')]"/>
                     <filter name="cerrado" string="Cerrados" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'C')]"/>
-                </separator>
+                </separator/>
             </xpath>
         </field>
     </record>
