@@ -195,6 +195,9 @@
                 <field name="payment_test_result" optional="show"></field>
                 <field name="purchase_test_result" optional="show"></field>
             </field>
+            <field name="company_id" position="after">
+                <field name="establishment_status" optional="hide"></field>
+            </field>
         </field>
     </record>
 
