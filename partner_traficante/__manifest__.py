@@ -36,6 +36,7 @@
         'data/account_journal_data.xml',
         'data/res_partner_test_question_data.xml',
         'data/res_partner_test_result_data.xml',
+        'data/ir_cron_data.xml',
 
         'views/res_partner_views.xml',
         'views/res_partner_test_question_views.xml',

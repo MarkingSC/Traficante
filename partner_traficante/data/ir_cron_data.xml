@@ -3,7 +3,7 @@
     <data noupdate = "1">
 
         <record id = "update_customer_type_from_orders" model = "ir.cron">
-            <field name = "name">Desactivar clientes que no han comprado en 30 días</field>
+            <field name = "name">Desactivar clientes que no han comprado en 3 meses</field>
             <field name = "model_id" ref = "base.model_res_partner" />
             <field name="active" eval="True"></field>
             <field name = "state">code</field>
