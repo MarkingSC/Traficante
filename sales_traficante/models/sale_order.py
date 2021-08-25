@@ -72,19 +72,19 @@ class SaleOrder(models.Model):
         if 'partner_id' in vals:
             _logger.debug("**** GUARDANDO partner_id ")
             partnerMain = vals['partner_id']
-            validInvPartner = self._validateAddrPartnerData(partnerInv)
+            validInvPartner = self._validateMainPartnerData(partnerMain)
             if not validInvPartner:
                 raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
         if 'partner_invoice_id' in vals:
             _logger.debug("**** GUARDANDO partner_invoice_id ")
             partnerInv = vals['partner_invoice_id']
-            validShipPartner = self._validateAddrPartnerData(partnerShip)
+            validShipPartner = self._validateAddrPartnerData(partnerInv)
             if not validShipPartner:
                 raise UserError("Capture todos los datos requeridos para la dirección de entrega.")
         if 'partner_shipping_id' in vals:
             _logger.debug("**** GUARDANDO partner_shipping_id ")
             partnerShip = vals['partner_shipping_id']
-            validMainPartner = self._validateMainPartnerData(partnerMain)
+            validMainPartner = self._validateAddrPartnerData(partnerShip)
             if not validMainPartner:
                 raise UserError("Capture todos los datos requeridos para el cliente.")
 
