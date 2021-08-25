@@ -3,6 +3,7 @@ import logging
 from datetime import  datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api
+from odoo.exceptions import AccessError, UserError, ValidationError
 
 
 _logger = logging.getLogger(__name__)
@@ -59,9 +60,9 @@ class SaleOrder(models.Model):
         validShipPartner = self._validatePartnerData(partnerShip)
 
         if not validInvPartner:
-            raise exceptions.UserError("Capture todos los datos requeridos para la dirección de facturación.")
+            raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
         if not validShipPartner:
-            raise exceptions.UserError("Capture todos los datos requeridos para la dirección de entrega.")
+            raise UserError("Capture todos los datos requeridos para la dirección de entrega.")
 
         # Si todo sale bien guarda el pedido
         return super(SaleOrder, self).create(vals)
@@ -76,7 +77,7 @@ class SaleOrder(models.Model):
                 validInvPartner = self._validatePartnerData(partnerInv)
 
                 if not validInvPartner:
-                    raise exceptions.UserError("Capture todos los datos requeridos para la dirección de facturación.")
+                    raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
             
             if 'partner_shipping_id' in vals:
                 #partnerShipId = self.partner_shipping_id.id
@@ -86,7 +87,7 @@ class SaleOrder(models.Model):
                 validShipPartner = self._validatePartnerData(partnerShip)
 
                 if not validShipPartner:
-                    raise exceptions.UserError("Capture todos los datos requeridos para la dirección de entrega.")
+                    raise UserError("Capture todos los datos requeridos para la dirección de entrega.")
             
 
         return super(SaleOrder, self).write(vals)
