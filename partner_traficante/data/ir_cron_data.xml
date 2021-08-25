@@ -8,7 +8,7 @@
             <field name="active" eval="True"></field>
             <field name = "state">code</field>
             <field name = "code">
-partners = env['res.partner'].search([('customer_type', '=', 'A'])
+partners = env['res.partner'].search([('customer_type', '=', 'A')])
 
 for partner in partners:
     partner._update_customer_type_from_orders()
