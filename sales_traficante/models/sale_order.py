@@ -36,9 +36,14 @@ class SaleOrder(models.Model):
         # Obtiene el objeto del cliente asociado al pedido
         partnerInvId = self.partner_invoice_id.id
         partnerShipId = self.partner_shipping_id.id
+        partnerInv = self.partner_invoice_id
+        partnerShip = self.partner_shipping_id
 
-        partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
-        partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
+
+        #partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
+        #partnerInv = self.env['res.partner'].search([('id', '=', partnerInvId)])
+        #partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
+        #partnerShip = self.env['res.partner'].search([('id', '=', partnerShipId)])
 
         validInvPartner = self._validatePartnerData(partnerInv)
         validShipPartner = self._validatePartnerData(partnerShip)
@@ -54,16 +59,20 @@ class SaleOrder(models.Model):
     def write(self, vals):
         for order in self:
             if 'partner_invoice_id' in vals:
-                partnerInvId = self.partner_invoice_id.id
-                partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
+                #partnerInvId = self.partner_invoice_id.id
+                #partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
+                partnerInv = self.partner_invoice_id
+                #partnerInv = self.env['res.partner'].search([('id', '=', partnerInvId)])
                 validInvPartner = self._validatePartnerData(partnerInv)
 
                 if not validInvPartner:
                     raise exceptions.UserError("Capture todos los datos requeridos para la dirección de facturación.")
             
             if 'partner_shipping_id' in vals:
-                partnerShipId = self.partner_shipping_id.id
-                partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
+                #partnerShipId = self.partner_shipping_id.id
+                #partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
+                #partnerShip = self.env['res.partner'].search([('id', '=', partnerShipId)])
+                partnerShip = self.partner_shipping_id
                 validShipPartner = self._validatePartnerData(partnerShip)
 
                 if not validShipPartner:
