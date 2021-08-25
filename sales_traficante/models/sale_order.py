@@ -25,6 +25,7 @@ class SaleOrder(models.Model):
             # Revisa si cuenta con todos los campos requeridos
             for reqField in reqFields:
                 _logger.debug("**** EVALUANDO EL CAMPO: " + str(reqField))
+                _logger.debug("**** partner[reqField]" + str(partner[reqField]))
                 if partner[reqField] is None:
                     _logger.debug("**** NO SE ENCONTRÓ EL CAMPO")
                     validFieldsFlag = False
