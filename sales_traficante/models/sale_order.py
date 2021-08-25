@@ -94,21 +94,21 @@ class SaleOrder(models.Model):
     def write(self, vals):
         for order in self:
             if 'partner_invoice_id' in vals:
-                partnerInv = self.partner_invoice_id
+                partnerInv = self.env['res.partner'].search([('id', '=', vals['partner_invoice_id'])])
                 validInvPartner = self._validateAddrPartnerData(partnerInv)
 
                 if not validInvPartner:
                     raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
             
             if 'partner_shipping_id' in vals:
-                partnerShip = self.partner_shipping_id
+                partnerShip = self.env['res.partner'].search([('id', '=', vals['partner_shipping_id'])])
                 validShipPartner = self._validateAddrPartnerData(partnerShip)
 
                 if not validShipPartner:
                     raise UserError("Capture todos los datos requeridos para la dirección de entrega.")
 
             if 'partner_id' in vals:
-                partnerMain = self.partner_id
+                partnerMain = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
                 validMainPartner = self._validateMainPartnerData(partnerMain)
 
                 if not validMainPartner:
