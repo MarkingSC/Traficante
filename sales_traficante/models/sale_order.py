@@ -31,7 +31,7 @@ class SaleOrder(models.Model):
                 
             if validFieldsFlag:
                 _logger.debug("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
-                self.env['res.partner'].write({'customer_type', 'A'})
+                self.env['res.partner'].write({'customer_type': 'A'})
 
         _logger.debug("**** FINALIZA _validateMainPartnerData")
         return validFieldsFlag
