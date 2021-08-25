@@ -235,7 +235,7 @@
             <xpath expr="..//filter[@name='inactive']" position="before">
                     <filter name="abierto" string="Abiertos" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'A')]"/>
                     <filter name="cerrado" string="Cerrados" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'C')]"/>
-                </separator/>
+                <separator/>
             </xpath>
         </field>
     </record>
