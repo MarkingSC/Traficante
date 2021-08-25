@@ -37,8 +37,8 @@ class SaleOrder(models.Model):
         partnerInvId = self.partner_invoice_id
         partnerShipId = self.partner_shipping_id
 
-        partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerInvId)])
-        partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerShipId)])
+        partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
+        partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
 
         validInvPartner = self._validatePartnerData(partnerInv)
         validShipPartner = self._validatePartnerData(partnerShip)
@@ -54,14 +54,14 @@ class SaleOrder(models.Model):
     def write(self, vals):
         for order in self:
             if 'partner_invoice_id' in vals:
-                partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerInvId)])
+                partnerInv = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerInvId)])
                 validInvPartner = self._validatePartnerData(partnerInv)
 
                 if not validInvPartner:
                     raise exceptions.UserError("Capture todos los datos requeridos para la dirección de facturación.")
             
             if 'partner_shipping_id' in vals:
-                partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('partner_id', '=', partnerShipId)])
+                partnerShip = self.env['res.partner'].search([('customer_type','=', 'P'), ('id', '=', partnerShipId)])
                 validShipPartner = self._validatePartnerData(partnerShip)
 
                 if not validShipPartner:
