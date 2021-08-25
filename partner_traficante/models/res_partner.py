@@ -119,7 +119,7 @@ class ResPartner(models.Model):
     establishment_status=fields.Selection(selection = [('A','Abierto'),('C','Cerrado')], string='Estado del Establecimiento', default="A")
 
     def _update_customer_type_from_orders(self):
-        _logger.debug("**** INICIA _update_customer_type_from_orders con el cliente: " + self.id)
+        _logger.debug("**** INICIA _update_customer_type_from_orders con el cliente: " + str(self.id))
 
         last_order = self.env['sale.order'].search([('partner_id', '=', self.id)], limit = 1, order ='date_order desc')
         today_date = datetime.today()
