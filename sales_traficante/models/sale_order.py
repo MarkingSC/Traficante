@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    def _validatePartnerData(partners):
+    def _validatePartnerData(self, partners):
         # Campos requeridos en el cliente para continuar con el pedido
         reqFields = ['vat', 'start_delivery_time', 'finish_delivery_time', 'bank_ids','street', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
 
