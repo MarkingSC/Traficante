@@ -13,7 +13,7 @@ class SaleOrder(models.Model):
 
     def _validateMainPartnerData(self, partners):
         _logger.debug("**** INICIA _validateMainPartnerData")
-        reqFields = ['vat', 'start_delivery_time', 'finish_delivery_time', 'bank_ids','street']
+        reqFields = ['vat']
         validFieldsFlag = True
 
         _logger.debug("**** reqFields: " + str(reqFields))

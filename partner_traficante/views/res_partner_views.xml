@@ -1,5 +1,5 @@
 <odoo>
-  <record id="partner_traficante_form" model="ir.ui.view">
+    <record id="partner_traficante_form" model="ir.ui.view">
         <field name="name">res.partner.traficante.form</field>
         <field name="model">res.partner</field>
         <field name="type">form</field>
@@ -22,11 +22,10 @@
                 <label for="is_distributor"/>
             </xpath>
             <xpath expr="..//field[@name='business_name']/.." position="after">
-              <field name="zone_id" placeholder="Zone"/>
+                <field name="zone_id" placeholder="Zone"/>
             </xpath>
             <xpath expr=".//field[@name='category_id']" position="replace">
-                <field name="est_category_id" string="Category" options="{'no_open': True}"
-                attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
+                <field name="est_category_id" string="Category" options="{'no_open': True}" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
                 <field name="capacity" string="Capacity" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
                 <field name="size_id" string="Size" readonly="1" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
                 <field name="category_id" string="Tags" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags..."/>
@@ -67,60 +66,101 @@
                     </group>
                 </page>
             </xpath>
-            
+
             <xpath expr="..//field[@name='vat']" position="after">
                 <field name="customer_type"/>
             </xpath>
             <xpath expr="//field[@name='vat']" position="attributes">
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                </xpath>
-       
-                <xpath expr="//field[@name='street']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                </xpath>
-       
-                <xpath expr="//field[@name='street2']" position="attributes">
+            </xpath>
+
+            <xpath expr="//field[@name='street']" position="attributes">
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                </xpath>
-       
-                <xpath expr="//field[@name='city']" position="attributes">
+            </xpath>
+
+            <xpath expr="//field[@name='street2']" position="attributes">
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                </xpath>
-                   
-                <xpath expr="//field[@name='state_id']" position="attributes">
+            </xpath>
+
+            <xpath expr="//field[@name='city']" position="attributes">
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                </xpath>
-                   
-                 <xpath expr="//field[@name='zip']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                 </xpath>
-       
-                 <xpath expr="//field[@name='country_id']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                 </xpath>
-       
-                           
-                 <xpath expr="//field[@name='mobile']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                 </xpath>      
-       
-                 <xpath expr="//field[@name='email']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                 </xpath>      
-       
-                 <xpath expr="//field[@name='start_delivery_time']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                 </xpath>  
-                 
-                 <xpath expr="//field[@name='finish_delivery_time']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                 </xpath>      
-                       
-                 <xpath expr="//field[@name='bank_ids']" position="attributes">
-                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-                 </xpath> 
+            </xpath>
+
+            <xpath expr="//field[@name='state_id']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='zip']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='country_id']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='mobile']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='email']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='start_delivery_time']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='finish_delivery_time']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='bank_ids']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+            </xpath>
+
+            <!-- Para poner campos forzosos en el formuario de las direcciones asociadas -->
+            <xpath expr="//field[@name='child_ids']" position="attributes">
+                <attribute name="context">{'default_parent_id': active_id, 'default_street': street, 'default_street2': street2, 'default_city': city, 'default_state_id': state_id, 'default_zip': zip, 'default_country_id': country_id, 'default_lang': lang, 'default_user_id': user_id, 'default_type': 'other', 'default_customer_type': customer_type}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='child_ids']/kanban/field[@name='display_name']" position="after">
+                <field name='customer_type'/>
+            </xpath>
+
+            <xpath expr="//field[@name='child_ids']/form//field[@name='name']" position="before">
+                <field name='customer_type' invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='child_ids']/form//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='street']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='street2']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='city']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='state_id']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='zip']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='country_id']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='email']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="attributes">
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
+            </xpath>
+
         </field>
-  </record>
+    </record>
 
     <record id="res_partner_test_result_kanban_view" model="ir.ui.view">
         <field name="inherit_id" ref="base.res_partner_kanban_view"></field>
@@ -157,7 +197,7 @@
         </field>
     </record>
 
-  <record id="account_view_partner_property_form_delivery_times" model="ir.ui.view">
+    <record id="account_view_partner_property_form_delivery_times" model="ir.ui.view">
         <field name="name">account.view.partner.property.form.delivery.times</field>
         <field name="model">res.partner</field>
         <field name="type">form</field>
@@ -170,21 +210,20 @@
                 <attribute name="groups">sales_team.group_sale_salesman,account.group_account_invoice</attribute>
             </group>
             <xpath expr="..//field[@name='property_supplier_payment_term_id']/.." position="before">
-                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice"
-                attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
+                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
                     <field string="From" name="start_delivery_time" widget="float_time"></field>
                     <field string="To" name="finish_delivery_time" widget="float_time"></field>
                 </group>
             </xpath>
         </field>
-  </record>
+    </record>
 
     <record model="ir.ui.view" id="view_res_partner_filter_inherit_reference">
         <field name="inherit_id" ref="base.view_res_partner_filter"></field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
             <xpath expr="..//filter[@name='type_company']" position="after">
-                <filter  name="distributors" string="Distributors" domain="[('is_distributor', '=', True)]"/>
+                <filter name="distributors" string="Distributors" domain="[('is_distributor', '=', True)]"/>
             </xpath>
             <xpath expr="//field[@name='name']" position="attributes">
                 <attribute name="filter_domain">['|', '|', ('display_name', 'ilike', self), ('ref', 'ilike', self), ('email', 'ilike', self)]</attribute>
