@@ -130,7 +130,9 @@ class ResPartner(models.Model):
         if ((today_date - last_order.date_order).days/30.4) > 3:
             _logger.debug("**** Cambia el cliente a Prospecto")
             self.write({'customer_type': 'P'})
-            
+        else:
+            self.write({'customer_type': 'A'})
+
         _logger.debug("**** TERMINA _update_customer_type_from_orders")
         return True
 
