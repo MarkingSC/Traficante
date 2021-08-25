@@ -19,7 +19,7 @@ class SaleOrder(models.Model):
 
         #partner_invoice_id
         #partner_shipping_id
-        _logger.debug("**** reqFields: " + reqFields)
+        _logger.debug("**** reqFields: " + str(reqFields))
         for partner in partners:
             _logger.debug("**** ITERA EL PARTNER: " + partner.id)
             # Revisa si cuenta con todos los campos requeridos
