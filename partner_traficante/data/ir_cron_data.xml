@@ -14,9 +14,9 @@ for partner in partners:
     partner._update_customer_type_from_orders()
             </field>
             <field name = "user_id" ref = "base.user_root" />
-            <field name = 'interval_number'>1</field>
-            <field name = 'interval_type'>days</field>
-            <field name = "numbercall ">-1 </field>
+            <field name = "interval_number">1</field>
+            <field name = "interval_type">days</field>
+            <field name = "numbercall">-1</field>
             <field name = "doall" eval = "True" />
         </record>
 
