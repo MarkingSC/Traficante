@@ -33,7 +33,7 @@ class SaleOrder(models.Model):
                 _logger.debug("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
                 self.env['res.partner'].write({'customer_type', 'A'})
 
-        _logger.debug("**** FINALIZA _validateAddrPartnerData")
+        _logger.debug("**** FINALIZA _validateMainPartnerData")
         return validFieldsFlag
 
 
@@ -68,21 +68,24 @@ class SaleOrder(models.Model):
                 
     @api.model
     def create(self, vals):
-
-        # Obtiene el objeto del cliente asociado al pedido
-        partnerMain = self.partner_id
-        partnerInv = self.partner_invoice_id
-        partnerShip = self.partner_shipping_id
-
-        validInvPartner = self._validateAddrPartnerData(partnerInv)
-        validShipPartner = self._validateAddrPartnerData(partnerShip)
-        validMainPartner = self._validateMainPartnerData(partnerMain)
-
-        if not validInvPartner:
+        
+        if 'partner_id' in vals:
+            _logger.debug("**** GUARDANDO partner_id ")
+            partnerMain = vals['partner_id']
+            validInvPartner = self._validateAddrPartnerData(partnerInv)
+            if not validInvPartner:
             raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
-        if not validShipPartner:
+        if 'partner_invoice_id' in vals:
+            _logger.debug("**** GUARDANDO partner_invoice_id ")
+            partnerInv = vals['partner_invoice_id']
+            validShipPartner = self._validateAddrPartnerData(partnerShip)
+            if not validShipPartner:
             raise UserError("Capture todos los datos requeridos para la dirección de entrega.")
-        if not validMainPartner:
+        if 'partner_shipping_id' in vals:
+            _logger.debug("**** GUARDANDO partner_shipping_id ")
+            partnerShip = vals['partner_shipping_id']
+            validMainPartner = self._validateMainPartnerData(partnerMain)
+            if not validMainPartner:
             raise UserError("Capture todos los datos requeridos para el cliente.")
 
         # Si todo sale bien guarda el pedido
