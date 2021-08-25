@@ -72,21 +72,21 @@ class SaleOrder(models.Model):
         if 'partner_id' in vals:
             _logger.debug("**** GUARDANDO partner_id ")
             partnerMain = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
-            validInvPartner = self._validateMainPartnerData(partnerMain)
-            if not validInvPartner:
-                raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
+            validMainPartner = self._validateMainPartnerData(partnerMain)
+            if not validMainPartner:
+                raise UserError("Capture todos los datos requeridos para el cliente.")
         if 'partner_invoice_id' in vals:
             _logger.debug("**** GUARDANDO partner_invoice_id ")
             partnerInv = self.env['res.partner'].search([('id', '=', vals['partner_invoice_id'])])
-            validShipPartner = self._validateAddrPartnerData(partnerInv)
-            if not validShipPartner:
-                raise UserError("Capture todos los datos requeridos para la dirección de entrega.")
+            validInvPartner = self._validateAddrPartnerData(partnerInv)
+            if not validInvPartner:
+                raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
         if 'partner_shipping_id' in vals:
             _logger.debug("**** GUARDANDO partner_shipping_id ")
             partnerShip = self.env['res.partner'].search([('id', '=', vals['partner_shipping_id'])])
-            validMainPartner = self._validateAddrPartnerData(partnerShip)
-            if not validMainPartner:
-                raise UserError("Capture todos los datos requeridos para el cliente.")
+            validShipPartner = self._validateAddrPartnerData(partnerShip)
+            if not validShipPartner:
+                raise UserError("Capture todos los datos requeridos para la dirección de entrega.")
 
         # Si todo sale bien guarda el pedido
         return super(SaleOrder, self).create(vals)
