@@ -11,6 +11,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     def _validatePartnerData(self, partners):
+        _logger.debug("**** INICIA _validatePartnerData")
         # Campos requeridos en el cliente para continuar con el pedido
         reqFields = ['vat', 'start_delivery_time', 'finish_delivery_time', 'bank_ids','street', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
 
@@ -18,15 +19,23 @@ class SaleOrder(models.Model):
 
         #partner_invoice_id
         #partner_shipping_id
-
+        _logger.debug("**** reqFields: " + reqFields)
         for partner in partners:
+            _logger.debug("**** ITERA EL PARTNER: " + partner.id)
             # Revisa si cuenta con todos los campos requeridos
             for reqField in reqFields:
+                _logger.debug("**** EVALUANDO EL CAMPO: " + reqField)
                 if partner[reqField] is None:
+                    _logger.debug("**** NO SE ENCONTRÓ EL CAMPO")
                     validFieldsFlag = False
 
+                _logger.debug("**** validFieldsFlag: " + validFieldsFlag)
+                
             if validFieldsFlag:
+                _logger.debug("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
                 self.env['res.partner'].write({'customer_type', 'A'})
+
+        _logger.debug("**** FINALIZA _validatePartnerData")
         return validFieldsFlag
             
                 
