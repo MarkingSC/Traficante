@@ -182,6 +182,15 @@
                     <t t-esc="record.purchase_test_result.value"/>
                 </span>
             </div>
+            <div class="oe_kanban_details" position="after">
+                <div class="o_kanban_record_bottom">
+                    <div class="oe_kanban_bottom_right">
+                        <span class="badge badge-pill" title="Estado del establecimiento" attrs="{'invisible' : [('company_type', '=', 'person')]}">
+                            <t t-esc="record.establishment_status.value"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </field>
     </record>
 
@@ -236,20 +245,20 @@
                 <filter name="est_category" string="Category" context="{'group_by': 'est_category_id'}"></filter>
             </xpath>
             <xpath expr="..//filter[@name='inactive']" position="before">
-                    <filter name="abierto" string="Abiertos" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'A')]"/>
-                    <filter name="cerrado" string="Cerrados" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'C')]"/>
+                <filter name="abierto" string="Abiertos" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'A')]"/>
+                <filter name="cerrado" string="Cerrados" domain="[('company_type', '=', 'company'),('establishment_status', '=', 'C')]"/>
                 <separator/>
             </xpath>
         </field>
     </record>
-    
+
     <record model="ir.actions.act_window" id="res_partner_prospectos_tree">
         <field name="name">Prospectos</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('customer_type','=','P')]</field>
     </record>
-   
+
     <menuitem name="Prospectos" sequence="5" action="res_partner_prospectos_tree" id="res_partner_prospectos_menu" parent="sale.sale_order_menu"/>
 
     <!-- INVOICE AVERAGE CRON -->
