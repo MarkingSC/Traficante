@@ -33,7 +33,7 @@ class SaleOrder(models.Model):
                 _logger.debug("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
                 self.env['res.partner'].write({'customer_type': 'A'})
 
-            if partner[establishment_status] == 'C':
+            if partner['establishment_status'] == 'C':
                 raise UserError("No se puede crear un pedido para un establecimiento cerrado.")
 
         _logger.debug("**** FINALIZA _validateMainPartnerData")
