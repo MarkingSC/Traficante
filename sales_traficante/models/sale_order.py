@@ -49,7 +49,7 @@ class SaleOrder(models.Model):
             raise exceptions.UserError("Capture todos los datos requeridos para la dirección de entrega.")
 
         # Si todo sale bien guarda el pedido
-        return super(SaleOrder, self).create(values)
+        return super(SaleOrder, self).create(vals)
 
     def write(self, vals):
         for order in self:
@@ -70,6 +70,6 @@ class SaleOrder(models.Model):
                     raise exceptions.UserError("Capture todos los datos requeridos para la dirección de entrega.")
             
 
-        return super(SaleOrder, self).write(values)
+        return super(SaleOrder, self).write(vals)
         
  
