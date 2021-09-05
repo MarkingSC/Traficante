@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="action_account_report_ar" model="ir.actions.client">
+            <field name="name">Aged Receivable</field>
+            <field name="tag">account_report</field>
+            <field name="type">ir.actions.client</field>
+            <field name="target">current</field>
+            <field name="binding_type">action</field>
+            <field name="bindingview_types">list,form</field>
+            <field name="context">{'model': 'account.aged.receivable'}</field>
+        </record>
+    </data>
+</odoo>
