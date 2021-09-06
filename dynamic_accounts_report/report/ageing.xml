@@ -49,9 +49,10 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Entry Label</th>
-                                <th>Due date</th>
-                                <th>JRNL</th>
-                                <th>Account</th>
+                                <th>Executive</th>
+                                <th>DueDate</th>
+                                <!--><th>JRNL</th><-->
+                                <!--><th>Account</th><-->
                                 <th>Not Due</th>
                                 <th>0 - 30</th>
                                 <th>30 - 60</th>
@@ -96,8 +97,9 @@
                                 <tr t-foreach="account['child_lines']" t-as="line">
                                     <td><span t-esc="line['move']"/></td>
                                     <td><span t-esc="line['date']"/></td>
-                                    <td><span t-esc="line['jrnl']"/></td>
-                                    <td><span t-esc="line['acc_code']"/></td>
+                                    <!--><td><span t-esc="line['jrnl']"/></td><-->
+                                    <!--><td><span t-esc="line['acc_code']"/></td><-->
+                                    <td><span t-esc="line['sales_person']"/></td>
                                     <td class="text-right">
                                         <span t-if="line.get('period6')"
                                               t-esc="line['amount']"
