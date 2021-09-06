@@ -286,6 +286,7 @@ class AgeingView(models.TransientModel):
             partner_id = line.partner_id.id or False
             move_id = line.move_id.id
             move_name = line.move_id.name
+            user_name = line.invoice_user_id.name
             date_maturity = line.date_maturity
             account_id = line.account_id.name
             account_code = line.account_id.code
@@ -315,6 +316,7 @@ class AgeingView(models.TransientModel):
                     'line': line,
                     'partner_id': partner_id,
                     'move': move_name,
+                    'sales_person': user_name,
                     'jrnl': jrnl_id,
                     'currency': currency_id,
                     'symbol': currency_symbol,
@@ -369,6 +371,7 @@ class AgeingView(models.TransientModel):
                 partner_id = line.partner_id.id or False
                 move_id = line.move_id.id
                 move_name = line.move_id.name
+                user_name = line.invoice_user_id.name
                 date_maturity = line.date_maturity
                 account_id = line.account_id.name
                 account_code = line.account_id.code
@@ -402,6 +405,7 @@ class AgeingView(models.TransientModel):
                             'line': line,
                             'partner_id': partner_id,
                             'move': move_name,
+                            'sales_person': user_name,
                             'currency': currency_id,
                             'symbol': currency_symbol,
                             'jrnl': jrnl_id,
@@ -419,6 +423,7 @@ class AgeingView(models.TransientModel):
                             'line': line,
                             'partner_id': partner_id,
                             'move': move_name,
+                            'sales_person': user_name,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
@@ -436,6 +441,7 @@ class AgeingView(models.TransientModel):
                             'line': line,
                             'partner_id': partner_id,
                             'move': move_name,
+                            'sales_person': user_name,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
@@ -453,6 +459,7 @@ class AgeingView(models.TransientModel):
                             'line': line,
                             'partner_id': partner_id,
                             'move': move_name,
+                            'sales_person': user_name,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
@@ -470,6 +477,7 @@ class AgeingView(models.TransientModel):
                             'line': line,
                             'partner_id': partner_id,
                             'move': move_name,
+                            'sales_person': user_name,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
