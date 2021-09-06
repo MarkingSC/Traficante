@@ -286,7 +286,7 @@ class AgeingView(models.TransientModel):
             partner_id = line.partner_id.id or False
             move_id = line.move_id.id
             move_name = line.move_id.name
-            user_name = line.invoice_user_id.name
+            user_name = line.move_id.invoice_user_id.name
             date_maturity = line.date_maturity
             account_id = line.account_id.name
             account_code = line.account_id.code
@@ -371,7 +371,7 @@ class AgeingView(models.TransientModel):
                 partner_id = line.partner_id.id or False
                 move_id = line.move_id.id
                 move_name = line.move_id.name
-                user_name = line.invoice_user_id.name
+                user_name = line.move_id.invoice_user_id.name
                 date_maturity = line.date_maturity
                 account_id = line.account_id.name
                 account_code = line.account_id.code
