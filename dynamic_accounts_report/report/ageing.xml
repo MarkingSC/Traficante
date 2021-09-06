@@ -96,10 +96,10 @@
                                 </tr>
                                 <tr t-foreach="account['child_lines']" t-as="line">
                                     <td><span t-esc="line['move']"/></td>
+                                    <td><span t-esc="line['sales_person']"/></td>
                                     <td><span t-esc="line['date']"/></td>
                                     <!--><td><span t-esc="line['jrnl']"/></td><-->
                                     <!--><td><span t-esc="line['acc_code']"/></td><-->
-                                    <td><span t-esc="line['sales_person']"/></td>
                                     <td class="text-right">
                                         <span t-if="line.get('period6')"
                                               t-esc="line['amount']"
