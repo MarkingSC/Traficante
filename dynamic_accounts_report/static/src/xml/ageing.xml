@@ -335,10 +335,9 @@
                 <thead>
                     <tr style="">
                         <th>Entry Label</th>
-                        <th>Executive</th>
                         <th>DueDate</th>
-                        <!--><th>JRNL</th><-->
-                        <!--><th>Account</th><-->
+                        <th>JRNL</th>
+                        <th>Account</th>
                         <th>Not Due</th>
                         <th>0-30</th>
                         <th>30-60</th>
@@ -375,17 +374,11 @@
                                 </t>
                             </td>
                             <td>
-                                <t t-esc="account_line.sales_person"/>
-                            </td>
-                            <td>
                                 <t t-esc="account_line.date"/>
                             </td>
-                            <!-->
                             <td>
                                 <t t-esc="account_line.jrnl"/>
                             </td>
-                            <-->
-                            <!-->
                             <td>
                                 <span>
                                     <t t-esc="account_line.acc_code"/>
@@ -393,7 +386,6 @@
                                     <t t-esc="account_line.acc_name"/>
                                 </span>
                             </td>
-                            <-->
                             <t t-if="account_line.currency== 'before'">
                                 <td>
                                     <t t-if="account_line.period6">
