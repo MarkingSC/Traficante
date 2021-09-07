@@ -44,7 +44,7 @@
         <field name="context">{'search_default_internal_loc': 1, 'search_default_categorygroup': 1, 'search_default_productgroup': 1, 'search_default_locationgroup': 1}</field>
     </record>
 
-    <menuitem id="menu_valuation" name="Inventory Report"
+    <menuitem id="stock.menu_valuation" name="Inventory Report"
               parent="stock.menu_warehouse_report" sequence="100"
               action="stock_view_quants_inventory"/>
 
