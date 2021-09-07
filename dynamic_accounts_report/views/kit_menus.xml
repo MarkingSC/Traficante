@@ -25,7 +25,9 @@
     <record id="base_accounting_kit.menu_account_cash_flow_report" model="ir.ui.menu">
         <field name="active" eval="False"/>
     </record>
-
+    <record id="base_accounting_kit.menu_accounting_dashboard" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
 
 </odoo>
 
