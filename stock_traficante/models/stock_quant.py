@@ -11,5 +11,5 @@ class StockPicking(models.Model):
     _inherit = 'stock.quant'
 
     product_category = fields.Many2one(
-        'product.category', 'Category',
+        'product.category', 'Category', store=True,
         readonly=True, related='product_id.categ_id')
