@@ -16,7 +16,7 @@
       <field name="model">stock.quant</field>
       <field name="inherit_id" ref="stock.quant_search_view"/>
       <field name="arch" type="xml">
-        <xpath expr="//filter[@name='productgroup]" position = "before">
+        <xpath expr="//filter[@name='productgroup']" position = "before">
           <filter string="Category" name="categorygroup" context="{'group_by': 'product_category'}"/>
         </xpath>
       </field>
