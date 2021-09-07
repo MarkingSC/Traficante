@@ -22,10 +22,10 @@
       </field>
     </record>
 
-    <record model="ir.actions.server" id="stock.action_view_quants"> <!-- Menu + python -->
+    <!--
+    <record model="ir.actions.server" id="stock.action_view_quants">
         <field name="name">Inventory</field>
         <field name="model_id" ref="model_stock_quant"/>
-        <!--<field name="inherit_id" ref="stock.action_view_quants"/>-->
         <field name="state">code</field>
         <field name="code">
             action = model.with_context(
@@ -59,6 +59,6 @@
     <menuitem id="stock.menu_valuation" name="Inventory Report"
               parent="stock.menu_warehouse_report" sequence="100"
               action="stock_view_quants_inventory"/>
-
+    -->
   </data>
 </odoo>
