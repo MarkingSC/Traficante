@@ -45,6 +45,17 @@
         <field name="context">{'search_default_internal_loc': 1, 'search_default_categorygroup': 1, 'search_default_productgroup': 1, 'search_default_locationgroup': 1}</field>
     </record>
 
+    <record model="ir.ui.view" id="view_stock_quant_tree_custom">
+      <field name="name">stock.quant.tree.custom</field>
+      <field name="model">stock.quant</field>
+      <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='value']" position="replace">
+          <field name="value" optional="show"/>
+        </xpath>
+      </field>
+    </record>
+
     <menuitem id="stock.menu_valuation" name="Inventory Report"
               parent="stock.menu_warehouse_report" sequence="100"
               action="stock_view_quants_inventory"/>
