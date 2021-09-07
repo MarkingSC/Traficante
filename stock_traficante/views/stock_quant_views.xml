@@ -41,7 +41,7 @@
         <field name="name">Inventory</field>
         <field name="res_model">stock.quant</field>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="stock_traficante.view_stock_quant_tree_editable_optional_value_inherit"/>
+        <field name="view_id" ref="stock.view_stock_quant_tree"/>
         <field name="context">{'search_default_internal_loc': 1, 'search_default_categorygroup': 1, 'search_default_productgroup': 1, 'search_default_locationgroup': 1}</field>
     </record>
 
