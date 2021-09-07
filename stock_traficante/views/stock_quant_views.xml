@@ -55,10 +55,10 @@
         </xpath>
       </field>
     </record>
+    -->
 
     <menuitem id="stock.menu_valuation" name="Inventory Report"
               parent="stock.menu_warehouse_report" sequence="100"
-              action="stock_view_quants_inventory"/>
-    -->
+              action="stock.action_view_quants"/>
   </data>
 </odoo>
