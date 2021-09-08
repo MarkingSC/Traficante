@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-06 15:10+0000\n"
-"PO-Revision-Date: 2021-09-06 23:45-0500\n"
+"PO-Revision-Date: 2021-09-07 21:19-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr ": Libro Mayor De Empresas"
 #. module: dynamic_accounts_report
 #: model_terms:ir.ui.view,arch_db:dynamic_accounts_report.trial_balance
 msgid ": Trial Balance"
-msgstr ": Trial Balance"
+msgstr "Balance general"
 
 #. module: dynamic_accounts_report
 #: model_terms:ir.ui.view,arch_db:dynamic_accounts_report.cash_flow
@@ -633,7 +633,7 @@ msgstr "Fecha de finalización"
 #: model_terms:ir.ui.view,arch_db:dynamic_accounts_report.partner_ledger
 #, python-format
 msgid "Entry Label"
-msgstr "Identificador de Asiento"
+msgstr "Documento"
 
 #. module: dynamic_accounts_report
 #. openerp-web
@@ -995,7 +995,7 @@ msgstr "Informe"
 #. module: dynamic_accounts_report
 #: model:ir.model.fields,field_description:dynamic_accounts_report.field_account_cash_flow__today
 msgid "Report Date"
-msgstr "Fecha de informe"
+msgstr "Fecha de Informe"
 
 #. module: dynamic_accounts_report
 #: model:ir.model.fields,field_description:dynamic_accounts_report.field_account_cash_flow__date_from
@@ -1005,7 +1005,7 @@ msgstr "Fecha de informe"
 #: model:ir.model.fields,field_description:dynamic_accounts_report.field_account_partner_ledger__date_from
 #: model:ir.model.fields,field_description:dynamic_accounts_report.field_account_trial_balance__date_from
 msgid "Start Date"
-msgstr "Fecha de inicio"
+msgstr "Fecha de Inicio"
 
 #. module: dynamic_accounts_report
 #. openerp-web
@@ -1022,7 +1022,7 @@ msgstr "Fecha de Inicio:"
 #. module: dynamic_accounts_report
 #: model:ir.model.fields,field_description:dynamic_accounts_report.field_dynamic_balance_sheet_report__date_from
 msgid "Start date"
-msgstr "Fecha de inicio"
+msgstr "Fecha de Inicio"
 
 #. module: dynamic_accounts_report
 #. openerp-web
