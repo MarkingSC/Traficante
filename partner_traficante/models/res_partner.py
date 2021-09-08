@@ -145,5 +145,9 @@ class ResPartner(models.Model):
         diff = dict(show_address=None, show_address_only=None, show_email=None, html_format=None, show_vat=None)
         names = dict(self.with_context(**diff).name_get())
         for partner in self:
-            partner.display_name = names.get(partner.id) + ' ' + partner.business_name
+            if not partner.business_name:
+                partner.display_name = names.get(partner.id)
+            else:
+                partner.display_name = names.get(partner.id) + ' ' + partner.business_name
+
 
