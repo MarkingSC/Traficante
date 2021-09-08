@@ -148,6 +148,6 @@ class ResPartner(models.Model):
             if not partner.business_name:
                 partner.display_name = names.get(partner.id)
             else:
-                partner.display_name = names.get(partner.id) + ' ' + partner.business_name
+                partner.display_name = names.get(partner.id) + ' | ' + partner.business_name
 
 
