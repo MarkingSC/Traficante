@@ -25,11 +25,11 @@
                         <tr>
                             <th colspan="6">Partner</th>
                             <th class="mon_fld">Not Due</th>
-                            <th class="mon_fld">0-30</th>
-                            <th class="mon_fld">30-60</th>
-                            <th class="mon_fld">60-90</th>
-                            <th class="mon_fld">90-120</th>
-                            <th class="mon_fld">120+</th>
+                            <th class="mon_fld">1-7</th>
+                            <th class="mon_fld">8-14</th>
+                            <th class="mon_fld">15-21</th>
+                            <th class="mon_fld">22-30</th>
+                            <th class="mon_fld">30+</th>
 
                             <th class="mon_fld">Total</th>
                         </tr>
@@ -341,11 +341,11 @@
                         <!--><th>JRNL</th><-->
                         <!--><th>Account</th><-->
                         <th>Not Due</th>
-                        <th>0-30</th>
-                        <th>30-60</th>
-                        <th>60-90</th>
-                        <th>90-120</th>
-                        <th>120+</th>
+                        <th>1-7</th>
+                        <th>8-14</th>
+                        <th>15-21</th>
+                        <th>22-30</th>
+                        <th>30+</th>
 
                     </tr>
                 </thead>

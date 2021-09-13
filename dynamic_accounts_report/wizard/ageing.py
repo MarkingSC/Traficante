@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-
+import logging
 from dateutil.relativedelta import relativedelta
 from odoo import fields, models, api, _
 from odoo.tools import float_is_zero
@@ -13,6 +13,7 @@ try:
 except ImportError:
     import xlsxwriter
 
+_logger = logging.getLogger(__name__)
 
 class AgeingView(models.TransientModel):
     _inherit = "account.common.report"
@@ -332,19 +333,28 @@ class AgeingView(models.TransientModel):
 
         # Use one query per period and store results in history (a list variable)
         # Each history will contain: history[1] = {'<partner_id>': <partner_debit-credit>}
+        # El arreglo de periodos es [1-7, 8-14, 15-21, 22-30, 30+]
         history = []
         for i in range(5):
             args_list = (
                 tuple(move_state), tuple(account_type), tuple(partner_ids),)
             dates_query = '(COALESCE(l.date_maturity,l.date)'
-
-            if periods[str(i)]['start'] and periods[str(i)]['stop']:
+            
+            # Si la posicion en el arreglo de periodos es menos de 3 toma las fechas como son
+            if periods[str(i)]['start'] and periods[str(i)]['stop'] and i<3:
                 dates_query += ' BETWEEN %s AND %s)'
+
+            # Si la posicion en el arreglo de periodos es 3 le agrega 2 días a la fecha de fin 
+            # para que sea de 22-30, porque iba de 7 en 7
+            elif periods[str(i)]['start'] and periods[str(i)]['stop'] and i==3:
+                dates_query += " BETWEEN %s AND %s + INTERVAL '2 day')"
 
                 args_list += (
                     periods[str(i)]['start'], periods[str(i)]['stop'])
+            # Si solo tiene la fecha de inicio se le agregan dos días, porque si van de 7 en 7, 
+            # iba a ser 28, pero tiene que ser 30
             elif periods[str(i)]['start']:
-                dates_query += ' >= %s)'
+                dates_query += " >= %s + INTERVAL '2 day')"
 
                 args_list += (periods[str(i)]['start'],)
             else:
@@ -364,6 +374,8 @@ class AgeingView(models.TransientModel):
                                 
                             AND (l.date <= %s)
                             AND l.company_id IN %s'''
+
+            _logger.debug("**** QUERY PARA OBTENCION DE AGEING: " + query)
             cr.execute(query, args_list)
 
             partners_amount = {}
