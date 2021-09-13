@@ -353,16 +353,16 @@ class AgeingView(models.TransientModel):
             # para que sea de 22-30, porque iba de 7 en 7
             elif periods[str(i)]['start'] and periods[str(i)]['stop'] and i==3:
                 _logger.debug("**** EL RANGO TIENE AMBOS LIMITES Y ES 3 ")
-                dates_query += " BETWEEN %s AND %s + INTERVAL '2 day')"
+                dates_query += " BETWEEN %s AND %s::date + 2 * INTERVAL '1 day')"
 
                 args_list += (
                     periods[str(i)]['start'], periods[str(i)]['stop'])
-                    
+
             # Si solo tiene la fecha de inicio se le agregan dos días, porque si van de 7 en 7, 
             # iba a ser 28, pero tiene que ser 30
             elif periods[str(i)]['start']:
                 _logger.debug("**** EL RANGO SOLO TIENE EL LIMITE INFERIOR: ")
-                dates_query += " >= %s + INTERVAL '2 day')"
+                dates_query += " >= %s::date + 2 * INTERVAL '1 day')"
 
                 args_list += (periods[str(i)]['start'],)
             else:
