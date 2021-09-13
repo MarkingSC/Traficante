@@ -392,7 +392,7 @@ class AgeingView(models.TransientModel):
             partners_amount = {}
             aml_ids = cr.fetchall()
             aml_ids = aml_ids and [x[0] for x in aml_ids] or []
-            _logger.debug("**** ID DE MOVIMIENTOS ENCONTRADOS: " + aml_ids)
+            _logger.debug("**** ID DE MOVIMIENTOS ENCONTRADOS: " + str(aml_ids))
             for line in self.env['account.move.line'].browse(aml_ids):
                 partner_id = line.partner_id.id or False
                 move_id = line.move_id.id
