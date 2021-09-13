@@ -336,17 +336,20 @@ class AgeingView(models.TransientModel):
         # El arreglo de periodos es [1-7, 8-14, 15-21, 22-30, 30+]
         history = []
         for i in range(5):
+            _logger.debug("**** RANGO: " + str(i))
             args_list = (
                 tuple(move_state), tuple(account_type), tuple(partner_ids),)
             dates_query = '(COALESCE(l.date_maturity,l.date)'
             
             # Si la posicion en el arreglo de periodos es menos de 3 toma las fechas como son
             if periods[str(i)]['start'] and periods[str(i)]['stop'] and i<3:
+                _logger.debug("**** EL RANGO TIENE AMBOS LIMITES Y ES MENOR QUE 3 ")
                 dates_query += ' BETWEEN %s AND %s)'
 
             # Si la posicion en el arreglo de periodos es 3 le agrega 2 días a la fecha de fin 
             # para que sea de 22-30, porque iba de 7 en 7
             elif periods[str(i)]['start'] and periods[str(i)]['stop'] and i==3:
+                _logger.debug("**** EL RANGO TIENE AMBOS LIMITES Y ES 3 ")
                 dates_query += " BETWEEN %s AND %s + INTERVAL '2 day')"
 
                 args_list += (
@@ -354,14 +357,18 @@ class AgeingView(models.TransientModel):
             # Si solo tiene la fecha de inicio se le agregan dos días, porque si van de 7 en 7, 
             # iba a ser 28, pero tiene que ser 30
             elif periods[str(i)]['start']:
+                _logger.debug("**** EL RANGO SOLO TIENE EL LIMITE INFERIOR: ")
                 dates_query += " >= %s + INTERVAL '2 day')"
 
                 args_list += (periods[str(i)]['start'],)
             else:
+                _logger.debug("**** EL RANGO SOLO TIENE EL LIMITE SUPERIOR: ")
                 dates_query += ' <= %s)'
                 args_list += (periods[str(i)]['stop'],)
 
             args_list += (date_from, tuple(company_ids))
+
+            _logger.debug("**** LISTA DE ARGUMENTOS: " + str(args_list))
 
             query = '''SELECT l.id
                             FROM account_move_line AS l, account_account, account_move am
