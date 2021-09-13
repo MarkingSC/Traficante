@@ -19,7 +19,7 @@ class AgeingView(models.TransientModel):
     _name = 'account.partner.ageing'
 
     period_length = fields.Integer(string='Period Length (days)',
-                                   required=True, default=30)
+                                   required=True, default=7)
     date_from = fields.Date(default=lambda *a: time.strftime('%Y-%m-%d'))
     result_selection = fields.Selection([('customer', 'Receivable Accounts'),
                                          ('supplier', 'Payable Accounts'),
