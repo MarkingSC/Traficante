@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <record model="ir.actions.act_window" id="purchase_order_line_action">
+            <field name="name">Productos comprados</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                Visualice la relación de productos comprados.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="purchase_order_line_tree_view">
+            <field name="model">purchase.order.line.tree.view</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <field name="product_id"></field>
+                <field name="partner_id"></field>
+                <field name="price_total"></field>
+                <field name="product_qty"></field>
+                <field name="receipt_type"></field>
+                <field name="received_date"></field>
+            </field>
+        </record>
+
+        <record id="purchase_order_line_search_view" model="ir.ui.view">
+            <field name="name">purchase.order.line.search.view</field>
+            <field name="model">purchase.order.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar líneas">
+                    <filter name="regular" string="Regular" domain="[('receipt_type', '=', 'regular')]"/>
+                    <filter name="credito" string="Crédito" domain="[('receipt_type', '=', 'credito')]"/>
+                    <filter name="consigna" string="Consigna" domain="[('receipt_type', '=', 'consigna')]"/>
+                    <separator/>
+                    <filter name="product_id" string="Producto" context="{'group_by': 'product_id'}"></filter>
+                    <filter name="partner_id" string="Proveedor" context="{'group_by': 'partner_id'}"></filter>
+                </search>
+            </field>
+        </record>
+
+        <menuitem name="Productos comprados" sequence="2" id="purchase_order_line_menu" parent="purchase.purchase_report" action="purchase_order_line_action"></menuitem>
+
+    </data>
+</odoo>

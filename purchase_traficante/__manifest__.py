@@ -26,6 +26,7 @@
         # 'security/ir.model.access.csv',
         'views/purchase_order_views.xml',
         'views/res_partner_views.xml',
+        'views/purchase_order_line_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
