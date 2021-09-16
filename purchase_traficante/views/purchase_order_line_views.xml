@@ -4,6 +4,7 @@
             <field name="name">Productos comprados</field>
             <field name="res_model">purchase.order.line</field>
             <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="purchase_order_line_search_view"></field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                 Visualice la relación de productos comprados.
@@ -17,10 +18,10 @@
             <field name="arch" type="xml">
                 <field name="product_id"></field>
                 <field name="partner_id"></field>
-                <field name="price_total"></field>
-                <field name="product_qty"></field>
                 <field name="receipt_type"></field>
                 <field name="received_date"></field>
+                <field name="product_qty"></field>
+                <field name="price_total"></field>
             </field>
         </record>
 
@@ -30,12 +31,15 @@
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Buscar líneas">
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Vendor" filter_domain="[('partner_id', 'child_of', self)]"/>
                     <filter name="regular" string="Regular" domain="[('receipt_type', '=', 'regular')]"/>
                     <filter name="credito" string="Crédito" domain="[('receipt_type', '=', 'credito')]"/>
                     <filter name="consigna" string="Consigna" domain="[('receipt_type', '=', 'consigna')]"/>
                     <separator/>
                     <filter name="product_id" string="Producto" context="{'group_by': 'product_id'}"></filter>
                     <filter name="partner_id" string="Proveedor" context="{'group_by': 'partner_id'}"></filter>
+                    <filter string="Estado" name="status" domain="[]" context="{'group_by' : 'state'}"/>
                 </search>
             </field>
         </record>

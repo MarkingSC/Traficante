@@ -13,11 +13,15 @@ class PurchaseOrderLine(models.Model):
 
     @api.model
     def _get_received_date(self):
+        _logger.debug("**** self en _get_received_date: " + str(self))
         purchase_order = self.order_id
+        _logger.debug("**** purchase_order en _get_received_date: " + str(purchase_order))
         if purchase_order and len(purchase_order.picking_ids)>0:
             stock_move = purchase_order.picking_ids[0]
+            _logger.debug("**** stock_move en _get_received_date: " + str(stock_move))
             self.received_date = stock_move.date_done
         else:
+            _logger.debug("**** no hay picking_ids en _get_received_date para self:" + str(self))
             self.received_date = None
 
     receipt_type = fields.Selection(selection = [('regular','Regular'),('credito','Crédito'),('consigna','Consigna')], string='Tipo de recepción', default="regular", required=True)
