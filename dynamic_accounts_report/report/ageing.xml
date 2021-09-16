@@ -51,10 +51,10 @@
                                 <th>Entry Label</th>
                                 <th>Executive</th>
                                 <th>Invoice Date</th>
-                                <th>DueDate</th>
+                                <th style="max-width: 70px">DueDate</th>
                                 <!--><th>JRNL</th><-->
                                 <!--><th>Account</th><-->
-                                <th>Not Due</th>
+                                <th style="max-width: 70px">Not Due</th>
                                 <th class="text-right">1 - 7 </th>
                                 <th class="text-right">8 - 14 </th>
                                 <th class="text-right">15 - 21 </th>
@@ -102,7 +102,6 @@
                                     <td><span t-esc="line['date']"/></td>
                                     <!--><td><span t-esc="line['jrnl']"/></td><-->
                                     <!--><td><span t-esc="line['acc_code']"/></td><-->
-                                    <td></td>
                                     <td class="text-right">
                                         <span t-if="line.get('period6')"
                                               t-esc="line['amount']"
