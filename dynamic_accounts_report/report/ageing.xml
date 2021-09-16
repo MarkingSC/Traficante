@@ -55,12 +55,12 @@
                                 <!--><th>JRNL</th><-->
                                 <!--><th>Account</th><-->
                                 <th>Not Due</th>
-                                <th>0 - 30</th>
-                                <th>30 - 60</th>
-                                <th>60 - 90</th>
-                                <th>90 - 120</th>
-                                <th>120 +</th>
-                                <th> Total</th>
+                                <th class="text-right">1 - 7 </th>
+                                <th class="text-right">8 - 14 </th>
+                                <th class="text-right">15 - 21 </th>
+                                <th class="text-right">22 - 30 </th>
+                                <th class="text-right">30 + </th>
+                                <th class="text-right"> Total </th>
                                 <th groups="base.group_multi_currency">Currency</th>
                             </tr>
                         </thead>
