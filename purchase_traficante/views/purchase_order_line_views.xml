@@ -33,8 +33,8 @@
             <field name="arch" type="xml">
                 <search string="Buscar líneas">
                     <field name="product_id"/>
-                    <field name="from" string="Desde" filter_domain="[('received_date', '&gt;=', self)]"/>
-                    <field name="to" string="Haste" filter_domain="[('received_date', '&lt;=', self)]"/>
+                    <field name="received_date" string="Desde" filter_domain="[('received_date', '&gt;=', self)]"/>
+                    <field name="received_date" string="Haste" filter_domain="[('received_date', '&lt;=', self)]"/>
                     <field name="partner_id" string="Proceedor" filter_domain="[('partner_id', 'child_of', self)]"/>
                     <filter name="regular" string="Regular" domain="[('receipt_type', '=', 'regular')]"/>
                     <filter name="credito" string="Crédito" domain="[('receipt_type', '=', 'credito')]"/>
