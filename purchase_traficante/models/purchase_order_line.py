@@ -13,8 +13,9 @@ class PurchaseOrderLine(models.Model):
 
     @api.model
     def _get_received_date(self):
-        stock_move = self.order_id.picking_ids[0]
-        if stock_move:
+        purchase_order = self.order_id.picking_ids[0]
+        if purchase_order and len(purchase_order.picking_ids)>0:
+            stock_move = purchase_order.picking_ids[0]
             self.received_date = stock_move.date_done
         else:
             self.received_date = None
