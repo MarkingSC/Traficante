@@ -11,6 +11,13 @@
                 <xpath expr="//field[@name='order_line']/tree/field[@name='taxes_id']" position="attributes">
                     <attribute name="options">{'no_create': False}</attribute>
                 </xpath>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="payment_term_id" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}" options="{'no_create': True}"/>
+                    <field name="receipt_type" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
+                </xpath>
+                <xpath expr="//group[@name='other_info']/field[@name='payment_term_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
             </field>
         </record>
 
