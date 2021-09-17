@@ -25,20 +25,18 @@ class PurchaseOrder(models.Model):
             elif self.receipt_type != 'consigna':
                 self.receipt_type = 'credito'
         
-    @api.depends('receipt_type')
-    def _evaluate_payment_type(self):
-        for record in self:
-            _logger.debug("**** inicia _evaluate_payment_type para la orden: " + str(record))
-            payment_term = self.env['account.payment.term'].search([('id', '=', record.payment_term_id)])
-            if payment_term:
-                _logger.debug("**** plazo de pago seleccionado: " + str(payment_term.name))
-                _logger.debug("**** tipo de recepción seleccionada: " + str(record.receipt_type))
-                if len(payment_term.line_ids) == 1 and payment_term.line_ids[0].days == 0:
-                    if record.receipt_type != 'regular':
-                        raise UserError("No es posible generar la orden de compra. Si el plazo de pago inmediato la recepción debe ser regular.")
-                elif record.receipt_type != 'credito':
-                        raise UserError("No es posible generar la orden de compra. Si el plazo de pago no es inmediato la recepción debe ser a crédito.")
-            
+    @api.onchange('receipt_type')
+    def _onchange_receipt_type(self):
+        payment_term = self.env['account.payment.term'].search([('id', '=', record.payment_term_id)])
+        if payment_term:
+            if len(payment_term.line_ids) == 1 and payment_term.line_ids[0].days == 0:
+                if self.receipt_type != 'regular':
+                    self.receipt_type = 'regular'
+                    raise UserError("No es posible realizar el cambio. Si el plazo de pago inmediato la recepción debe ser regular.")
+            elif self.receipt_type != 'credito':
+                    self.receipt_type = 'credito'
+                    raise UserError("No es posible realizar el cambio. Si el plazo de pago no es inmediato la recepción debe ser a crédito.")
+        
     @api.model
     def create(self, vals):
         if 'receipt_type' in vals:
