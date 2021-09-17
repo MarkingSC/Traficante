@@ -12,31 +12,11 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     receipt_type = fields.Selection(selection = [('regular','Regular'),('credito','Crédito'),('consigna','Consigna')], string='Tipo de recepción', default="regular", required=True)
-
-    @api.onchange('payment_term_id')
-    def _onchange_payment_term(self):
-        """ Si se cambian los plazos de pago y es un plazo con dias de crédito entonces se toma como recepción a crédito.
-        """
-
-        payment_term = self.env['account.payment.term'].search([('id', '=', self.payment_term_id.id)])
-        if payment_term:
-            if len(payment_term.line_ids) == 1 and payment_term.line_ids[0].days == 0:
-                self.receipt_type = 'regular'
-            elif self.receipt_type != 'consigna':
-                self.receipt_type = 'credito'
         
     @api.onchange('receipt_type')
     def _onchange_receipt_type(self):
-        payment_term = self.env['account.payment.term'].search([('id', '=', self.payment_term_id.id)])
-        if payment_term:
-            if len(payment_term.line_ids) == 1 and payment_term.line_ids[0].days == 0:
-                if self.receipt_type != 'regular':
-                    self.receipt_type = 'regular'
-                    raise UserError("No es posible realizar el cambio. Si el plazo de pago inmediato la recepción debe ser regular.")
-            elif self.receipt_type != 'credito':
-                    self.receipt_type = 'credito'
-                    raise UserError("No es posible realizar el cambio. Si el plazo de pago no es inmediato la recepción debe ser a crédito.")
-        
+        self.payment_term_id = None
+
     @api.model
     def create(self, vals):
         if 'receipt_type' in vals:
