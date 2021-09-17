@@ -24,7 +24,19 @@ class PurchaseOrderLine(models.Model):
             _logger.debug("**** no hay picking_ids en _get_received_date para self:" + str(self))
             self.received_date = None
 
-    receipt_type = fields.Selection(selection = [('regular','Regular'),('credito','Crédito'),('consigna','Consigna')], string='Tipo de recepción', default="regular", required=True)
+    @api.model
+    def _get_receipt_type(self):
+        _logger.debug("**** self en _get_receipt_type: " + str(self))
+        purchase_order = self.order_id
+        _logger.debug("**** purchase_order en _get_receipt_type: " + str(purchase_order))
+        if purchase_order:
+            _logger.debug("**** purchase_order en _get_receipt_type: " + str(purchase_order))
+            self.receipt_type = purchase_order.receipt_type
+        else:
+            _logger.debug("**** no hay purchase_order en _get_receipt_type para self:" + str(self))
+            self.receipt_type = 'regular'
+
+    receipt_type = fields.Selection(selection = [('regular','Regular'),('credito','Crédito'),('consigna','Consigna')], string='Tipo de recepción', default=_get_receipt_type, required=True)
 
     partner_id = fields.Many2one(string="Proveedor", comodel_name="res.partner", related="order_id.partner_id")
     received_date = fields.Date(string="Fecha de recepción", default=_get_received_date)
