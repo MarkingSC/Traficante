@@ -27,7 +27,7 @@ class PurchaseOrder(models.Model):
         
     @api.onchange('receipt_type')
     def _onchange_receipt_type(self):
-        payment_term = self.env['account.payment.term'].search([('id', '=', record.payment_term_id)])
+        payment_term = self.env['account.payment.term'].search([('id', '=', self.payment_term_id)])
         if payment_term:
             if len(payment_term.line_ids) == 1 and payment_term.line_ids[0].days == 0:
                 if self.receipt_type != 'regular':
