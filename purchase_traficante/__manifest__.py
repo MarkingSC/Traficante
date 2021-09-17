@@ -27,6 +27,7 @@
         'views/purchase_order_views.xml',
         'views/res_partner_views.xml',
         'views/purchase_order_line_views.xml',
+        'data/ir_cron_data.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
