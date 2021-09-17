@@ -26,15 +26,16 @@ class PurchaseOrderLine(models.Model):
 
     @api.depends('order_id.receipt_type')
     def _get_receipt_type(self):
-        _logger.debug("**** self en _get_receipt_type: " + str(self))
-        purchase_order = self.order_id
-        _logger.debug("**** purchase_order en _get_receipt_type: " + str(purchase_order))
-        if purchase_order:
+        for record in self:
+            _logger.debug("**** self en _get_receipt_type: " + str(record))
+            purchase_order = record.order_id
             _logger.debug("**** purchase_order en _get_receipt_type: " + str(purchase_order))
-            self.receipt_type = purchase_order.receipt_type
-        else:
-            _logger.debug("**** no hay purchase_order en _get_receipt_type para self:" + str(self))
-            self.receipt_type = 'regular'
+            if purchase_order:
+                _logger.debug("**** purchase_order en _get_receipt_type: " + str(purchase_order))
+                record.receipt_type = purchase_order.receipt_type
+            else:
+                _logger.debug("**** no hay purchase_order en _get_receipt_type para self:" + str(record))
+                record.receipt_type = 'regular'
 
     receipt_type = fields.Selection(selection = [('regular','Regular'),('credito','Crédito'),('consigna','Consigna')], string='Tipo de recepción', compute=_get_receipt_type, required=True)
 
