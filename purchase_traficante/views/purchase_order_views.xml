@@ -13,7 +13,7 @@
                 </xpath>
                 <xpath expr="//field[@name='company_id']" position="after">
                     <field name="receipt_type" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
-                    <field name="payment_term_id" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')], 'required': [('receipt_type', '=', 'credito')]}" options="{'no_create': True}"/>
+                    <field name="payment_term_id" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')], 'required': [('receipt_type', '=', 'credito')], 'invisible': ['|',('receipt_type', '=', 'regular'), ('receipt_type', '=', 'consigna')]}" options="{'no_create': True}"/>
                 </xpath>
                 <xpath expr="//group[@name='other_info']/field[@name='payment_term_id']" position="attributes">
                     <attribute name="invisible">True</attribute>
