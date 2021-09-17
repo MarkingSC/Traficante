@@ -18,7 +18,7 @@ class PurchaseOrder(models.Model):
         """ Si se cambian los plazos de pago y es un plazo con dias de crédito entonces se toma como recepción a crédito.
         """
 
-        payment_term = self.env['account.payment.term'].search([('id', '=', self.payment_term_id)])
+        payment_term = self.env['account.payment.term'].search([('id', '=', self.payment_term_id.id)])
         if payment_term:
             if len(payment_term.line_ids) == 1 and payment_term.line_ids[0].days == 0:
                 self.receipt_type = 'regular'
