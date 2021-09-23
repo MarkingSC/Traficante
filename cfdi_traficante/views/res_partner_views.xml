@@ -9,9 +9,9 @@
 			<field name="arch" type="xml">
                  <!--<field name="vat" position="replace">
                  </field> -->
-                 <field name="website" position="after">
-                     <field name="rfc" />
-                 </field>
+                 <xpath expr="//field[@name='rfc']" position="attributes">
+                    <attribute name='invisible'>1</attribute>
+	            </xpath>
 	            <xpath expr="//field[@name='uso_cfdi']" position="after">
                     <field name="methodo_pago"/>
                     <field name="forma_pago"/>
