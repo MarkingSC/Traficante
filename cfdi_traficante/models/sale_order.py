@@ -32,13 +32,13 @@ class SaleOrder(models.Model):
                    ('29', '29 - Tarjeta de servicios'),
                    ('30', '30 - Aplicación de anticipos'),
                    ('99', '99 - Por definir'),],
-        string=_('Forma de pago'), related = 'partner_id.forma_pago', required = True
+        string=_('Forma de pago'), related = 'partner_id.forma_pago'
     )
     #num_cta_pago = fields.Char(string=_('Núm. Cta. Pago'))
     methodo_pago = fields.Selection(
         selection=[('PUE', _('Pago en una sola exhibición')),
                    ('PPD', _('Pago en parcialidades o diferido')),],
-        string=_('Método de pago'), related = 'partner_id.methodo_pago', required = True
+        string=_('Método de pago'), related = 'partner_id.methodo_pago'
     )
     uso_cfdi = fields.Selection(
         selection=[('G01', _('Adquisición de mercancías')),
@@ -60,7 +60,7 @@ class SaleOrder(models.Model):
                    ('D08', _('Gastos de transportación escolar obligatoria')),
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
                    ('P01', _('Por definir')),],
-        string=_('Uso CFDI (cliente)'), related = 'partner_id.uso_cfdi', required = True
+        string=_('Uso CFDI (cliente)'), related = 'partner_id.uso_cfdi'
     )
 
     @api.onchange("partner_id")
