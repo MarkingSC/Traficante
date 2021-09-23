@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\account_traficante"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\catalogos_cfdi"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\cdfi_invoice"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\crm_traficante"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\partner_business_name"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\partner_traficante"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\purchase_discount"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\purchase_traficante"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\stock_traficante"
+		},
+		{
+			"path": "..\\..\\..\\odoo_traficante\\Traficante\\traficante_settings"
+		}
+	]
+}

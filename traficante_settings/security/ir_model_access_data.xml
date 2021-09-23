@@ -353,6 +353,25 @@
             <field name="perm_create" eval="True"></field>
             <field name="perm_unlink" eval="True"></field>
         </record>
-
+        <!-- Reglas de registro para exclusividad de productos en compañias -->
+        <record id="ir_rule_model_produc_exclusive" model="ir.rule">
+                 <field name = "name"> exclusividad de productos en compañias </field>
+                 <field name = "model_id" ref = "account.model_product_template" />
+                 <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+                 <field name="perm_read" eval="True"></field>
+                 <field name="perm_write" eval="True"></field>
+                 <field name="perm_create" eval="True"></field>
+                 <field name="perm_unlink" eval="True"></field>
+        </record>
+        <!-- Reglas de registro para exclusividad de Contactos en compañias -->
+        <record id="ir_rule_model_partner_exclusive" model="ir.rule">
+            <field name = "name">exclusividad de Contactos en compañias</field>
+            <field name = "model_id" ref = "account.model_res_partner" />
+         <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+         <field name="perm_read" eval="True"></field>
+         <field name="perm_write" eval="True"></field>
+         <field name="perm_create" eval="True"></field>
+         <field name="perm_unlink" eval="True"></field>
+   </record>
     </data>
 </odoo>
