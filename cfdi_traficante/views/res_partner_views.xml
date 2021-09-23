@@ -12,9 +12,12 @@
                  <xpath expr="//field[@name='rfc']" position="attributes">
                     <attribute name='invisible'>1</attribute>
 	            </xpath>
+                <xpath expr="//field[@name='uso_cfdi']" position="attributes">
+                    <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                </xpath>
 	            <xpath expr="//field[@name='uso_cfdi']" position="after">
-                    <field name="methodo_pago"/>
-                    <field name="forma_pago"/>
+                    <field name="methodo_pago" attrs="{'required' : [('customer_type', '=', 'A')]}"/>
+                    <field name="forma_pago" attrs="{'required' : [('customer_type', '=', 'A')]}"/>
 	            </xpath>
 			</field>
 		</record>
