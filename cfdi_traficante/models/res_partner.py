@@ -2,7 +2,7 @@
 import logging
 from datetime import  datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import AccessError, UserError, ValidationError
 
 
