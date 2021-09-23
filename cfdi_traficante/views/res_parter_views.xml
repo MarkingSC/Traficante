@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- INHERIT view_partner_form -->
+		<record id="view_partner_form_cfdi_traficante" model="ir.ui.view">
+			<field name="name">res.partner.form.cfdi.traficante.inherit</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="cdfi_invoice.view_partner_form" />
+			<field name="arch" type="xml">
+                 <!--<field name="vat" position="replace">
+                 </field> -->
+                 <field name="website" position="after">
+                     <field name="rfc" />
+                 </field>
+	            <xpath expr="//field[@name='uso_cfdi']" position="after">
+                    <field name="methodo_pago"/>
+                    <field name="forma_pago"/>
+	            </xpath>
+			</field>
+		</record>
+    </data>
+</odoo>
