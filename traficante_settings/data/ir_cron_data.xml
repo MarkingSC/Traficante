@@ -1,5 +1,5 @@
 <odoo>
-<record model="ir.cron" id="product_exclusivity ">
+<record model="ir.cron" id="planned_product_action">
     <field name="name">Actualizar los productos para cada compañia</field>
     <field name="model_id" ref="account.model_res_partner"></field>
     <field name="active" eval="True"></field>
@@ -24,7 +24,7 @@ for partner in partners:
 </record>
 
 
-<record model="ir.cron" id="contact_exclusivity ">
+<record model="ir.cron" id="planned_contact_action">
     <field name="name">Actualizar los contactos para cada compañia </field>
     <field name="model_id" ref="account.model_product_template"></field>
     <field name="active" eval="True"></field>
