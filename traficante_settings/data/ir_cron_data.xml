@@ -18,7 +18,7 @@
 partners = env['res.partner'].search([])
 
 for partner in partners:
-  partner.write({"company_id": 1})
+    partner.write({"company_id": 1})
         
     </field>
 </record>
@@ -43,7 +43,7 @@ for partner in partners:
 products = env['product.template'].search([])
 
 for product in products:
-product.write({"company_id": 1})
+    product.write({"company_id": 1})
         
     </field>
 </record>
