@@ -28,6 +28,7 @@
         'views/ir_ui_menu_views.xml',
         'data/res_users_data.xml',
         'data/res_company_data.xml',
+        'data/ir_cron_data.xml',
         'security/ir_model_access_data.xml',
     ],
 
