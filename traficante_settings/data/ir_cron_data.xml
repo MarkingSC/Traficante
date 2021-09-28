@@ -1,6 +1,6 @@
 <odoo>
 <record model="ir.cron" id="planned_product_action">
-    <field name="name">Actualizar los productos para cada compañia</field>
+    <field name="name">Establecer la compañía principal para los contactos</field>
     <field name="model_id" ref="account.model_res_partner"></field>
     <field name="active" eval="True"></field>
     <field name="state">code</field>
@@ -25,7 +25,7 @@ for partner in partners:
 
 
 <record model="ir.cron" id="planned_contact_action">
-    <field name="name">Actualizar los contactos para cada compañia </field>
+    <field name="name">Establecer la compañía principal para los productos </field>
     <field name="model_id" ref="account.model_product_template"></field>
     <field name="active" eval="True"></field>
     <field name="state">code</field>
@@ -40,10 +40,10 @@ for partner in partners:
 #  - Warning: Warning Exception to use with raise
 # To return an action, assign: action = {...}
 
-partners = env['res.partner'].search([])
+products = env['product.template'].search([])
 
-ffor partner in partners:
-partner.write({"company_id": 1})
+for product in products:
+product.write({"company_id": 1})
         
     </field>
 </record>
