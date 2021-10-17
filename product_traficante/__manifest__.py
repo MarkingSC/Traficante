@@ -3,10 +3,10 @@
     'name': "Configuraciones de ventas para Traficante",
 
     'summary': """
-        Modifica los modelos necesarios para la adaptación al proceso de Traficante""",
+        Modifica las características de los produtos para Traficante""",
 
     'description': """
-        - Modificación de las funciones de creación y modificación de pedidos de venta para validar que el cliente tenga datos fiscales y de entrega
+        - Modificación del método de obtención de cantidades en inventario.
         
     """,
 
@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'partner_traficante', 'cfdi_traficante'],
+    'depends': ['base', 'stock', 'product'],
 
     # always loaded
     'data': [
