@@ -7,6 +7,7 @@
             <field name="reception_steps">one_step</field>
             <field name="delivery_steps">ship_only</field>
             <field name="buy_to_resupply" eval="True"></field>
+            <field name="return_location" eval="True"></field>
         </record>
 
         <record id="warehouse1" model="stock.warehouse">
@@ -16,6 +17,7 @@
             <field name="reception_steps">one_step</field>
             <field name="delivery_steps">ship_only</field>
             <field name="buy_to_resupply" eval="True"></field>
+            <field name="return_location" eval="True"></field>
         </record>
 
         <record id="warehouse_0_1" model="stock.warehouse">
