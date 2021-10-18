@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Configuraciones de ventas para Traficante",
+    'name': "Configuraciones de productos para Traficante",
 
     'summary': """
         Modifica las características de los produtos para Traficante""",

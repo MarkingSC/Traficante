@@ -22,12 +22,9 @@ class ProductProduct(models.Model):
             #)
             #return [('id', 'in', product_ids)]
         #return self._search_product_quantity(operator, value, 'qty_available')
-        #---
-        #product_ids = self._search_qty_available_new(
-        #        operator, value, self.env.context.get('lot_id'), self.env.context.get('owner_id'),
-        #        self.env.context.get('package_id')
-        #    )
-        #return [('id', 'in', product_ids)]
-        #---
-        return self._search_product_quantity(operator, value, 'qty_available')
+        product_ids = self._search_qty_available_new(
+                operator, value, self.env.context.get('lot_id'), self.env.context.get('owner_id'),
+                self.env.context.get('package_id')
+            )
+        return [('id', 'in', product_ids)]
 
