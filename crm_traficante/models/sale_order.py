@@ -18,7 +18,7 @@ class saleOrder(models.Model):
                 if (line.free_qty_today < line.qty_to_deliver and not line.is_mto):
                     pass_flag = False
                     message = _('You plan to sell %s %s of %s but you only have %s %s available in %s warehouse.') % \
-                              (line.qty_to_deliver, line.product_uom.name, line.product_id.name, line.virtual_available_at_date,
+                              (line.qty_to_deliver, line.product_uom.name, line.product_id.name, line.free_qty_today,
                                line.product_uom.name, line.order_id.warehouse_id.name)
                     raise exceptions.UserError(message)
         if pass_flag:
