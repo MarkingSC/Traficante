@@ -11,7 +11,20 @@
                 <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+                <xpath expr="//field[@name='partner_invoice_id']" position="attributes">
+                    <attribute name="context">{'default_type':'invoice', 'show_address': 1}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+                    <attribute name="context">{'default_type':'delivery', 'show_address': 1}</attribute>
+                </xpath>
             </field>
         </record>
+        
+        <!--
+        <template id="sale_order_line_view_list_traficante" name="sale.order.line.view.list" inherit_id="web.assets_backend">
+            <xpath expr="//script[@src='/sale_stock/static/src/js/qty_at_date_widget.js']" position="replace">
+                <script type="text/javascript" src="/crm_traficante/static/src/js/qty_at_date_widget.js"></script>
+            </xpath>
+        </template>-->
     </data>
 </odoo>
