@@ -254,6 +254,7 @@
         </field>
     </record>
 
+    <!-- Accion para activar la vista de arbol de prospectos -->
     <record model="ir.actions.act_window" id="res_partner_prospectos_tree">
         <field name="name">Prospectos</field>
         <field name="res_model">res.partner</field>
@@ -261,7 +262,24 @@
         <field name="domain">[('customer_type','=','P')]</field>
     </record>
 
+    <!-- Accion para activar la vista de arbol de clientes suspendidos-->
+    <record model="ir.actions.act_window" id="res_partner_suspendidos_tree">
+        <field name="name">Suspendidos</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('customer_type','=','X')]</field>
+    </record>
+
+    <!-- Modificación de la accion para crear contacctos para que se establezca la compañía por defecto-->
+    <record model="ir.actions.act_window" id="contacts.action_contacts">
+        <field name="context">{'default_is_company': True, 'default_company_id': allowed_company_ids[0]}</field>
+    </record>
+
+    <!-- Elemento del menú para ver los prospectos-->
     <menuitem name="Prospectos" sequence="5" action="res_partner_prospectos_tree" id="res_partner_prospectos_menu" parent="sale.sale_order_menu"/>
+
+    <!-- Elemento del menú para ver los clientes suspendidos-->
+    <menuitem name="Suspendidos" sequence="6" action="res_partner_suspendidos_tree" id="res_partner_suspendidos_menu" parent="sale.sale_order_menu"/>
 
     <!-- INVOICE AVERAGE CRON -->
     <record model="ir.cron" id="daily_invoiced_avg_cron">

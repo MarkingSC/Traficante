@@ -115,29 +115,61 @@ class ResPartner(models.Model):
 
 
     # Campos para resolver requerimientos de fase 2.1
-    customer_type = fields.Selection(selection = [('P','Prospecto'),('A','Activo')], string='Tipo', default="P", required=True)
+    customer_type = fields.Selection(selection = [('P','Prospecto'),('A','Activo'),('X','Suspendido')], string='Tipo', default="P", required=True)
     establishment_status=fields.Selection(selection = [('A','Abierto'),('C','Cerrado')], string='Estado del Establecimiento', default="A")
 
+    # Función que cambia la segmentación del cliente y le resetea los valores de credito, ventas, compras y evaluaciones
     def _update_customer_type_from_orders(self):
-        _logger.debug("**** INICIA _update_customer_type_from_orders con el cliente: " + str(self.id))
+
+        _logger.info("**** INICIA _update_customer_type_from_orders")
 
         last_order = self.env['sale.order'].search([('partner_id', '=', self.id)], limit = 1, order ='date_order desc')
         today_date = datetime.today()
+        total_due = None
 
-        _logger.debug("**** Fecha del ultimo pedido: " + str(last_order.date_order))
-        _logger.debug("**** Fecha de hoy: " + str(today_date))
+        try:
+            _logger.info('**** self.total_due: ' + str(self.total_due))
+            total_due = self.total_due
+        except:
+            _logger.info('**** No se pudo obtener self.total_due ')
+            total_due = 0
 
-        if not last_order.date_order:
-            _logger.debug("**** Cambia el cliente a Prospecto")
-            self.write({'customer_type': 'P'})
-        else:
-            if ((today_date - last_order.date_order).days/30.4) > 3:
-                _logger.debug("**** Cambia el cliente a Prospecto")
-                self.write({'customer_type': 'P'})
+        if (not last_order.date_order) and total_due <= 0:
+            # Si no tiene ventas y no debe nada
+            _logger.info('**** entra a if not last_order.date_order: ')
+            _logger.info("**** Cambia el segmento del cliente y reinicia los valores de evaluación de cliente")
+            self.write({
+                'customer_type': 'X', 
+                'pmf': '0',
+                'pmfxp': '0',
+                'active_limit': False,
+                'warning_stage': '0',
+                'blocking_stage': '0',
+                'payment_test_result': None,
+                'purchase_test_result': None})
+            self.payment_answer_ids.write({'option_id': None})
+            self.purchase_answer_ids.write({'option_id': None})
+        elif last_order.date_order:
+            # Si si tiene ventas, evalua la fecha de la ultima venta
+            _logger.info('**** entra a ELSE de if not last_order.date_order: ')
+            if ((today_date - last_order.date_order).days/30.4) > 3 and total_due <= 0:
+                _logger.info("**** Cambia el segmento del cliente y reinicia los valores de evaluación de cliente")
+                self.write({
+                    'customer_type': 'X', 
+                    'pmf': '0',
+                    'pmfxp': '0',
+                    'active_limit': False,
+                    'warning_stage': '0',
+                    'blocking_stage': '0',
+                    'payment_test_result': None,
+                    'purchase_test_result': None})
+                self.payment_answer_ids.write({'option_id': None})
+                self.purchase_answer_ids.write({'option_id': None})
             else:
                 self.write({'customer_type': 'A'})
+        
 
-        _logger.debug("**** TERMINA _update_customer_type_from_orders")
+        _logger.info("**** TERMINA _update_customer_type_from_orders")
         return True
 
     @api.depends('is_company', 'name', 'parent_id.display_name', 'type', 'company_name')
