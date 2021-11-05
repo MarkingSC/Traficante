@@ -270,9 +270,12 @@
         <field name="domain">[('customer_type','=','X')]</field>
     </record>
 
-    <!-- Modificación de la accion para crear contacctos para que se establezca la compañía por defecto-->
+    <!-- Modificación de la accion para crear contactos para que se establezca la compañía por defecto-->
     <record model="ir.actions.act_window" id="contacts.action_contacts">
         <field name="context">{'default_is_company': True, 'default_company_id': allowed_company_ids[0]}</field>
+    </record>
+    <record model="ir.actions.act_window" id="account.res_partner_action_customer">
+        <field name="context">{'search_default_customer': 1,'res_partner_search_mode': 'customer', 'default_is_company': True, 'default_customer_rank': 1, 'default_company_id': allowed_company_ids[0]}</field>
     </record>
 
     <!-- Elemento del menú para ver los prospectos-->

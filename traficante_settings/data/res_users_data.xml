@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="1">
 
         <!-- Agentes de ventas -->
         <record id="res_user_sale_agent_1" model="res.users">

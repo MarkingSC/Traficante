@@ -21,7 +21,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account', 'partner_traficante'],
+    'depends': ['base', 'account', 'partner_traficante', 'sale'],
 
     # always loaded
     'data': [
