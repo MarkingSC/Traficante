@@ -369,9 +369,9 @@
             <field name = "model_id" ref = "account.model_res_partner" />
          <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
          <field name="perm_read" eval="True"></field>
-         <field name="perm_write" eval="True"></field>
-         <field name="perm_create" eval="True"></field>
-         <field name="perm_unlink" eval="True"></field>
+         <field name="perm_write" eval="False"></field>
+         <field name="perm_create" eval="False"></field>
+         <field name="perm_unlink" eval="False"></field>
    </record>
     </data>
 </odoo>

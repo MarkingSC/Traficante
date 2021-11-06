@@ -254,12 +254,13 @@
         </field>
     </record>
 
-    <!-- Accion para activar la vista de arbol de prospectos -->
+    <!-- Acciotn para activar la vista de arbol de prospectos -->
     <record model="ir.actions.act_window" id="res_partner_prospectos_tree">
         <field name="name">Prospectos</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('customer_type','=','P')]</field>
+        <field name="context">{'default_is_company': True, 'default_company_id': allowed_company_ids[0]}</field>
     </record>
 
     <!-- Accion para activar la vista de arbol de clientes suspendidos-->
@@ -268,6 +269,7 @@
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('customer_type','=','X')]</field>
+        <field name="context">{'default_is_company': True, 'default_company_id': allowed_company_ids[0]}</field>
     </record>
 
     <!-- Modificación de la accion para crear contactos para que se establezca la compañía por defecto-->

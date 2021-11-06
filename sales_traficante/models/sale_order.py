@@ -11,6 +11,12 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
+    partner_business_name = fields.Char(string='Razón social')
+
+    @api.onchange('partner_id')
+    def _update_business_name(self):
+        self.partner_business_name = self.partner_id.business_name
+
     def _validateMainPartnerData(self, partners):
         _logger.debug("**** INICIA _validateMainPartnerData")
         reqFields = ['vat', 'rfc', 'forma_pago', 'methodo_pago', 'uso_cfdi']
