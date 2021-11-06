@@ -8,6 +8,12 @@ _logger = logging.getLogger(__name__)
 class saleOrder(models.Model):
     _inherit = 'sale.order'
 
+    partner_business_name = fields.Char(string='Razón social')
+
+    @api.onchange('partner_id')
+    def _update_business_name(self):
+        self.partner_business_name = self.partner_id.business_name
+
     def action_confirm(self):
         pass_flag = True
         for so in self:
