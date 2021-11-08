@@ -2,7 +2,7 @@
 <odoo>
     <template id="cdfi_invoice_report_invoice_document_traficante" inherit_id="cdfi_invoice.report_invoice_document">
         <xpath expr="//span[@t-field='o.partner_id.name']" position="before">
-            <span t-field="o.partner_id.business_name" />
+            <span t-field="o.partner_id.business_name" /> <br/>
         </xpath>
     </template>
 </odoo>
