@@ -34,6 +34,7 @@
         'views/account_tax_views.xml',
         'views/account_fiscal_position_views.xml',
         'views/ir_ui_menu_views.xml',
+        '/report/sale_order_report_templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
