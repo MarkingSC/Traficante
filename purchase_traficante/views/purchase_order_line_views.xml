@@ -1,16 +1,5 @@
 <odoo>
     <data>
-        <record model="ir.actions.act_window" id="purchase_order_line_action">
-            <field name="name">Productos comprados</field>
-            <field name="res_model">purchase.order.line</field>
-            <field name="view_mode">tree</field>
-            <field name="search_view_id" ref="purchase_order_line_search_view"></field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">
-                Visualice la relación de productos comprados.
-                </p>
-            </field>
-        </record>
 
         <record model="ir.ui.view" id="purchase_order_line_tree_view">
             <field name="model">purchase.order.line</field>
@@ -47,7 +36,19 @@
             </field>
         </record>
 
-        <menuitem name="Productos comprados" sequence="2" id="purchase_order_line_menu" parent="purchase.purchase_report" action="purchase_order_line_action"></menuitem>
+        <record model="ir.actions.act_window" id="purchase_order_line_action">
+            <field name="name">Productos comprados</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="purchase_order_line_search_view"></field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                Visualice la relación de productos comprados.
+                </p>
+            </field>
+        </record>
 
+        <menuitem name="Productos comprados" sequence="2" id="purchase_order_line_menu" parent="purchase.purchase_report" action="purchase_order_line_action"></menuitem>
+        
     </data>
 </odoo>
