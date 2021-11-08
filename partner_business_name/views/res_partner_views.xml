@@ -7,9 +7,17 @@
           <field name="arch" type="xml">
               <xpath expr="..//field[@name='name']/.." position="after">
                   <h1>
-                    <field name="business_name" placeholder="Business name"
-                           attrs="{'invisible': [('is_company','=', False)]}"/>
+                    <field name="business_name" placeholder="Business name"/>
                   </h1>
+              </xpath>
+              <xpath expr="//field[@name='child_ids']/form//field[@name='name']" position="before">
+                <div class="o_td_label">
+                    <label for="name" string="Nombre o Razón Social" style="font-weight:bold;" attrs="{'invisible': [('type','!=', 'invoice')]}"/>
+                    <label for="name" string="Nombre del contacto" style="font-weight:bold;" attrs="{'invisible': [('type','=', 'invoice')]}"/>
+                </div>
+              </xpath>
+              <xpath expr="//field[@name='child_ids']/form//field[@name='name']" position="attributes">
+                <attribute name="nolabel">1</attribute>
               </xpath>
           </field>
     </record>

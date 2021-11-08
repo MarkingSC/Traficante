@@ -22,7 +22,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:partner_business_name.field_res_users__business_name
 #: model_terms:ir.ui.view,arch_db:partner_business_name.partner_business_name_form
 msgid "Business name"
-msgstr "Razón Social"
+msgstr "Nombre o Razón Social"
 
 #. module: partner_business_name
 #: model:ir.model,name:partner_business_name.model_res_partner
