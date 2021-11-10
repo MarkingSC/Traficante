@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <odoo>
     <template id="cdfi_invoice_report_invoice_document_traficante" inherit_id="cdfi_invoice.report_invoice_document">
-        <xpath expr="//span[@t-field='o.partner_id.name']" position="before">
+        <xpath expr="//span[@t-field='o.partner_id.name']" position="replace">
             <span t-field="o.partner_id.business_name" /> <br/>
+            <span t-field="o.partner_commercial_name" />
         </xpath>
     </template>
 </odoo>

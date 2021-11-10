@@ -19,6 +19,7 @@
                     <attribute name="context">{'default_company_id': allowed_company_ids[0], 'res_partner_search_mode': (context.get('default_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and 'customer') or (context.get('default_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt') and 'supplier') or False,'show_address': 1, 'default_is_company': True, 'show_vat': True}</attribute>
                 </xpath>
                 <xpath expr="//group[@id='header_left_group']/div[1]" position="before">
+                    <field name="partner_commercial_name" readonly="1" string="Nombre Comercial"></field>
                     <field name="partner_business_name" readonly="1" string="Razón Social"></field> 
                 </xpath>
             </field>
