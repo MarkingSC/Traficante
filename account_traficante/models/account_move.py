@@ -17,10 +17,11 @@ class AccountMove(models.Model):
     @api.depends('invoice_origin', 'partner_id')
     def _get_client_name(self):
         _logger.info('**** entra a _get_client_name: ')
-        self.ensure_one()
-        if self.invoice_origin:
-            _logger.info('**** origen de la factura: ' + str(self.invoice_origin))
-            sale_order_origin = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit = 1)
-            sale_partner_name = sale_order_origin.partner_id.name
-            _logger.info('**** nombre del cliente: ' + str(sale_partner_name))
-            self.partner_commercial_name = sale_partner_name
+        #self.ensure_one()
+        for invoice in self:
+            if invoice.invoice_origin:
+                _logger.info('**** origen de la factura: ' + str(invoice.invoice_origin))
+                sale_order_origin = self.env['sale.order'].search([('name', '=', invoice.invoice_origin)], limit = 1)
+                sale_partner_name = sale_order_origin.partner_id.name
+                _logger.info('**** nombre del cliente: ' + str(sale_partner_name))
+                invoice.partner_commercial_name = sale_partner_name
