@@ -109,9 +109,9 @@ class ResPartner(models.Model):
 
         # default to type 'contact' or the partner itself
         if result.get('delivery'):
-            _logger.info('**** result.get(delivery) ' + str(result.get('delivery').name))
+            _logger.info('**** result.get(delivery) ' + str(result.get('delivery')))
         if result.get('invoice'):           
-            _logger.info('**** result.get(invoice) ' + str(result.get('invoice').name))
+            _logger.info('**** result.get(invoice) ' + str(result.get('invoice')))
         default = result.get('contact', self.id or False)
         for adr_type in adr_pref:
             result[adr_type] = result.get(adr_type) or default
