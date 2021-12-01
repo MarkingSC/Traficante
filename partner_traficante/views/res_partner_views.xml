@@ -69,10 +69,11 @@
 
             <xpath expr="..//field[@name='vat']" position="after">
                 <field name="customer_type"/>
-                <field name="establishment_status" attrs="{'invisible' : [('company_type', '=', 'person')]}"/>
+                <!--<field name="establishment_status" attrs="{'invisible' : [('company_type', '=', 'person')]}"/>-->
+                <field name="establishment_status"/>
             </xpath>
             <xpath expr="//field[@name='vat']" position="attributes">
-                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
+                <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), ('parent_id', '=', False)]}</attribute>
             </xpath>
 
             <xpath expr="//field[@name='street']" position="attributes">
@@ -187,7 +188,10 @@
             <div class="oe_kanban_details" position="after">
                 <div class="o_kanban_record_bottom">
                     <div class="oe_kanban_bottom_right">
-                        <span class="badge badge-pill" title="Estado del establecimiento" attrs="{'invisible' : [('company_type', '=', 'person')]}">
+                        <!--><span class="badge badge-pill" title="Estado del establecimiento" attrs="{'invisible' : [('company_type', '=', 'person')]}">
+                            <t t-esc="record.establishment_status.value"/>
+                        </span>-->
+                        <span class="badge badge-pill" title="Estado del establecimiento">
                             <t t-esc="record.establishment_status.value"/>
                         </span>
                     </div>

@@ -45,3 +45,16 @@ class ResPartner(models.Model):
     @api.onchange('vat')
     def setRfcCfdi(self):
         self.rfc = self.vat
+
+        
+    @api.model
+    def create(self, vals):
+        _logger.info("**** Entra a create con vals: " + str(vals))
+        if 'vat' in vals and vals['vat']:
+            _logger.info("**** RFC entrante " + str(vals['vat']))
+            foundVat = self.env['res.partner'].search([('vat', '=', vals['vat'])])
+            if len(foundVat) > 0:                
+                raise UserError("Ya existe un registro con el mismo RFC.")
+
+        record = super(ResPartner, self).create(vals)
+        return record

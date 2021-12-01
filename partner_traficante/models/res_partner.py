@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
 
     _inherit = 'res.partner'
+    _rec_name = 'display_name'
 
     zone_id = fields.Many2one('res.partner.zone', string='Zone')
     start_delivery_time = fields.Float(string="Start delivery time")
@@ -181,5 +182,7 @@ class ResPartner(models.Model):
                 partner.display_name = names.get(partner.id)
             else:
                 partner.display_name = names.get(partner.id) + ' | ' + partner.business_name
+
+
 
 

@@ -12,80 +12,106 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     def _validateMainPartnerData(self, partners):
-        _logger.debug("**** INICIA _validateMainPartnerData")
-        reqFields = ['vat', 'rfc', 'forma_pago', 'methodo_pago', 'uso_cfdi']
+        _logger.info("**** INICIA _validateMainPartnerData")
+        reqFields = ['name', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
         validFieldsFlag = True
 
-        _logger.debug("**** reqFields: " + str(reqFields))
+        _logger.info("**** reqFields: " + str(reqFields))
         for partner in partners:
-            _logger.debug("**** ITERA EL PARTNER: " + str(partner.id))
+            _logger.info("**** ITERA EL PARTNER: " + str(partner.id))
             # Revisa si cuenta con todos los campos requeridos
             for reqField in reqFields:
-                _logger.debug("**** EVALUANDO EL CAMPO: " + str(reqField))
-                _logger.debug("**** partner[reqField]" + str(partner[reqField]))
+                _logger.info("**** EVALUANDO EL CAMPO: " + str(reqField))
+                _logger.info("**** partner[reqField]" + str(partner[reqField]))
                 if not partner[reqField]:
-                    _logger.debug("**** NO SE ENCONTRÓ EL CAMPO")
+                    _logger.info("**** NO SE ENCONTRÓ EL CAMPO")
                     validFieldsFlag = False
 
-                _logger.debug("**** validFieldsFlag: " + str(validFieldsFlag))
+                _logger.info("**** validFieldsFlag: " + str(validFieldsFlag))
                 
             if validFieldsFlag:
-                _logger.debug("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
+                _logger.info("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
                 self.env['res.partner'].write({'customer_type': 'A'})
 
             if partner['establishment_status'] == 'C':
                 raise UserError("No se puede crear un pedido para un establecimiento cerrado.")
 
-        _logger.debug("**** FINALIZA _validateMainPartnerData")
+        _logger.info("**** FINALIZA _validateMainPartnerData")
         return validFieldsFlag
 
 
     def _validateAddrPartnerData(self, partners):
-        _logger.debug("**** INICIA _validateAddrPartnerData")
+        _logger.info("**** INICIA _validateAddrPartnerData")
         # Campos requeridos en el cliente para continuar con el pedido
         reqFields = ['street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
 
         validFieldsFlag = True
 
-        _logger.debug("**** reqFields: " + str(reqFields))
+        _logger.info("**** reqFields: " + str(reqFields))
         for partner in partners:
-            _logger.debug("**** ITERA EL PARTNER: " + str(partner.id))
+            _logger.info("**** ITERA EL PARTNER: " + str(partner.id))
             # Revisa si cuenta con todos los campos requeridos
             for reqField in reqFields:
-                _logger.debug("**** EVALUANDO EL CAMPO: " + str(reqField))
-                _logger.debug("**** partner[reqField]" + str(partner[reqField]))
+                _logger.info("**** EVALUANDO EL CAMPO: " + str(reqField))
+                _logger.info("**** partner[reqField]" + str(partner[reqField]))
                 if not partner[reqField]:
-                    _logger.debug("**** NO SE ENCONTRÓ EL CAMPO")
+                    _logger.info("**** NO SE ENCONTRÓ EL CAMPO")
                     validFieldsFlag = False
 
-                _logger.debug("**** validFieldsFlag: " + str(validFieldsFlag))
+                _logger.info("**** validFieldsFlag: " + str(validFieldsFlag))
 
             # No lo actualiza porque estas son solo direcciones  
             #if validFieldsFlag:
-            #    _logger.debug("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
+            #    _logger.info("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
             #    self.env['res.partner'].write({'customer_type', 'A'})
 
-        _logger.debug("**** FINALIZA _validateAddrPartnerData")
+        _logger.info("**** FINALIZA _validateAddrPartnerData")
         return validFieldsFlag
             
+    def _validateInvoicePartnerData(self, partners):
+        _logger.info("**** INICIA _validateInvoicePartnerData")
+        # Campos requeridos en el cliente para continuar con el pedido
+        reqFields = ['vat', 'rfc', 'forma_pago', 'methodo_pago', 'uso_cfdi', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
+
+        validFieldsFlag = True
+
+        _logger.info("**** reqFields: " + str(reqFields))
+        for partner in partners:
+            _logger.info("**** ITERA EL PARTNER: " + str(partner.id))
+            # Revisa si cuenta con todos los campos requeridos
+            for reqField in reqFields:
+                _logger.info("**** EVALUANDO EL CAMPO: " + str(reqField))
+                _logger.info("**** partner[reqField]" + str(partner[reqField]))
+                if not partner[reqField]:
+                    _logger.info("**** NO SE ENCONTRÓ EL CAMPO")
+                    validFieldsFlag = False
+
+                _logger.info("**** validFieldsFlag: " + str(validFieldsFlag))
+
+            if validFieldsFlag:
+                _logger.info("**** ACTUALIZA EL CLIENTE CON CUSTOMER_TYPE A")
+                self.env['res.partner'].write({'customer_type': 'A'})
+
+        _logger.info("**** FINALIZA _validateInvoicePartnerData")
+        return validFieldsFlag
                 
     @api.model
     def create(self, vals):
         
         if 'partner_id' in vals:
-            _logger.debug("**** GUARDANDO partner_id ")
+            _logger.info("**** GUARDANDO partner_id ")
             partnerMain = self.env['res.partner'].search([('id', '=', vals['partner_id'])])
             validMainPartner = self._validateMainPartnerData(partnerMain)
             if not validMainPartner:
                 raise UserError("Capture todos los datos requeridos para el cliente.")
         if 'partner_invoice_id' in vals:
-            _logger.debug("**** GUARDANDO partner_invoice_id ")
+            _logger.info("**** GUARDANDO partner_invoice_id ")
             partnerInv = self.env['res.partner'].search([('id', '=', vals['partner_invoice_id'])])
-            validInvPartner = self._validateAddrPartnerData(partnerInv)
+            validInvPartner = self._validateInvoicePartnerData(partnerInv)
             if not validInvPartner:
                 raise UserError("Capture todos los datos requeridos para la dirección de facturación.")
         if 'partner_shipping_id' in vals:
-            _logger.debug("**** GUARDANDO partner_shipping_id ")
+            _logger.info("**** GUARDANDO partner_shipping_id ")
             partnerShip = self.env['res.partner'].search([('id', '=', vals['partner_shipping_id'])])
             validShipPartner = self._validateAddrPartnerData(partnerShip)
             if not validShipPartner:

@@ -7,7 +7,7 @@
           <field name="arch" type="xml">
               <xpath expr="..//field[@name='name']/.." position="after">
                   <h1>
-                    <field name="business_name" placeholder="Business name"/>
+                    <field name="business_name" placeholder="Business name" force_save="1" attrs="{'readonly': [('parent_id','!=',False)]}"/>
                   </h1>
               </xpath>
               <xpath expr="//field[@name='child_ids']/form//field[@name='name']" position="before">
