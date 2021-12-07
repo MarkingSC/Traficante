@@ -4,6 +4,7 @@ from odoo import models, fields, api, _, exceptions
 import odoo
 from datetime import timedelta, datetime
 import pytz
+from odoo.exceptions import AccessError, UserError, ValidationError
 
 datetime.today()
 
@@ -44,6 +45,20 @@ class StockPicking(models.Model):
                 move.invoice_ids = []
 
     invoice_ids = fields.Many2many('account.move', ondelete='restrict', string='invoices', compute=get_invoices)
+
+    def button_validate(self):
+        # Evalúa si hay facturas validadas para la validación del movimiento
+        _logger.info("**** INICIA button_validate")
+        _logger.info("**** INICIA self.invoice_ids: " + str(self.invoice_ids))
+        _logger.info("**** INICIA self.picking_type_code: " + str(self.picking_type_code))
+        _logger.info("**** INICIA self.origin: " + str(self.origin))
+
+        postedInvoices = self.invoice_ids.filtered(lambda r: r.state == 'posted')
+
+        if len(postedInvoices)  == 0 and self.picking_type_code == 'outgoing' and self.origin:
+            raise UserError("No es posible validar el movimiento. No existen facturas confirmadas para este pedido.")
+
+        return super(StockPicking, self).button_validate()
 
     def action_set_delivery_route_date(self):
         active_ids = self.env.context.get('active_ids')

@@ -208,3 +208,10 @@ msgstr "Albarán"
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__invoice_ids
 msgid "invoices"
 msgstr "Facturas"
+
+
+#. module: stock
+#: selection:stock.move,state:0 selection:stock.pack.operation,state:0
+#: selection:stock.picking,state:0
+msgid "Available"
+msgstr "Disponible"
