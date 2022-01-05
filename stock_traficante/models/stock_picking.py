@@ -15,20 +15,22 @@ class StockPicking(models.Model):
 
     @api.depends('partner_id')
     def get_delivery_times(self):
-        start = '{0:02.0f}:{1:02.0f}'.format(*divmod(self.partner_id.start_delivery_time * 60, 60))
-        finish = '{0:02.0f}:{1:02.0f}'.format(*divmod(self.partner_id.finish_delivery_time * 60, 60))
-        self.partner_delivery_time = start + ' - ' + finish
+        for move in self:
+            start = '{0:02.0f}:{1:02.0f}'.format(*divmod(move.partner_id.start_delivery_time * 60, 60))
+            finish = '{0:02.0f}:{1:02.0f}'.format(*divmod(move.partner_id.finish_delivery_time * 60, 60))
+            move.partner_delivery_time = start + ' - ' + finish
 
     @api.depends('partner_id')
     def get_delivery_address(self):
-        partner = self.partner_id
-        addressList = [partner.street,
-                       partner.street2,
-                       partner.city,
-                       partner.state_id.name,
-                       partner.country_id.name]
+        for move in self:
+            partner = move.partner_id
+            addressList = [partner.street,
+                        partner.street2,
+                        partner.city,
+                        partner.state_id.name,
+                        partner.country_id.name]
 
-        self.partner_address = ",".join(map(str, addressList))
+            move.partner_address = ",".join(map(str, addressList))
 
     on_delivery_route = fields.Boolean(string="On delivery route", default = False)
     partner_delivery_time = fields.Char(string="Customer receiving times", readonly=True, compute=get_delivery_times)
@@ -36,6 +38,19 @@ class StockPicking(models.Model):
     partner_address =fields.Char(string="Delivery address", compute=get_delivery_address)
     partner_business_name = fields.Char(string="Business name", store=True, related='partner_id.business_name')
     partner_zip_code = fields.Char(string="Business name", store=True, related='partner_id.zip')
+
+    @api.depends('origin', 'invoice_ids')
+    def get_invoices_amount(self):
+        _logger.info("**** INICIA get_invoices_amount")
+        for move in self:
+            if move.origin:
+                _logger.info("str(self.invoice_ids): " + str(move.invoice_ids))
+                _logger.info("str(self.invoice_ids.mapped('amount_total')): " + str(move.invoice_ids.mapped('amount_total')))
+                _logger.info("','.join(['1','2','3']): " + ','.join(['1','2','3']))
+                #_logger.info("','.join(['1','2','3']): " + ','.join([1,2,3]))
+                move.invoice_amounts = str(",".join(move.invoice_ids.mapped(lambda r: "${:,.2f}".format(r.amount_total))))
+            else:
+                move.invoice_amounts = ''
 
     def get_invoices(self):
         for move in self:
@@ -45,6 +60,7 @@ class StockPicking(models.Model):
                 move.invoice_ids = []
 
     invoice_ids = fields.Many2many('account.move', ondelete='restrict', string='invoices', compute=get_invoices)
+    invoice_amounts = fields.Char(string="Invoices amount", compute=get_invoices_amount)
 
     def button_validate(self):
         # Evalúa si hay facturas validadas para la validación del movimiento
@@ -55,15 +71,39 @@ class StockPicking(models.Model):
 
         postedInvoices = self.invoice_ids.filtered(lambda r: r.state == 'posted')
 
-        if len(postedInvoices)  == 0 and self.picking_type_code == 'outgoing' and self.origin:
-            raise UserError("No es posible validar el movimiento. No existen facturas confirmadas para este pedido.")
+        if self.picking_type_code == 'outgoing' and self.origin:
+            if len(postedInvoices)  == 0:
+                raise UserError("No es posible validar el movimiento. No existen facturas confirmadas para este pedido.")
+
+            if self.on_delivery_route != True:
+                raise UserError("No es posible validar el movimiento. Esta entrega debe estar programada en ruta para continuar.")
 
         return super(StockPicking, self).button_validate()
 
     def action_set_delivery_route_date(self):
+        _logger.info("**** INICIA action_set_delivery_route_date")  
         active_ids = self.env.context.get('active_ids')
+
         if not active_ids:
             return ''
+
+        return {
+            'name': _('Set delivery route date'),
+            'res_model': 'stock.picking.route.register',
+            'view_mode': 'form',
+            'view_id': self.env.ref('stock_traficante.stock_picking_delivery_route_date_multi').id,
+            'context': self.env.context,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+        }
+
+    @api.model
+    def action_set_delivery_route_date_form(self, vals):
+        
+        _logger.info("**** INICIA action_set_delivery_route_date_form")  
+        _logger.info("self.env.ref('stock_traficante.stock_picking_delivery_route_date_multi').id: " + str(self.env.ref('stock_traficante.stock_picking_delivery_route_date_multi').id))  
+        _logger.info("**** self.env.context: " + str(self.env.context)) 
+        _logger.info("**** vals: " + str(vals))  
 
         return {
             'name': _('Set delivery route date'),
@@ -88,6 +128,7 @@ class pickingRouteRegister(models.TransientModel):
 
     @api.model
     def default_get(self, fields):
+        _logger.info("**** INICIA default_get")  
         if not self.env.user.tz:
             raise exceptions.UserError("Es necesario establecer una zona horaria desde las preferencias su usuario.")
         tz = pytz.timezone(str(self.env.user.tz))
@@ -96,7 +137,13 @@ class pickingRouteRegister(models.TransientModel):
 
         rec['scheduled_date'] = tz.fromutc(odoo.fields.Datetime.now()).date() + timedelta(days=1)
 
-        active_ids = self._context.get('active_ids')
+        if self._context.get('params'):            
+            _logger.info("***** self._context.get('params').get('id'): " + str (self._context.get('params').get('id')))  
+            active_ids = self._context.get('params').get('id')
+        else:
+            _logger.info("***** self._context.get('active_ids'): " + str(self._context.get('active_ids')))  
+            active_ids = self._context.get('active_ids')
+
         if not active_ids:
             return rec
         moves = self.env['stock.picking'].browse(active_ids)
@@ -111,8 +158,9 @@ class pickingRouteRegister(models.TransientModel):
         return rec
 
     def add_to_route(self):
+        _logger.info("**** INICIA add_to_route")  
         tz = pytz.timezone(str(self.env.user.tz))
-        utc_now = fields.Datetime.now();
+        utc_now = fields.Datetime.now()
         now_user = tz.fromutc(fields.Datetime.now()).replace(tzinfo=None)
         diferencia = utc_now - now_user
         fecha_res = datetime.combine(self.scheduled_date, datetime.min.time()) + diferencia
