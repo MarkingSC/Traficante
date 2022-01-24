@@ -66,3 +66,21 @@ class AccountMove(models.Model):
         self.methodo_pago = self.partner_id.methodo_pago
         self.forma_pago = self.partner_id.forma_pago
         self.uso_cfdi = self.partner_id.uso_cfdi
+
+    # Envía de forma automática el correo de la facura cuando se timbre
+    def action_cfdi_generate(self):
+        _logger.info('**** entra a action_cfdi_generate: ')
+        result = super(AccountMove, self).action_cfdi_generate()
+        if result == True:
+            _logger.info('**** Se generó el CFDI y se enviará por correo. ')
+            self.force_invoice_send()
+            _logger.info('**** Factura enviada. ')
+        return result
+
+    # Envía de forma automática el correo de la Nota de crédito cuando se timbre
+    def action_cfdi_cancel(self):
+        _logger.info('***** entra a action_cfdi_cancel *****')
+        result = super(AccountMove, self).action_cfdi_cancel()
+        #_logger.info('**** Se generó la nota de credito y se enviará por correo. ')
+        #self.force_invoice_send() en realidad la cancelación del cfdi no es como tal la creacion de la nota de crédito
+        #_logger.info('**** Nota de crédito enviada. ')
