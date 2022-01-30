@@ -39,10 +39,8 @@
 					<div style="border-bottom: 1px solid black;"></div>
 				</div>
 			</div>
-			<t t-if="o.estado_factura == 'factura_cancelada'">
-			   <div style="position:absolute;opacity:0.25;z-index:1000;transform:rotate(300deg);-webkit-transform:rotate(300deg);width:150%;">
-                      <p style="font-size:140px;">CANCELADO</p>
-               </div>
+			<t t-if="o.estado_factura == 'factura_cancelada'">			 
+			   <h1 style="text-align:center;">FACTURA CANCELADA</h1>			 
 			</t>
         </div>
 
@@ -271,41 +269,27 @@
 												t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
 										</td>
 									</tr>
-
-									<t t-set="positive_tax_amount" t-value="0.0"/>
-									<t t-set="negative_tax_amount" t-value="0.0"/>
-
-									<!--
-									<t t-foreach="o.tax_line_ids" t-as="line">
-											<t t-if="line.tax_id.amount > 0">
-												<t t-set="positive_tax_amount" t-value="positive_tax_amount + line.amount"/>
-											</t>
-											<t t-if="not line.tax_id.amount > 0">
-												<t t-set="negative_tax_amount" t-value="negative_tax_amount + line.amount"/>
-											</t>
-									</t>-->
-									<t t-if="positive_tax_amount > 0">
-										<tr>
-											<td>
-												<span>Total impuestos trasladados</span>
-											</td>
-											<td class="text-right">
-												<span t-esc="positive_tax_amount"
-												t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-											</td>
-										</tr>
-									</t>
-									<t t-if="abs(negative_tax_amount) > 0">
-										<tr>
-											<td>
-												<span>Total impuestos retenidos</span>
-											</td>
-											<td class="text-right">
-												<span t-esc="abs(negative_tax_amount)"
-												t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-											</td>
-										</tr>
-									</t>
+                                    <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                        <tr style="">
+                                            <t t-if="len(o.line_ids.filtered(lambda line: line.tax_line_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                <td><span t-esc="amount_by_group[0]"/></td>
+                                                <td class="text-right o_price_total">
+                                                    <span t-esc="amount_by_group[3]"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>
+                                                    <span t-esc="amount_by_group[0]"/>
+                                                   <!-- <span>&amp;nbsp;<span>on</span>
+                                                        <t t-esc="amount_by_group[4]"/>
+                                                    </span>-->
+                                                </td>
+                                                <td class="text-right o_price_total">
+                                                    <span t-esc="amount_by_group[3]"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
 									<tr class="border-black">
 										<td>
 										<strong>Total</strong>
@@ -422,7 +406,7 @@
 				<!--CORRECCIÓN DE ETIQUETAS STRONG-->
 
 
-				<div class="row" style="page-break-inside: avoid">
+				<div name="cadenas" class="row" style="page-break-inside: avoid">
 						<!--INICIA CODIGOQR-->
 						<div class="col-xs-5">
 							<img t-if="o.qrcode_image" t-att-src="'data:image/png;base64,%s' % to_text(o.qrcode_image)"

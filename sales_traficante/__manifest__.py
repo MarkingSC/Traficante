@@ -7,6 +7,7 @@
 
     'description': """
         - Modificación de las funciones de creación y modificación de pedidos de venta para validar que el cliente tenga datos fiscales y de entrega
+        - Implementación de la devolución automática de productos desde la cancelación de pedidos
         
     """,
 
@@ -24,6 +25,7 @@
 
     # always loaded
     'data': [
+        'security/stock_security.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

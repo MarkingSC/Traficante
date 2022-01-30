@@ -71,7 +71,7 @@ class SaleOrder(models.Model):
     def _validateInvoicePartnerData(self, partners):
         _logger.info("**** INICIA _validateInvoicePartnerData")
         # Campos requeridos en el cliente para continuar con el pedido
-        reqFields = ['vat', 'rfc', 'forma_pago', 'methodo_pago', 'uso_cfdi', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
+        reqFields = ['vat', 'forma_pago', 'methodo_pago', 'uso_cfdi', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
 
         validFieldsFlag = True
 
@@ -146,4 +146,12 @@ class SaleOrder(models.Model):
 
         return super(SaleOrder, self).write(vals)
         
- 
+    # Para ejecutar la devolución automática de los productos.
+    def action_cancel(self):
+        _logger.info('**** Entra a action_cancel: ')
+        res = super(SaleOrder, self).action_cancel()
+        last_movement = self.env['stock.picking'].search([('sale_id', '=', self.id)], limit = 1, order='date_done desc')
+        # Si el ultimo movimiento corresponde a una orden de entrega de ese almacén
+        if last_movement.picking_type_id == last_movement.picking_type_id.warehouse_id.out_type_id and last_movement.state == 'done':
+            last_movement.action_reverse_automatic()
+        return res

@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 #----------------------------------------------------------
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-      
+
     forma_pago = fields.Selection(
         selection=[('01', '01 - Efectivo'), 
                    ('02', '02 - Cheque nominativo'), 
@@ -35,6 +35,7 @@ class SaleOrder(models.Model):
                    ('28', '28 - Tarjeta de débito'), 
                    ('29', '29 - Tarjeta de servicios'),
                    ('30', '30 - Aplicación de anticipos'),
+                   ('31', '31 - Intermediario pagos'),
                    ('99', '99 - Por definir'),],
         string=_('Forma de pago'),
     )
@@ -68,7 +69,6 @@ class SaleOrder(models.Model):
     )
     fecha_corregida = fields.Datetime(string=_('Fecha Cotizacion'), compute='_get_fecha_corregida')
 
-    
     @api.onchange('partner_id')
     def _get_uso_cfdi(self):
         if self.partner_id:
@@ -77,7 +77,6 @@ class SaleOrder(models.Model):
                 }
             self.update(values)
 
-    
     @api.onchange('payment_term_id')
     def _get_metodo_pago(self):
         if self.payment_term_id:
@@ -120,15 +119,15 @@ class SaleOrder(models.Model):
     
     def _get_fecha_corregida(self):
         if self.date_order:
-            #corregir hora
-            timezone = self._context.get('tz')
-            if not timezone:
-                timezone = self.env.user.partner_id.tz or 'America/Mexico_City'
-            #timezone = tools.ustr(timezone).encode('utf-8')
-            
-            local = pytz.timezone(timezone)
-            naive_from = self.date_order
-            local_dt_from = naive_from.replace(tzinfo=pytz.UTC).astimezone(local)
-            self.fecha_corregida = local_dt_from.strftime ("%Y-%m-%d %H:%M:%S")
-            #_logger.info('fecha ... %s', self.fecha_corregida)
+           #corregir hora
+           timezone = self._context.get('tz')
+           if not timezone:
+               timezone = self.env.user.partner_id.tz or 'America/Mexico_City'
+           #timezone = tools.ustr(timezone).encode('utf-8')
+
+           local = pytz.timezone(timezone)
+           naive_from = self.date_order
+           local_dt_from = naive_from.replace(tzinfo=pytz.UTC).astimezone(local)
+           self.fecha_corregida = local_dt_from.strftime ("%Y-%m-%d %H:%M:%S")
+           #_logger.info('fecha ... %s', self.fecha_corregida)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -84,3 +84,14 @@ class AccountMove(models.Model):
         #_logger.info('**** Se generó la nota de credito y se enviará por correo. ')
         #self.force_invoice_send() en realidad la cancelación del cfdi no es como tal la creacion de la nota de crédito
         #_logger.info('**** Nota de crédito enviada. ')
+
+    @api.model
+    def _reverse_move_vals(self,default_values, cancel=True):
+    # Cuando se crea una nota de crédito la crea desde 0 para que se pueda timbrar
+        values = super(AccountMove, self)._reverse_move_vals(default_values, cancel)
+        if self.estado_factura == 'factura_correcta':
+            values['estado_factura'] = 'factura_no_generada'
+            values['folio_fiscal'] = ''
+            values['fecha_factura'] = None
+            values['factura_cfdi'] = False
+        return values

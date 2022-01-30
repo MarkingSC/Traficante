@@ -31,6 +31,8 @@
                 <field name="category_id" string="Tags" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags..."/>
             </xpath>
             <xpath expr="//group[@name='sale']" position="inside">
+                <field name="monthly_average"></field>
+                <field name="invoice_payment_average"></field>
                 <field name="pmf" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
                 <field name="pmfxp" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}"></field>
             </xpath>
@@ -302,6 +304,22 @@
         <field name="state">code</field>
         <field name="code">
             model.update_all_daily_avg()
+        </field>
+    </record>
+
+    <!-- INVOICE AVERAGE 3 MONTH CRON -->
+    <record model="ir.cron" id="monthly_invoiced_average_cron">
+        <field name="name">Set monthly invoiced average</field>
+        <field name="model_id" ref="model_res_partner"></field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"></field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True"></field>
+        <field name="state">code</field>
+        <field name="code">
+partners = env['res.partner'].search([])
+partners.get_monthly_invoiced_average()
         </field>
     </record>
 

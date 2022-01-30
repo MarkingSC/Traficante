@@ -15,7 +15,6 @@ from reportlab.lib.units import mm
 from . import amount_to_text_es_MX
 import pytz
 
-
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -26,7 +25,8 @@ class AccountMove(models.Model):
     tipo_comprobante = fields.Selection(
         selection=[('I', 'Ingreso'), 
                    ('E', 'Egreso'),
-                    ('T', 'Traslado'),],
+                   ('T', 'Traslado'),
+                  ],
         string=_('Tipo de comprobante'),
     )
     forma_pago = fields.Selection(
@@ -50,6 +50,7 @@ class AccountMove(models.Model):
                    ('28', '28 - Tarjeta de débito'), 
                    ('29', '29 - Tarjeta de servicios'), 
                    ('30', '30 - Aplicación de anticipos'), 
+                   ('31', '31 - Intermediario pagos'),
                    ('99', '99 - Por definir'),],
         string=_('Forma de pago'),
     )
@@ -80,7 +81,6 @@ class AccountMove(models.Model):
                    ('P01', _('Por definir')),],
         string=_('Uso CFDI (cliente)'),
     )
-    xml_invoice_link = fields.Char(string=_('XML Invoice Link'))
     estado_factura = fields.Selection(
         selection=[('factura_no_generada', 'Factura no generada'), ('factura_correcta', 'Factura correcta'), 
                    ('solicitud_cancelar', 'Cancelación en proceso'),('factura_cancelada', 'Factura cancelada'),
@@ -112,7 +112,9 @@ class AccountMove(models.Model):
                    ('607', _('Régimen de Enajenación o Adquisición de Bienes')),
                    ('629', _('De los Regímenes Fiscales Preferentes y de las Empresas Multinacionales')),
                    ('630', _('Enajenación de acciones en bolsa de valores')),
-                   ('615', _('Régimen de los ingresos por obtención de premios')),],
+                   ('615', _('Régimen de los ingresos por obtención de premios')),
+                   ('625', _('Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas')),
+                   ('626', _('Régimen Simplificado de Confianza')),],
         string=_('Régimen Fiscal'), 
     )
     numero_cetificado = fields.Char(string=_('Numero de cetificado'))
@@ -124,6 +126,7 @@ class AccountMove(models.Model):
     selo_sat = fields.Char(string=_('Selo del SAT'))
     moneda = fields.Char(string=_('Moneda'))
     tipocambio = fields.Char(string=_('TipoCambio'))
+    jurnal_type=fields.Selection('Journal Type', related='journal_id.type', store=True)
     folio = fields.Char(string=_('Folio'))
     version = fields.Char(string=_('Version'))
     number_folio = fields.Char(string=_('Folio'), compute='_get_number_folio')
@@ -160,9 +163,6 @@ class AccountMove(models.Model):
 
     @api.model
     def _reverse_move_vals(self,default_values, cancel=True):
-    #def _prepare_refund(self, invoice, date_invoice=None, date=None, description=None, journal_id=None):
-    #    values = super(AccountMove, self)._prepare_refund(invoice, date_invoice=date_invoice, 
-    #                                                       date=date, description=description, journal_id=journal_id)
         values = super(AccountMove, self)._reverse_move_vals(default_values, cancel)
         if self.estado_factura == 'factura_correcta':
             values['uuid_relacionado'] = self.folio_fiscal
@@ -172,10 +172,11 @@ class AccountMove(models.Model):
             values['uso_cfdi'] = 'G02'
             values['tipo_relacion'] = '01'
             values['fecha_factura'] = None
+            values['folio_fiscal'] = None
+            values['estado_factura'] = None
+            values['factura_cfdi'] = False
         return values
 
-
-    
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):
         default = dict(default or {})
@@ -211,17 +212,17 @@ class AccountMove(models.Model):
             self.update(values)
 
     
-    @api.onchange('payment_term_id')
+    @api.onchange('invoice_payment_term_id')
     def _get_metodo_pago(self):
-        if self.payment_term_id:
-            if self.payment_term_id.methodo_pago == 'PPD':
+        if self.invoice_payment_term_id:
+            if self.invoice_payment_term_id.methodo_pago == 'PPD':
                 values = {
-                 'methodo_pago': self.payment_term_id.methodo_pago,
+                 'methodo_pago': self.invoice_payment_term_id.methodo_pago,
                  'forma_pago': '99'
                 }
             else:
                 values = {
-                    'methodo_pago': self.payment_term_id.methodo_pago,
+                    'methodo_pago': self.invoice_payment_term_id.methodo_pago,
                     'forma_pago': False
                     }
         else:
@@ -237,7 +238,7 @@ class AccountMove(models.Model):
             nombre = ''
         else:
             nombre = self.partner_id.name
-        decimales = self.env['decimal.precision'].search([('name','=','Product Price')])
+        decimales = self.env['decimal.precision'].sudo().search([('name','=','Product Price')])
         no_decimales = decimales.digits
 
         #corregir hora
@@ -254,7 +255,7 @@ class AccountMove(models.Model):
         _logger.info('date_from %s', date_from)
         request_params = { 
                 'company': {
-                      'rfc': self.company_id.rfc,
+                      'rfc': self.company_id.vat,
                       'api_key': self.company_id.proveedor_timbrado,
                       'modo_prueba': self.company_id.modo_prueba,
                       'regimen_fiscal': self.company_id.regimen_fiscal,
@@ -264,7 +265,7 @@ class AccountMove(models.Model):
                 },
                 'customer': {
                       'name': nombre,
-                      'rfc': self.partner_id.rfc,
+                      'rfc': self.partner_id.vat,
                       'residencia_fiscal': self.partner_id.residencia_fiscal,
                       'registro_tributario': self.partner_id.registro_tributario,
                       'uso_cfdi': self.uso_cfdi,
@@ -272,7 +273,7 @@ class AccountMove(models.Model):
                 'invoice': {
                       'tipo_comprobante': self.tipo_comprobante,
                       'moneda': self.currency_id.name,
-                      'tipocambio': self.currency_id.rate,
+                      'tipocambio': self.currency_id.with_context(date=self.invoice_date).rate,
                       'forma_pago': self.forma_pago,
                       'methodo_pago': self.methodo_pago,
                       'subtotal': self.amount_untaxed,
@@ -280,7 +281,7 @@ class AccountMove(models.Model):
                       'folio': self.name.replace('INV','').replace('/',''),
                       'serie_factura': self.journal_id.serie_diario or self.company_id.serie_factura,
                       'fecha_factura': date_from, #self.fecha_factura,
-                      'decimales': no_decimales,
+                      'decimales_cantidad': 6,
                 },
                 'adicional': {
                       'tipo_relacion': self.tipo_relacion,
@@ -289,8 +290,8 @@ class AccountMove(models.Model):
                 },
                 'version': {
                       'cfdi': '3.3',
-                      'sistema': 'odoo11',
-                      'version': '6',
+                      'sistema': 'odoo13',
+                      'version': '4',
                 },
         }
         amount_total = 0.0
@@ -302,7 +303,7 @@ class AccountMove(models.Model):
         items = {'numerodepartidas': len(self.invoice_line_ids)}
         invoice_lines = []
         for line in self.invoice_line_ids:
-            if line.quantity <= 0:
+            if not line.product_id or line.display_type in ('line_section', 'line_note'):
                 continue
             self.total_impuesto = 0.0
             price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
@@ -320,18 +321,19 @@ class AccountMove(models.Model):
             for tax in taxes:
                 tax_id = self.env['account.tax'].browse(tax['id'])
                 if tax_id.price_include or tax_id.amount_type == 'division':
-                    amount_wo_tax -= tax['amount']
-                self.monto_impuesto = tax['amount']
+                    amount_wo_tax -= float("%.2f" % tax['amount'])
+                self.monto_impuesto = float("%.2f" % tax['amount'])
                 self.total_impuesto += self.monto_impuesto
                 tax_items.append({'name': tax_id.tax_group_id.name,
                  'percentage': tax_id.amount,
-                 'amount': self.monto_impuesto, #tax['amount'],
+                 'amount': self.monto_impuesto,
                  'impuesto': tax_id.impuesto,
-                 'tipo_factor': tax_id.tipo_factor})
+                 'tipo_factor': tax_id.tipo_factor,
+                 'nombre': tax_id.impuesto_local,})
                 val = {'move_id': line.move_id.id,
                  'name': tax_id.tax_group_id.name,
                  'tax_id': tax['id'],
-                 'amount': tax['amount']}
+                 'amount': float("%.2f" % tax['amount'])}
                 key = tax['id']
                 if key not in tax_grouped:
                     tax_grouped[key] = val
@@ -340,60 +342,66 @@ class AccountMove(models.Model):
             if tax_items:
                 product_taxes.update({'tax_lines': tax_items})
 
-            self.precio_unitario = float(amount_wo_tax) / float(line.quantity)
-            self.monto = self.precio_unitario * line.quantity
+            self.precio_unitario = "{:.2f}".format(float(amount_wo_tax) / float(line.quantity))
+            self.monto = line.price_subtotal #self.precio_unitario * line.quantity
             amount_untaxed += self.monto
             self.subtotal += self.monto
             self.total += self.monto + self.total_impuesto
 
-            self.desc = self.monto - line.price_subtotal # p_unit * line.quantity - line.price_subtotal
-            if self.desc < 0.01:
+            if line.discount > 0:
+               self.desc = "{:.2f}".format(self.precio_unitario * line.quantity - line.price_subtotal)
+            else:
                 self.desc = 0
             self.discount += self.desc
 
             product_string = line.product_id.code and line.product_id.code[:100] or ''
             if product_string == '':
-                if line.name.find(']') > 0:
-                    product_string = line.name[line.name.find('[')+len('['):line.name.find(']')] or ''
+               if line.name.find(']') > 0:
+                  product_string = line.name[line.name.find('[')+len('['):line.name.find(']')] or ''
 
             #self.amount = p_unit * line.quantity * (1 - (line.discount or 0.0) / 100.0)
             if self.tipo_comprobante == 'E':
                 invoice_lines.append({'quantity': line.quantity,
-                                      'unidad_medida': line.product_id.unidad_medida,
+                                      'unidad_medida': line.product_id.cat_unidad_medida.descripcion,
                                       'product': product_string,
                                       'price_unit': self.precio_unitario,
-                                      'amount': self.monto,
+                                      'amount': "{:.2f}".format(self.monto + self.desc),
                                       'description': line.name[:1000],
                                       'clave_producto': '84111506',
                                       'clave_unidad': 'ACT',
                                       'taxes': product_taxes,
-                                      'descuento': self.desc,})
+                                      'descuento': self.desc,
+                                      'numero_pedimento': line.pedimento,
+                                      'numero_predial': line.predial})
             elif self.tipo_comprobante == 'T':
                 invoice_lines.append({'quantity': line.quantity,
-                                      'unidad_medida': line.product_id.unidad_medida,
+                                      'unidad_medida': line.product_id.cat_unidad_medida.descripcion,
                                       'product': product_string,
                                       'price_unit': self.precio_unitario,
-                                      'amount': self.monto,
+                                      'amount': "{:.2f}".format(self.monto + self.desc),
                                       'description': line.name[:1000],
                                       'clave_producto': line.product_id.clave_producto,
-                                      'clave_unidad': line.product_id.clave_unidad})
+                                      'clave_unidad': line.product_id.cat_unidad_medida.clave})
             else:
                 invoice_lines.append({'quantity': line.quantity,
-                                      'unidad_medida': line.product_id.unidad_medida,
+                                      'unidad_medida': line.product_id.cat_unidad_medida.descripcion,
                                       'product': product_string,
                                       'price_unit': self.precio_unitario,
-                                      'amount': self.monto,
+                                      'amount': "{:.2f}".format(self.monto + self.desc),
                                       'description': line.name[:1000],
                                       'clave_producto': line.product_id.clave_producto,
-                                      'clave_unidad': line.product_id.clave_unidad,
+                                      'clave_unidad': line.product_id.cat_unidad_medida.clave,
                                       'taxes': product_taxes,
-                                      'descuento': self.desc})
+                                      'descuento': self.desc,
+                                      'numero_pedimento': line.pedimento,
+                                      'numero_predial': line.predial})
+
 
         self.discount = round(self.discount,2)
         if self.tipo_comprobante == 'T':
             request_params['invoice'].update({'subtotal': '0.00','total': '0.00'})
         else:
-            request_params['invoice'].update({'subtotal': self.subtotal,'total': self.total-self.discount})
+            request_params['invoice'].update({'subtotal': "{:.2f}".format(self.subtotal  + self.discount),'total': "{:.2f}".format(self.total)})
         items.update({'invoice_lines': invoice_lines})
         request_params.update({'items': items})
         tax_lines = []
@@ -404,7 +412,7 @@ class AccountMove(models.Model):
             tax_lines.append({
                       'name': line['name'],
                       'percentage': tax.amount,
-                      'amount': line['amount'],
+                      'amount': float("%.2f" % line['amount']),
                 })
         taxes = {'numerodeimpuestos': tax_count}
         if tax_lines:
@@ -422,124 +430,7 @@ class AccountMove(models.Model):
                       'contrasena': self.company_id.contrasena,
                 }})
         return request_params
-        
-    
-    def invoice_validate(self):
-        # after validate, send invoice data to external system via http post
-        for invoice in self:
-            if invoice.factura_cfdi:
-                if invoice.fecha_factura == False:
-                    invoice.fecha_factura= datetime.datetime.now()
-                    invoice.write({'fecha_factura': invoice.fecha_factura})
-                if invoice.estado_factura == 'factura_correcta':
-                    raise UserError(_('Error para timbrar factura, Factura ya generada.'))
-                if invoice.estado_factura == 'factura_cancelada':
-                    raise UserError(_('Error para timbrar factura, Factura ya generada y cancelada.'))
-                values = invoice.to_json()
-                url=''
-                if invoice.company_id.proveedor_timbrado == 'multifactura':
-                    url = '%s' % ('http://facturacion.itadmin.com.mx/api/invoice')
-                elif invoice.company_id.proveedor_timbrado == 'multifactura2':
-                    url = '%s' % ('http://facturacion2.itadmin.com.mx/api/invoice')
-                elif invoice.company_id.proveedor_timbrado == 'multifactura3':
-                    url = '%s' % ('http://facturacion3.itadmin.com.mx/api/invoice')
-                elif invoice.company_id.proveedor_timbrado == 'gecoerp':
-                    if self.company_id.modo_prueba:
-                        #url = '%s' % ('https://ws.gecoerp.com/itadmin/pruebas/invoice/?handler=OdooHandler33')
-                        url = '%s' % ('https://itadmin.gecoerp.com/invoice/?handler=OdooHandler33')
-                    else:
-                        url = '%s' % ('https://itadmin.gecoerp.com/invoice/?handler=OdooHandler33')
-                try:
-                    response = requests.post(url , 
-                                         auth=None,verify=False, data=json.dumps(values), 
-                                         headers={"Content-type": "application/json"})
-                except Exception as e:
-                    error = str(e)
-                    if "Name or service not known" in error or "Failed to establish a new connection" in error:
-                        raise Warning("Servidor fuera de servicio, favor de intentar mas tarde")
-                    else:
-                        raise Warning(error)
-    
-                #_logger.info('something ... %s', response.text)
-                json_response = response.json()
-                xml_file_link = False
-                estado_factura = json_response['estado_factura']
-                if estado_factura == 'problemas_factura':
-                    raise UserError(_(json_response['problemas_message']))
-                # Receive and stroe XML invoice
-                if json_response.get('factura_xml'):
-                    xml_file_link = invoice.company_id.factura_dir + '/' + invoice.name.replace('/', '_') + '.xml'
-                    xml_file = open(xml_file_link, 'w')
-                    xml_invoice = base64.b64decode(json_response['factura_xml'])
-                    xml_file.write(xml_invoice.decode("utf-8"))
-                    xml_file.close()
-                    invoice._set_data_from_xml(xml_invoice)
-                    
-                    file_name = invoice.name.replace('/', '_') + '.xml'
-                    self.env['ir.attachment'].sudo().create(
-                                                {
-                                                    'name': file_name,
-                                                    'datas': json_response['factura_xml'],
-                                                    'datas_fname': file_name,
-                                                    'res_model': self._name,
-                                                    'res_id': invoice.id,
-                                                    'type': 'binary'
-                                                })
-                invoice.write({'estado_factura': estado_factura,
-                               'xml_invoice_link': xml_file_link})
-                invoice.message_post(body="CFDI emitido")
-        result = super(AccountMove, self).invoice_validate()
-        return result
-    
-    
-    def generate_cfdi_invoice(self):
-        # after validate, send invoice data to external system via http post
-        for invoice in self:
-            if self.estado_factura == 'factura_correcta':
-                raise UserError(_('Error para timbrar factura, Factura ya generada.'))
-            if self.estado_factura == 'factura_cancelada':
-                raise UserError(_('Error para timbrar factura, Factura ya generada y cancelada.'))
-            self.fecha_factura= datetime.datetime.now()
-            values = invoice.to_json()
-            if self.company_id.proveedor_timbrado == 'multifactura':
-                url = '%s' % ('http://facturacion.itadmin.com.mx/api/invoice')
-            elif invoice.company_id.proveedor_timbrado == 'multifactura2':
-                url = '%s' % ('http://facturacion2.itadmin.com.mx/api/invoice')
-            elif invoice.company_id.proveedor_timbrado == 'multifactura3':
-                url = '%s' % ('http://facturacion3.itadmin.com.mx/api/invoice')
-            elif self.company_id.proveedor_timbrado == 'gecoerp':
-                url = '%s' % ('https://itadmin.gecoerp.com/invoice/?handler=OdooHandler33')
-            try:
-                response = requests.post(url , 
-                                         auth=None,verify=False, data=json.dumps(values), 
-                                         headers={"Content-type": "application/json"})
-            except Exception as e:
-                error = str(e)
-                if "Name or service not known" in error or "Failed to establish a new connection" in error:
-                    raise Warning("Servidor fuera de servicio, favor de intentar mas tarde")
-                else:
-                    raise Warning(error)
 
-            #_logger.info('something ... %s', response.text)
-            json_response = response.json()
-            xml_file_link = False
-            estado_factura = json_response['estado_factura']
-            if estado_factura == 'problemas_factura':
-                raise UserError(_(json_response['problemas_message']))
-            # Receive and stroe XML invoice
-            if json_response.get('factura_xml'):
-                xml_file_link = invoice.company_id.factura_dir + '/' + invoice.name.replace('/', '_') + '.xml'
-                xml_file = open(xml_file_link, 'w')
-                xml_invoice = base64.b64decode(json_response['factura_xml'])
-                xml_file.write(xml_invoice.decode("utf-8"))
-                xml_file.close()
-                invoice._set_data_from_xml(xml_invoice)
-            invoice.write({'estado_factura': estado_factura,
-                           'xml_invoice_link': xml_file_link,
-                           'factura_cfdi': True})
-            invoice.message_post(body="CFDI emitido")
-        return True
-    
     def _set_data_from_xml(self, xml_invoice):
         if not xml_invoice:
             return None
@@ -573,7 +464,7 @@ class AccountMove(models.Model):
         self.folio_fiscal = TimbreFiscalDigital.attrib['UUID']
         self.folio = xml_data.attrib['Folio']
         if self.company_id.serie_factura:
-            self.serie_emisor = xml_data.attrib['Serie']
+           self.serie_emisor = xml_data.attrib['Serie']
         self.invoice_datetime = xml_data.attrib['Fecha']
         self.version = TimbreFiscalDigital.attrib['Version']
         self.cadena_origenal = '||%s|%s|%s|%s|%s||' % (self.version, self.folio_fiscal, self.fecha_certificacion, 
@@ -582,8 +473,8 @@ class AccountMove(models.Model):
         options = {'width': 275 * mm, 'height': 275 * mm}
         amount_str = str(self.amount_total).split('.')
         qr_value = 'https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?&id=%s&re=%s&rr=%s&tt=%s.%s&fe=%s' % (self.folio_fiscal,
-                                                 self.company_id.rfc, 
-                                                 self.partner_id.rfc,
+                                                 self.company_id.vat, 
+                                                 self.partner_id.vat,
                                                  amount_str[0].zfill(10),
                                                  amount_str[1].ljust(6, '0'),
                                                  self.selo_digital_cdfi[-8:],
@@ -591,8 +482,7 @@ class AccountMove(models.Model):
         self.qr_value = qr_value
         ret_val = createBarcodeDrawing('QR', value=qr_value, **options)
         self.qrcode_image = base64.encodestring(ret_val.asString('jpg'))
-    
-    
+
     def print_cdfi_invoice(self):
         self.ensure_one()
         #return self.env['report'].get_action(self, 'custom_invoice.cdfi_invoice_report') #modulename.custom_report_coupon 
@@ -618,7 +508,7 @@ class AccountMove(models.Model):
                     raise UserError(_('Error para timbrar factura, Factura ya generada.'))
             if invoice.estado_factura == 'factura_cancelada':
                 raise UserError(_('Error para timbrar factura, Factura ya generada y cancelada.'))
-            
+
             values = invoice.to_json()
             if invoice.company_id.proveedor_timbrado == 'multifactura':
                 url = '%s' % ('http://facturacion.itadmin.com.mx/api/invoice')
@@ -628,10 +518,12 @@ class AccountMove(models.Model):
                 url = '%s' % ('http://facturacion3.itadmin.com.mx/api/invoice')
             elif invoice.company_id.proveedor_timbrado == 'gecoerp':
                 if self.company_id.modo_prueba:
-                    #url = '%s' % ('https://ws.gecoerp.com/itadmin/pruebas/invoice/?handler=OdooHandler33')
                     url = '%s' % ('https://itadmin.gecoerp.com/invoice/?handler=OdooHandler33')
                 else:
                     url = '%s' % ('https://itadmin.gecoerp.com/invoice/?handler=OdooHandler33')
+            else:
+                raise UserError(_('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
+
             try:
                 response = requests.post(url , 
                                          auth=None,verify=False, data=json.dumps(values), 
@@ -651,20 +543,23 @@ class AccountMove(models.Model):
                 raise UserError(_(json_response['problemas_message']))
             # Receive and stroe XML invoice
             if json_response.get('factura_xml'):
-                xml_file_link = invoice.company_id.factura_dir + '/' + invoice.name.replace('/', '_') + '.xml'
-                xml_file = open(xml_file_link, 'w')
-                xml_invoice = base64.b64decode(json_response['factura_xml'])
-                xml_file.write(xml_invoice.decode("utf-8"))
-                xml_file.close()
-                invoice._set_data_from_xml(xml_invoice)
+                invoice._set_data_from_xml(base64.b64decode(json_response['factura_xml']))
+                file_name = invoice.name.replace('/', '_') + '.xml'
+                self.env['ir.attachment'].sudo().create(
+                                                {
+                                                    'name': file_name,
+                                                    'datas': json_response['factura_xml'],
+                                                    #'datas_fname': file_name,
+                                                    'res_model': self._name,
+                                                    'res_id': invoice.id,
+                                                    'type': 'binary'
+                                                })
+
             invoice.write({'estado_factura': estado_factura,
-                           'xml_invoice_link': xml_file_link,
                            'factura_cfdi': True})
             invoice.message_post(body="CFDI emitido")
         return True
-    
-    
-    
+
     def action_cfdi_cancel(self):
         for invoice in self:
             if invoice.factura_cfdi:
@@ -677,11 +572,13 @@ class AccountMove(models.Model):
                     raise UserError(_('Falta la ruta del archivo .key'))
                 archivo_cer = self.company_id.archivo_cer
                 archivo_key = self.company_id.archivo_key
-                archivo_xml_link = invoice.company_id.factura_dir + '/' + invoice.name.replace('/', '_') + '.xml'
-                with open(archivo_xml_link, 'rb') as cf:
-                    archivo_xml = base64.b64encode(cf.read())
+                domain = [
+                     ('res_id', '=', invoice.id),
+                     ('res_model', '=', invoice._name),
+                     ('name', '=', invoice.name.replace('/', '_') + '.xml')]
+                xml_file = self.env['ir.attachment'].search(domain)[0]
                 values = {
-                          'rfc': invoice.company_id.rfc,
+                          'rfc': invoice.company_id.vat,
                           'api_key': invoice.company_id.proveedor_timbrado,
                           'uuid': self.folio_fiscal,
                           'folio': self.folio,
@@ -692,7 +589,9 @@ class AccountMove(models.Model):
                                   'archivo_key': archivo_key.decode("utf-8"),
                                   'contrasena': invoice.company_id.contrasena,
                             },
-                          'xml': archivo_xml.decode("utf-8"),
+                          'xml': xml_file.datas.decode("utf-8"),
+                          'motivo': self.env.context.get('motivo_cancelacion',False),
+                          'foliosustitucion': self.env.context.get('foliosustitucion',''),
                           }
                 if self.company_id.proveedor_timbrado == 'multifactura':
                     url = '%s' % ('http://facturacion.itadmin.com.mx/api/refund')
@@ -702,10 +601,12 @@ class AccountMove(models.Model):
                     url = '%s' % ('http://facturacion3.itadmin.com.mx/api/refund')
                 elif self.company_id.proveedor_timbrado == 'gecoerp':
                     if self.company_id.modo_prueba:
-                        #url = '%s' % ('https://ws.gecoerp.com/itadmin/pruebas/refund/?handler=OdooHandler33')
                         url = '%s' % ('https://itadmin.gecoerp.com/refund/?handler=OdooHandler33')
                     else:
                         url = '%s' % ('https://itadmin.gecoerp.com/refund/?handler=OdooHandler33')
+                else:
+                    raise UserError(_('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
+
                 try:
                     response = requests.post(url , 
                                          auth=None,verify=False, data=json.dumps(values), 
@@ -715,7 +616,7 @@ class AccountMove(models.Model):
                     if "Name or service not known" in error or "Failed to establish a new connection" in error:
                         raise Warning("Servidor fuera de servicio, favor de intentar mas tarde")
                     else:
-                        raise Warning(error)
+                       raise Warning(error)
                 _logger.info('something ... %s', response.text)
                 json_response = response.json()
 
@@ -727,18 +628,7 @@ class AccountMove(models.Model):
                     log_msg = "Se solicitó cancelación de CFDI"
                     #raise Warning(_(json_response['problemas_message']))
                 elif json_response.get('factura_xml', False):
-                    if invoice.name:
-                        xml_file_link = invoice.company_id.factura_dir + '/CANCEL_' + invoice.name.replace('/', '_') + '.xml'
-                    else:
-                        xml_file_link = invoice.company_id.factura_dir + '/CANCEL_' + invoice.name.replace('/', '_') + '.xml'
-                    xml_file = open(xml_file_link, 'w')
-                    xml_invoice = base64.b64decode(json_response['factura_xml'])
-                    xml_file.write(xml_invoice.decode("utf-8"))
-                    xml_file.close()
-                    if invoice.name:
-                        file_name = invoice.name.replace('/', '_') + '.xml'
-                    else:
-                        file_name = invoice.name.replace('/', '_') + '.xml'
+                    file_name = 'CANCEL_' + invoice.name.replace('/', '_') + '.xml'
                     self.env['ir.attachment'].sudo().create(
                                                 {
                                                     'name': file_name,
@@ -769,11 +659,17 @@ class AccountMove(models.Model):
         invoices = self.search(domain, order = 'id')
         for invoice in invoices:
             _logger.info('Solicitando estado de factura %s', invoice.folio_fiscal)
+            domain = [
+                 ('res_id', '=', invoice.id),
+                 ('res_model', '=', invoice._name),
+                 ('name', '=', invoice.name.replace('/', '_') + '.xml')]
+            xml_file = self.env['ir.attachment'].search(domain)[0]
             values = {
-                 'rfc': invoice.company_id.rfc,
+                 'rfc': invoice.company_id.vat,
                  'api_key': invoice.company_id.proveedor_timbrado,
                  'modo_prueba': invoice.company_id.modo_prueba,
                  'uuid': invoice.folio_fiscal,
+                 'xml': xml_file.datas.decode("utf-8"),
                  }
 
             if invoice.company_id.proveedor_timbrado == 'multifactura':
@@ -786,17 +682,17 @@ class AccountMove(models.Model):
                 url = '%s' % ('http://facturacion.itadmin.com.mx/api/consulta-cacelar')
 
             try:
-                response = requests.post(url, 
+               response = requests.post(url, 
                                          auth=None,verify=False, data=json.dumps(values), 
                                          headers={"Content-type": "application/json"})
-                #_logger.info('info enviada ...')
-                json_response = response.json()
-                #_logger.info('something ... %s', response.text)
+               #_logger.info('info enviada ...')
+               json_response = response.json()
+               #_logger.info('something ... %s', response.text)
             except Exception as e:
-                _logger.info('log de la exception ... %s', response.text)
-                json_response = {}
+               _logger.info('log de la exception ... %s', response.text)
+               json_response = {}
             if not json_response:
-                return
+               return
             estado_factura = json_response['estado_consulta']
             if estado_factura == 'problemas_consulta':
                 _logger.info('Error en la consulta %s', json_response['problemas_message'])
@@ -816,14 +712,55 @@ class AccountMove(models.Model):
                 _logger.info('Error... %s', response.text)
         return True
 
-    
     def action_cfdi_rechazada(self):
         for invoice in self:
             if invoice.factura_cfdi:
-                if invoice.estado_factura == 'solicitud_rechazada':
+                if invoice.estado_factura == 'solicitud_rechazada' or invoice.estado_factura == 'solicitud_cancelar':
                     invoice.estado_factura = 'factura_correcta'
                     # raise UserError(_('La factura ya fue cancelada, no puede volver a cancelarse.'))
- 
+
+    def liberar_cfdi(self):
+        for invoice in self:
+           values = {
+                 'command': 'liberar_cfdi',
+                 'rfc': invoice.company_id.vat,
+                 'folio': invoice.name.replace('INV','').replace('/',''),
+                 'serie_factura': invoice.journal_id.serie_diario or invoice.company_id.serie_factura,
+                 'archivo_cer': invoice.company_id.archivo_cer.decode("utf-8"),
+                 'archivo_key': invoice.company_id.archivo_key.decode("utf-8"),
+                 'contrasena': invoice.company_id.contrasena,
+                 }
+           url=''
+           if invoice.company_id.proveedor_timbrado == 'multifactura':
+               url = '%s' % ('http://facturacion.itadmin.com.mx/api/command')
+           elif invoice.company_id.proveedor_timbrado == 'multifactura2':
+               url = '%s' % ('http://facturacion2.itadmin.com.mx/api/command')
+           elif invoice.company_id.proveedor_timbrado == 'multifactura3':
+               url = '%s' % ('http://facturacion3.itadmin.com.mx/api/command')
+           if not url:
+               return
+           try:
+               response = requests.post(url,auth=None,verify=False, data=json.dumps(values),headers={"Content-type": "application/json"})
+               json_response = response.json()
+           except Exception as e:
+               print(e)
+               json_response = {}
+
+           if not json_response:
+               return
+           #_logger.info('something ... %s', response.text)
+
+           respuesta = json_response['respuesta']
+           message_id = self.env['mymodule.message.wizard'].create({'message': respuesta})
+           return {
+               'name': 'Respuesta',
+               'type': 'ir.actions.act_window',
+               'view_mode': 'form',
+               'res_model': 'mymodule.message.wizard',
+               'res_id': message_id.id,
+               'target': 'new'
+           }
+
 class MailTemplate(models.Model):
     "Templates for sending email"
     _inherit = 'mail.template'
@@ -842,31 +779,62 @@ class MailTemplate(models.Model):
             templates_to_res_ids.setdefault(template, []).append(res_id)
 
         for template, template_res_ids in templates_to_res_ids.items():
-            if template.report_template and template.report_template.report_name == 'account.report_invoice':
+            if template.report_template and template.report_template.report_name == 'account.report_invoice' \
+                                or template.report_template.report_name == 'account.report_invoice_with_payments':
                 for res_id in template_res_ids:
                     invoice = self.env[template.model].browse(res_id)
                     if not invoice.factura_cfdi:
                         continue
                     if invoice.estado_factura == 'factura_correcta' or invoice.estado_factura == 'solicitud_cancelar':
-                        xml_name = invoice.company_id.factura_dir + '/' + invoice.name.replace('/', '_') + '.xml'
-                        xml_file = open(xml_name, 'rb').read()
+                        domain = [
+                            ('res_id', '=', invoice.id),
+                            ('res_model', '=', invoice._name),
+                            ('name', '=', invoice.name.replace('/', '_') + '.xml')]
+                        xml_file = self.env['ir.attachment'].search(domain, limit=1)
                         attachments = results[res_id]['attachments'] or []
-                        attachments.append(('CDFI_' + invoice.name.replace('/', '_') + '.xml', 
-                                            base64.b64encode(xml_file)))
+                        if xml_file:
+                           attachments.append(('CDFI_' + invoice.name.replace('/', '_') + '.xml', xml_file.datas))
                     else:
-                        if invoice.name:
-                            cancel_file_link = invoice.company_id.factura_dir + '/CANCEL_' + invoice.name.replace('/', '_') + '.xml'
-                        else:
-                            cancel_file_link = invoice.company_id.factura_dir + '/CANCEL_' + invoice.name.replace('/', '_') + '.xml'
-                        with open(cancel_file_link, 'rb') as cf:
-                            cancel_xml_file = cf.read()
-                            attachments = []	
-                            if invoice.name:
-                                attachments.append(('CDFI_CANCEL_' + invoice.name.replace('/', '_') + '.xml', base64.b64encode(cancel_xml_file)))
-                            else:
-                                attachments.append(('CDFI_CANCEL_' + invoice.name.replace('/', '_') + '.xml', base64.b64encode(cancel_xml_file)))
+                        domain = [
+                            ('res_id', '=', invoice.id),
+                            ('res_model', '=', invoice._name),
+                            ('name', '=', 'CANCEL_' + invoice.name.replace('/', '_') + '.xml')]
+                        xml_file = self.env['ir.attachment'].search(domain, limit=1)
+                        attachments = []
+                        if xml_file:
+                           attachments.append(('CDFI_CANCEL_' + invoice.name.replace('/', '_') + '.xml', xml_file.datas))
                     results[res_id]['attachments'] = attachments
         return results
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:            
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    pedimento = fields.Char('Pedimento')
+    predial = fields.Char('No. Predial')
     
+    
+class AccountPartialReconcile(models.Model):
+    _inherit = "account.partial.reconcile"
+    
+    def unlink(self):
+        full_to_unlink = self.env['account.full.reconcile']
+        for rec in self:
+            if rec.full_reconcile_id:
+                full_to_unlink |= rec.full_reconcile_id
+        for move in self.env['account.move'].search([('tax_cash_basis_rec_id', 'in', self._ids)]):
+            move.tax_cash_basis_rec_id = False
+            move.state = 'cancel'
+        res = super(AccountPartialReconcile, self).unlink()
+        if full_to_unlink:
+            full_to_unlink.unlink()
+        return res
+
+class MyModuleMessageWizard(models.TransientModel):
+    _name = 'mymodule.message.wizard'
+    _description = "Show Message"
+
+    message = fields.Text('Message', required=True)
+
+#    @api.multi
+    def action_close(self):
+        return {'type': 'ir.actions.act_window_close'}

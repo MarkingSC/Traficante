@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
+		<record id="paperformat_a4_landscape" model="report.paperformat">
+            <field name="name">CDFI Letter</field>
+            <field name="default" eval="True" />
+            <field name="format">Letter</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">15</field>
+            <field name="dpi">90</field>
+        </record>
 
         <template id="cfdi_payment_layout">
 			<!-- Multicompany -->
@@ -94,7 +109,7 @@
 							</div>
 							<div>
 								<strong>Tipo de comprobante: </strong>
-								<span t-field="o.tipo_comprobante" />
+								P
 							</div>
 						</div>
 					</div>
@@ -107,7 +122,7 @@
 								<span t-field="o.partner_id.name" />
 
 						     <div>
-						    	<span t-field="o.partner_id.rfc" />
+						    	<span t-field="o.partner_id.vat" />
 						     </div>
 							 <div>
 						    	Uso CFDI: P01
@@ -131,6 +146,11 @@
 					</div>
 
 					<table class="table" font-size="15px;">
+						<t t-if="o.company_id.modo_prueba == True">
+			    			<div style="position:absolute;opacity:0.2;z-index:99;width:100%;text-align:center;">
+            					<center><span style="font-size:150px;color:red;">PAGO DE <br/>PRUEBA</span></center>
+            				</div>
+        				</t>
 						<thead>
 							<tr>
 								<th>Clave Producto</th>
@@ -240,7 +260,7 @@
 								<td>
 		                            <span t-esc="row.get('tipodecambio')"/>
 		                        </td>
-								<td>
+		                        <td>
 		                            <t t-if="row.get('methodo_pago')=='PUE'">Pago en una sola exibición</t>
 		                            <t t-if="row.get('methodo_pago')=='PPD'">Pago en parcialidades o diferido</t>
 		                        </td>
@@ -316,8 +336,8 @@
 						</table>
 					</div>
 					<div><br/></div>
-					<t t-if="o.banco_emisor and o.banco_receptor and o.forma_pago == '03'">
-					<center><strong>Detalles de la transferencia bancaria</strong></center>
+					<t t-if="o.banco_emisor and o.banco_receptor and (o.forma_pago == '03' or o.forma_pago == '02')">
+					<center><strong>Detalles bancarios</strong></center>
 					<div class="row" style="border:solid 2px black;font-size:12px;">
 						<table class="borderless" cellspacing="0"  style="width:100%;border:none;border-collapse:separate;border-spacing: 2px;">
 							<tr>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="group_stock_return_assigned" model="res.groups">
+            <field name="name">Asignado a devoluciones de inventario</field>
+            <field name="comment">Se le asignan las devoluciones automáticas del inventario, generadas a partir de pedidos cancelados</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+    </data>
+</odoo>

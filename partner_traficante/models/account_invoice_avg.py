@@ -80,38 +80,52 @@ class AccountInvoiceAvg(models.Model):
     @api.model
     def _update_avg(self, last_date, partner):
         last_day_date = self._get_last_day_date(last_date)
+        # obtiene los meses entre la fecha de la factura y la fecha de creación del cliente
         months_between = (last_day_date.year - partner.create_date.year) * 12 + \
                          (last_day_date.month - partner.create_date.month) + 1
+
+        # si son más de 12 se toma como fecha inicial la fecha de la factura menos 12 meses, si no, la fecha de creación del cliente                       
         if months_between > 12:
             months_between = 12
             first_date = self._get_last_day_date(last_day_date - relativedelta(months=12) + relativedelta(days=1))
         else:
             first_date = partner.create_date.date()
 
+        # Obtiene los registros de promedios guardados entre ese periodo
         avg_records = self.search([('date', '>=', first_date),
                                    ('date', '<=', last_day_date)])
 
+        # Obtiene los montos de los promedios
         avg_amounts = avg_records.mapped('amount')
 
+        # Suma los montos de los promedios
         avg_amount_sum = sum(avg_amounts)
 
+        # Obtiene el promedio
         avg_amount_avg = avg_amount_sum / months_between
 
+        # Obtiene el registro del promedio que aplica para este mes
         current_avg = self.search([('date', '=', last_day_date)], limit=1)
 
+        # Si no hay un registro del promedio, llama a una funcion que evalua la suma
         if not current_avg:
             current_avg = self._update_amount(last_day_date, partner)
 
+        # Actualiza la suma del promedio
         current_avg.write({
             'average': avg_amount_avg
         })
 
+        # Si la fecha del último average es menor que hoy, llama de nuevo a la función con un 
+        # mes más adelante en caso de er una factura cancelada en mes diferente
         today  = self._get_tz_datetime(datetime.today())
         if last_day_date < today.date():
             next_date = last_day_date + relativedelta(months=1)
 
             self._update_avg(next_date, partner)
 
+        # Si la fecha del último average es mayor o igual que hoy, setea el promedio mensual y 
+        # el promedio mensual per cápita en el registro del cliente
         if last_day_date >= today.date():
             partner.write({
                 'pmfxp': avg_amount_avg / (partner.capacity),
@@ -121,14 +135,16 @@ class AccountInvoiceAvg(models.Model):
 
     @api.model
     def update_all_daily_avg(self):
-        today = self._get_tz_datetime(datetime.today())
-        invoices = self.env['account.move'].search([
-            ('state', '=', 'posted'),
-            ('write_date', '>=', today.replace(hour=0, minute=0, second=0)),
-            ('write_date', '<=', today.replace(hour=23, minute=59, second=59)),
-            '|',
-            ('type', '=', 'out_invoice'),
-            ('type', '=', 'out_refund')])
-        for invoice in invoices:
-            last_day_date = self.env['account.move']._get_date_from_invoice(invoice)
-            self._update_avg(last_day_date, invoice.partner_id)
+        for average in self:
+            today = self._get_tz_datetime(datetime.today())
+            # Obtiene todas las facturas validadas el día en que se lanza la acción
+            invoices = self.env['account.move'].search([
+                ('state', '=', 'posted'),
+                ('write_date', '>=', today.replace(hour=0, minute=0, second=0)),
+                ('write_date', '<=', today.replace(hour=23, minute=59, second=59)),
+                '|',
+                ('type', '=', 'out_invoice'),
+                ('type', '=', 'out_refund')])
+            for invoice in invoices:
+                last_day_date = self.env['account.move']._get_date_from_invoice(invoice)
+                average._update_avg(last_day_date, invoice.partner_id)
