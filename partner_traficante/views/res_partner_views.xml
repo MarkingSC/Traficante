@@ -11,21 +11,6 @@
             <group name="sale" position="attributes">
                 <attribute name="groups">sales_team.group_sale_salesman,account.group_account_invoice</attribute>
             </group>
-            <xpath expr="..//field[@name='property_supplier_payment_term_id']/.." position="before">
-                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
-                    <field string="From" name="start_delivery_time" widget="float_time"></field>
-                    <field string="To" name="finish_delivery_time" widget="float_time"></field>
-                </group>
-            </xpath>
-        </field>
-    </record>
-
-    <record id="partner_traficante_form" model="ir.ui.view">
-        <field name="name">res.partner.traficante.form</field>
-        <field name="model">res.partner</field>
-        <field name="type">form</field>
-        <field name="inherit_id" ref="account_view_partner_property_form_delivery_times" />
-        <field name="arch" type="xml">
             <xpath expr="..//field[@name='is_company']/.." position="before">
                 <field name="customer_rank" invisible="1"></field>
                 <div attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
@@ -131,14 +116,6 @@
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
             </xpath>
 
-            <xpath expr="//field[@name='start_delivery_time']" position="attributes">
-                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-            </xpath>
-
-            <xpath expr="//field[@name='finish_delivery_time']" position="attributes">
-                <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
-            </xpath>
-
             <xpath expr="//field[@name='bank_ids']" position="attributes">
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A')]}</attribute>
             </xpath>
@@ -183,6 +160,23 @@
             <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="attributes">
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
             </xpath>
+
+            <xpath expr="..//field[@name='property_supplier_payment_term_id']/.." position="before">
+                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
+                    <field string="From" name="start_delivery_time" widget="float_time" attrs="'required' : [('customer_type', '=', 'A')]}"></field>
+                    <field string="To" name="finish_delivery_time" widget="float_time" attrs="'required' : [('customer_type', '=', 'A')]}"></field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="partner_traficante_form" model="ir.ui.view">
+        <field name="name">res.partner.traficante.form</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="account_view_partner_property_form_delivery_times" />
+        <field name="arch" type="xml">
+            
 
         </field>
     </record>
