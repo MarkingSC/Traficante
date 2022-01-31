@@ -42,9 +42,10 @@ class ResPartner(models.Model):
         string=_('Forma de pago'),
     )
 
-    @api.onchange('vat')
-    def setRfcCfdi(self):
-        self.rfc = self.vat
+    # 31 Eenero 2022, se comenta porque no aplica en el nvo módulo de timbrado
+    #@api.onchange('vat')
+    #def setRfcCfdi(self):
+    #    self.rfc = self.vat
 
         
     @api.model

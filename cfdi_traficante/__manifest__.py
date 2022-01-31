@@ -8,7 +8,6 @@
     'description': """
         - Adicion de campos de uso, forma de pago y método de pago al formulario de contactos
         - Inhabilita los campos de uso, forma de pago y método de pago en el formulario de facturas y pedidos
-        - Automatización del valor de RFC para CFDI en función del RFC VAT
         
     """,
 
