@@ -74,7 +74,7 @@ class AccountMove(models.Model):
         result = super(AccountMove, self).action_cfdi_generate()
         if result == True:
             _logger.info('**** Se generó el CFDI y se enviará por correo. ')
-            self.force_invoice_send()
+            #self.force_invoice_send()
             _logger.info('**** Factura enviada. ')
         return result
 
