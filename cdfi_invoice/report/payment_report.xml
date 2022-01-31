@@ -87,7 +87,7 @@
 
 							</div>
 								<div>
-								<span t-field="o.rfc_emisor" />
+								<span t-field="o.company_id.vat" />
 								</div>
 								<div>
 								<strong>Regimen fiscal</strong>: <span t-field="o.company_id.regimen_fiscal" />
@@ -246,32 +246,32 @@
 						<tbody class="invoice_tbody">
 							<tr t-foreach="o.get_docto_relacionados(o)" t-as="row" style="page-break-inside: avoid">
 		                        <td>
-		                            <span t-esc="row.get('no_de_pago')"/>
+		                            <span t-esc="row.get('NumParcialidad')"/>
 		                        </td>
 								<td>
-		                            <span t-esc="row.get('iddocumento')"/>
+		                            <span t-esc="row.get('IdDocumento')"/>
 		                        </td>
 								<td>
 		                            <span t-esc="row.get('folio_facura')"/>
 		                        </td>
 								<td>
-		                            <span t-esc="row.get('moneda')"/>
+		                            <span t-esc="row.get('MonedaDR')"/>
 		                        </td>
 								<td>
-		                            <span t-esc="row.get('tipodecambio')"/>
+		                            <span t-esc="row.get('TipoCambioDR')"/>
 		                        </td>
 		                        <td>
-		                            <t t-if="row.get('methodo_pago')=='PUE'">Pago en una sola exibición</t>
-		                            <t t-if="row.get('methodo_pago')=='PPD'">Pago en parcialidades o diferido</t>
+		                            <t t-if="row.get('MetodoDePagoDR')=='PUE'">Pago en una sola exibición</t>
+		                            <t t-if="row.get('MetodoDePagoDR')=='PPD'">Pago en parcialidades o diferido</t>
 		                        </td>
 		                        <td>
-		                            <span t-esc="row.get('saldo_pendiente')" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+		                            <span t-esc="float(row.get('ImpSaldoAnt'))" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
 		                        </td>
 		                        <td>
-		                            <span t-esc="row.get('monto_pagar')" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+		                            <span t-esc="float(row.get('ImpPagado'))" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
 		                        </td>
 		                        <td>
-		                            <span t-esc="row.get('saldo_restante')"  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+		                            <span t-esc="float(row.get('ImpSaldoInsoluto'))"  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
 		                        </td>
 							</tr>
 						</tbody>
