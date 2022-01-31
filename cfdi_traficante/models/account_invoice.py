@@ -68,14 +68,14 @@ class AccountMove(models.Model):
         self.uso_cfdi = self.partner_id.uso_cfdi
 
     # 31 ENERO 2022 - Se comenta para poder probar 4.0
-    # Envía de forma automática el correo de la facura cuando se timbre
+    # Envía de forma automática el correo de la factura cuando se timbre
     def action_cfdi_generate(self):
         _logger.info('**** entra a action_cfdi_generate: ')
         result = super(AccountMove, self).action_cfdi_generate()
-        #if result == True:
-        #    _logger.info('**** Se generó el CFDI y se enviará por correo. ')
-        #    self.force_invoice_send()
-        #    _logger.info('**** Factura enviada. ')
+        if result == True:
+            _logger.info('**** Se generó el CFDI y se enviará por correo. ')
+            self.force_invoice_send()
+            _logger.info('**** Factura enviada. ')
         return result
 
     # Envía de forma automática el correo de la Nota de crédito cuando se timbre
