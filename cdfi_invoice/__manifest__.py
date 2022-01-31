@@ -18,7 +18,7 @@
     'data': [
         'data/catalogo.unidad.medida.csv',
         'security/ir.model.access.csv',
-        'wizard/import_account_payment_view.xml',
+        #'wizard/import_account_payment_view.xml',
         'wizard/reason_cancelation_sat_view.xml',
         'views/res_partner_view.xml',
         'views/res_company_view.xml',
