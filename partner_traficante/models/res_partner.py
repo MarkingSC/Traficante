@@ -269,9 +269,16 @@ class ResPartner(models.Model):
         real_paid_amount = invoices_payments_total - refund_invoices_payments_total
 
         # Obtiene el promedio
-        monthly_average = real_amount / months_between
-        payment_average = real_paid_amount / len(invoices)
-
+        if real_amount and months_between:
+            monthly_average = real_amount / months_between
+        else:
+            monthly_average = 0
+        
+        if real_paid_amount and len(invoices):
+            payment_average = real_paid_amount / len(invoices)
+        else:
+            payment_average = 0
+             
         self.write({
             "monthly_average": monthly_average,
             "invoice_payment_average": payment_average

@@ -67,7 +67,6 @@ class AccountMove(models.Model):
         self.forma_pago = self.partner_id.forma_pago
         self.uso_cfdi = self.partner_id.uso_cfdi
 
-    # 31 ENERO 2022 - Se comenta para poder probar 4.0
     # Envía de forma automática el correo de la factura cuando se timbre
     def action_cfdi_generate(self):
         _logger.info('**** entra a action_cfdi_generate: ')
