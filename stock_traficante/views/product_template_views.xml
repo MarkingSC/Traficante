@@ -28,5 +28,13 @@
                 </xpath>
             </field>
         </record>
+
+        <!-- Modificación de la accion para crear productos para que se establezca la compañía por defecto-->
+        <record model="ir.actions.act_window" id="stock.product_template_action_product">
+            <field name="context">{"search_default_consumable": 1, 'default_type': 'product', 'quantity_available_locations_domain': ('internal',),'default_company_id': allowed_company_ids[0]}</field>
+        </record>
+        <record model="ir.actions.act_window" id="sale.product_template_action">
+            <field name="context">{"search_default_filter_to_sell":1, "sale_multi_pricelist_product_template": 1, 'default_company_id': allowed_company_ids[0]}</field>
+        </record>
     </data>
 </odoo>

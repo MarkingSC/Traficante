@@ -26,6 +26,7 @@
     # always loaded
     'data': [
         'security/stock_security.xml',
+        'views/sale_order_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
