@@ -26,6 +26,7 @@
     # always loaded
     'data': [
         'views/res_partner_views.xml',
+        'report/invoice_report_custom.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

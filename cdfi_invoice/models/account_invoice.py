@@ -82,8 +82,6 @@ class AccountMove(models.Model):
                    ('D09', _('Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones')),
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
                    ('S01', _('Sin efectos fiscales')),
-                   ('CP01', _('Pagos')),
-                   ('CN01', _('Nómina')),
                    ('P01', _('Por definir (obsoleto)')),],
         string=_('Uso CFDI (cliente)'),
     )
@@ -144,7 +142,7 @@ class AccountMove(models.Model):
         values = super(AccountMove, self)._reverse_move_vals(default_values, cancel)
         if self.estado_factura == 'factura_correcta':
             values['uuid_relacionado'] = self.folio_fiscal
-            values['methodo_pago'] = self.methodo_pago
+            values['methodo_pago'] = 'PUE'
             values['forma_pago'] = self.forma_pago
             values['tipo_comprobante'] = 'E'
             values['uso_cfdi'] = 'G02'
@@ -221,7 +219,7 @@ class AccountMove(models.Model):
         if self.partner_id.vat == 'XAXX010101000':
             nombre = 'PUBLICO GENERAL'
         else:
-            nombre = self.clean_text(self.partner_id.name.upper())
+            nombre = self.partner_id.name.upper()
 
         no_decimales = self.currency_id.no_decimales
         no_decimales_prod = self.currency_id.decimal_places
@@ -240,6 +238,8 @@ class AccountMove(models.Model):
            naive_from = self.fecha_factura
         local_dt_from = naive_from.replace(tzinfo=pytz.UTC).astimezone(local)
         date_from = local_dt_from.strftime ("%Y-%m-%dT%H:%M:%S")
+        if not self.fecha_factura:
+           self.fecha_factura = datetime.datetime.now()
 
         if self.currency_id.name == 'MXN':
            tipocambio = 1
@@ -267,7 +267,7 @@ class AccountMove(models.Model):
                 },
                 'emisor': {
                       'rfc': self.company_id.vat.upper(),
-                      'nombre': self.clean_text(self.company_id.nombre_fiscal.upper()),
+                      'nombre': self.company_id.nombre_fiscal.upper(),
                       'RegimenFiscal': self.company_id.regimen_fiscal,
                       'FacAtrAdquirente': self.facatradquirente,
                 },
@@ -344,7 +344,7 @@ class AccountMove(models.Model):
                    self.env.cr.commit()
                    raise UserError(_('El impuesto %s no tiene tipo de factor del SAT configurado.') % (tax.name))
                 if tax.impuesto != '004':
-                   key = tax['id']
+                   key = taxes['id']
                    if tax.price_include or tax.amount_type == 'division':
                        tax_included += taxes['amount']
 
@@ -353,6 +353,12 @@ class AccountMove(models.Model):
                          tax_tras.append({'Base': self.set_decimals(taxes['base'], no_decimales_prod),
                                            'Impuesto': tax.impuesto,
                                            'TipoFactor': tax.tipo_factor,})
+                      elif tax.tipo_factor == 'Cuota':
+                         tax_tras.append({'Base': self.set_decimals(line.quantity, no_decimales_prod),
+                                           'Impuesto': tax.impuesto,
+                                           'TipoFactor': tax.tipo_factor,
+                                           'TasaOCuota': self.set_decimals(tax.amount,6),
+                                           'Importe': self.set_decimals(taxes['amount'], no_decimales_prod),})
                       else:
                          tax_tras.append({'Base': self.set_decimals(taxes['base'], no_decimales_prod),
                                            'Impuesto': tax.impuesto,
@@ -360,14 +366,14 @@ class AccountMove(models.Model):
                                            'TasaOCuota': self.set_decimals(tax.amount / 100.0,6),
                                            'Importe': self.set_decimals(taxes['amount'], no_decimales_prod),})
                       tras_tot += taxes['amount']
-                      val = {'tax_id': tax['id'],
-                             'base': taxes['base'],
+                      val = {'tax_id': taxes['id'],
+                             'base': taxes['base'] if tax.tipo_factor != 'Cuota' else line.quantity,
                              'amount': taxes['amount'],}
                       if key not in tax_grouped_tras:
                           tax_grouped_tras[key] = val
                       else:
-                          tax_grouped_tras[key]['base'] += taxes['base']
-                          tax_grouped_tras[key]['amount'] += taxes['amount']
+                          tax_grouped_tras[key]['base'] += val['base'] if tax.tipo_factor != 'Cuota' else line.quantity
+                          tax_grouped_tras[key]['amount'] += val['amount']
                    else:
                       tax_ret.append({'Base': self.set_decimals(taxes['base'], no_decimales_prod),
                                       'Impuesto': tax.impuesto,
@@ -375,14 +381,14 @@ class AccountMove(models.Model):
                                       'TasaOCuota': self.set_decimals(tax.amount / 100.0 * -1, 6),
                                       'Importe': self.set_decimals(taxes['amount'] * -1, no_decimales_prod),})
                       ret_tot += taxes['amount'] * -1
-                      val = {'tax_id': tax['id'],
+                      val = {'tax_id': taxes['id'],
                              'base': taxes['base'],
                              'amount': taxes['amount'],}
                       if key not in tax_grouped_ret:
                           tax_grouped_ret[key] = val
                       else:
-                          tax_grouped_tras[key]['base'] += taxes['base']
-                          tax_grouped_ret[key]['amount'] += taxes['amount']
+                          tax_grouped_ret[key]['base'] += val['base']
+                          tax_grouped_ret[key]['amount'] += val['amount']
                 else: #impuestos locales
                    if taxes['amount'] >= 0.0:
                       tax_local_tras_tot += taxes['amount']
@@ -447,9 +453,8 @@ class AccountMove(models.Model):
                                       'Impuestos': tax_items and tax_items or '',
                                       'Descuento': self.set_decimals(discount_prod, no_decimales_prod),
                                       'ObjetoImp': line.product_id.objetoimp,
-                                      'InformacionAduanera': pedimentos and pedimentos or '',})
-            if line.predial:
-                invoice_lines.append({'predial': line.predial})
+                                      'InformacionAduanera': pedimentos and pedimentos or '',
+                                      'predial': line.predial and line.predial or '',})
 
         tras_tot = round(tras_tot, no_decimales)
         ret_tot = round(ret_tot, no_decimales)
@@ -463,12 +468,18 @@ class AccountMove(models.Model):
                 if tax_grouped_tras:
                    for line in tax_grouped_tras.values():
                        tax = self.env['account.tax'].browse(line['tax_id'])
-                       if tax.tipo_factor != 'Exento':
-                          traslados.append({'impuesto': tax.impuesto,
+                       if tax.tipo_factor == 'Exento':
+                          tasa_tr = ''
+                       elif tax.tipo_factor == 'Cuota':
+                          tasa_tr = self.set_decimals(tax.amount, 6)
+                       else:
+                          tasa_tr = self.set_decimals(tax.amount / 100.0, 6)
+                       traslados.append({'impuesto': tax.impuesto,
                                          'TipoFactor': tax.tipo_factor,
-                                         'tasa': self.set_decimals(tax.amount / 100.0, 6), # if tax.tipo_factor != 'Exento' else '',
-                                         'importe': self.set_decimals(line['amount'], no_decimales), # if tax.tipo_factor != 'Exento' else '',
+                                         'tasa': tasa_tr,
+                                         'importe': self.set_decimals(line['amount'], no_decimales) if tax.tipo_factor != 'Exento' else '',
                                          'base': self.set_decimals(line['base'], no_decimales),
+                                         'tax_id': line['tax_id'],
                                          })
                    impuestos.update({'translados': traslados, 'TotalImpuestosTrasladados': self.set_decimals(tras_tot, no_decimales)})
                 if tax_grouped_ret:
@@ -476,13 +487,14 @@ class AccountMove(models.Model):
                        tax = self.env['account.tax'].browse(line['tax_id'])
                        retenciones.append({'impuesto': tax.impuesto,
                                          'TipoFactor': tax.tipo_factor,
-                                         'tasa': self.set_decimals(tax.amount / 100.0, 6) * -1,
+                                         'tasa': self.set_decimals(float(tax.amount) / 100.0 * -1, 6),
                                          'importe': self.set_decimals(line['amount'] * -1, no_decimales),
-                                         'base': self.set_decimals(line['base'] * -1, no_decimales),
+                                         'base': self.set_decimals(line['base'], no_decimales),
+                                         'tax_id': line['tax_id'],
                                          })
                    impuestos.update({'retenciones': retenciones, 'TotalImpuestosRetenidos': self.set_decimals(ret_tot, no_decimales)})
                 request_params.update({'impuestos': impuestos})
-                self.tax_payment= json.dumps(impuestos)
+                self.tax_payment = json.dumps(impuestos)
 
         if tax_local_ret or tax_local_tras:
            if tax_local_tras and not tax_local_ret:
@@ -501,28 +513,6 @@ class AccountMove(models.Model):
 
         request_params.update({'conceptos': invoice_lines})
 
-        #if not self.company_id.archivo_cer:
-        #    self.write({'proceso_timbrado': False})
-        #    self.env.cr.commit()
-        #    raise UserError(_('El archivo del certificado .cer no se encuentra.'))
-        #if not self.company_id.archivo_key:
-        #    self.write({'proceso_timbrado': False})
-        #    self.env.cr.commit()
-        #    raise UserError(_('El archivo del certificado .key no se encuentra.'))
-        #if not self.company_id.contrasena:
-        #    self.write({'proceso_timbrado': False})
-        #    self.env.cr.commit()
-        #    raise UserError(_('La contraseña del certificado no se encuentra.'))
-        #archivo_cer = self.company_id.archivo_cer
-        #archivo_key = self.company_id.archivo_key
-        #request_params.update({
-        #    'certificados': {
-               # 'archivo_cer': archivo_cer.decode("utf-8"),
-               # 'archivo_key': archivo_key.decode("utf-8"),
-        #        'contrasena': self.company_id.contrasena,
-        #    }})
-
-        #_logger.info('xml: ', json.dumps(request_params))
         return request_params
 
     def set_decimals(self, amount, precision):
@@ -590,7 +580,7 @@ class AccountMove(models.Model):
             if TimbreFiscalDigital:
                 break
 
-        self.tipocambio = xml_data.find('TipoCambio') and xml_data.attrib['TipoCambio'] or '1'
+        self.tipocambio = xml_data.attrib['TipoCambio']
         self.moneda = xml_data.attrib['Moneda']
         self.numero_cetificado = xml_data.attrib['NoCertificado']
         self.cetificaso_sat = TimbreFiscalDigital.attrib['NoCertificadoSAT']
@@ -599,8 +589,8 @@ class AccountMove(models.Model):
         self.selo_sat = TimbreFiscalDigital.attrib['SelloSAT']
         self.folio_fiscal = TimbreFiscalDigital.attrib['UUID']
         self.invoice_datetime = xml_data.attrib['Fecha']
-        if not self.fecha_factura:
-            self.fecha_factura = self.invoice_datetime.replace('T', ' ')
+#        if not self.fecha_factura:
+#            self.fecha_factura = self.invoice_datetime.replace('T', ' ')
         version = TimbreFiscalDigital.attrib['Version']
         self.cadena_origenal = '||%s|%s|%s|%s|%s||' % (version, self.folio_fiscal, self.fecha_certificacion,
                                                        self.selo_digital_cdfi, self.cetificaso_sat)
@@ -632,6 +622,7 @@ class AccountMove(models.Model):
     
     def action_cfdi_generate(self):
         # after validate, send invoice data to external system via http post
+        _logger.info('**** entra a action_cfdi_generate del modulo original: ')
         for invoice in self:
             if invoice.proceso_timbrado:
                 return True
@@ -718,12 +709,6 @@ class AccountMove(models.Model):
                 if invoice.estado_factura == 'factura_cancelada':
                     pass
                     # raise UserError(_('La factura ya fue cancelada, no puede volver a cancelarse.'))
-                #if not invoice.company_id.archivo_cer:
-                #    raise UserError(_('Falta la ruta del archivo .cer'))
-                #if not invoice.company_id.archivo_key:
-                #    raise UserError(_('Falta la ruta del archivo .key'))
-                #archivo_cer = self.company_id.archivo_cer
-                #archivo_key = self.company_id.archivo_key
                 if not invoice.company_id.contrasena:
                   raise UserError(_('El campo de contraseña de los certificados está vacío.'))
                 domain = [
@@ -736,9 +721,9 @@ class AccountMove(models.Model):
                 values = {
                     'rfc': invoice.company_id.vat,
                     'api_key': invoice.company_id.proveedor_timbrado,
-                    'uuid': self.folio_fiscal,
-                    'folio': self.name.replace('INV','').replace('/',''),
-                    'serie_factura':  self.journal_id.serie_diario or self.company_id.serie_factura,
+                    'uuid': invoice.folio_fiscal,
+                    'folio': invoice.name.replace('INV','').replace('/',''),
+                    'serie_factura': invoice.journal_id.serie_diario or invoice.company_id.serie_factura,
                     'modo_prueba': invoice.company_id.modo_prueba,
                     'certificados': {
                     #    'archivo_cer': archivo_cer.decode("utf-8"),
@@ -800,9 +785,7 @@ class AccountMove(models.Model):
                     log_msg = "CFDI Cancelado"
                 invoice.write({'estado_factura': json_response['estado_factura']})
                 invoice.message_post(body=log_msg)
- 
- 
-    
+
     def force_invoice_send(self):
         for inv in self:
             email_act = inv.action_invoice_sent()
@@ -839,6 +822,8 @@ class AccountMove(models.Model):
                 url = '%s' % ('http://facturacion3.itadmin.com.mx/api/consulta-cacelar')
             elif invoice.company_id.proveedor_timbrado == 'gecoerp':
                 url = '%s' % ('http://facturacion.itadmin.com.mx/api/consulta-cacelar')
+            else:
+                raise UserError(_('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
 
             try:
                response = requests.post(url, 

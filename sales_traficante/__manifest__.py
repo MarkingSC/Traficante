@@ -27,6 +27,7 @@
     'data': [
         'security/stock_security.xml',
         'views/sale_order_views.xml',
+        'views/product_pricelist_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

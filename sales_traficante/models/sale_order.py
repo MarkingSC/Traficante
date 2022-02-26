@@ -155,3 +155,7 @@ class SaleOrder(models.Model):
         if last_movement.picking_type_id == last_movement.picking_type_id.warehouse_id.out_type_id and last_movement.state == 'done':
             last_movement.action_reverse_automatic()
         return res
+
+class SaleOrderLine(models.Model):
+
+    _inherit = 'sale.order.line'

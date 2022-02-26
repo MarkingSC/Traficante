@@ -24,7 +24,7 @@
         'views/res_company_view.xml',
         'views/product_view.xml',
         'views/account_invoice_view.xml',
-        #'views/account_payment_view.xml',
+        'views/account_payment_view.xml',
         'views/account_tax_view.xml',
         'views/sale_view.xml',
         'views/account_payment_term_view.xml',
@@ -41,5 +41,5 @@
     'installable': True,
     'price': 0.00,
     'currency': 'USD',
-    'license': 'OPL-1',	
+    'license': 'OPL-1',
 }
