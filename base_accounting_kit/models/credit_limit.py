@@ -39,7 +39,7 @@ class ResPartner(models.Model):
                                        "Set its value to 0.00 to disable "
                                        "this feature")
     due_amount = fields.Float(string="Total Sale",
-                              compute="compute_due_amount")
+                              compute="compute_due_amount", compute_sudo=True)
     active_limit = fields.Boolean("Active Credit Limit", default=False)
 
     enable_credit_limit = fields.Boolean(string="Credit Limit Enabled",
