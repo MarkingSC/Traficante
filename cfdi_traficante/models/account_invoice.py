@@ -84,12 +84,15 @@ class AccountMove(models.Model):
     # Envía de forma automática el correo de la factura cuando se timbre
     def action_cfdi_generate(self):
         _logger.info('**** entra a action_cfdi_generate: ')
+        for invoice in self:
+            invoice.write({'proceso_timbrado': False})
+            #self.env.cr.commit()
         result = super(AccountMove, self).action_cfdi_generate()
         _logger.info('**** result de action_cfdi_generate: ' + str(result))
-        if result == True:
-            _logger.info('**** Se generó el CFDI y se enviará por correo. ')
-            self.force_invoice_send()
-            _logger.info('**** Factura enviada. ')
+        #if result == True:
+            #_logger.info('**** Se generó el CFDI y se enviará por correo. ')
+            #self.force_invoice_send()
+            #_logger.info('**** Factura enviada. ')
         return result
 
     # Envía de forma automática el correo de la Nota de crédito cuando se timbre
