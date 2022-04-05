@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="1">
         <!-- TAXES UPDATE -->
         <record id="l10n_mx.1_tax12" model="account.tax">
             <field name="price_include" eval="True"></field>
@@ -12,78 +12,78 @@
         </record>
 
         <!-- TAXES CREATION -->
-                <!-- COMPRA -->
-                <record id="account_tax_ieps_2_56992593_purchase" model="account.tax">
-                     <field name="name">IEPS (2.57%) COMPRAS</field>
-                     <field name="amount_type">percent</field>
-                     <field name="include_base_amount" eval="True"></field>
-                     <field name="type_tax_use">purchase</field>
-                     <field name="amount">2.56992593</field>
-                     <field name="description">IEPS (2.56992593%) para bebidas saborizadas</field>
-                     <field name="price_include" eval="True"></field>
-                </record>
-                 <record id="account_tax_ieps_26_5_purchase" model="account.tax">
-                     <field name="name">IEPS (26.5%) COMPRAS</field>
-                     <field name="amount_type">percent</field>
-                     <field name="include_base_amount" eval="True"></field>
-                     <field name="type_tax_use">purchase</field>
-                     <field name="amount">26.5</field>
-                     <field name="description">IEPS (26.5%)</field>
-                </record>
-                 <record id="account_tax_ieps_30_purchase" model="account.tax">
-                     <field name="name">IEPS (30%) COMPRAS</field>
-                     <field name="amount_type">percent</field>
-                     <field name="include_base_amount" eval="True"></field>
-                     <field name="type_tax_use">purchase</field>
-                     <field name="amount">30.0</field>
-                     <field name="description">IEPS (30%)</field>
-                </record>
-                <record id="account_tax_ieps_53_purchase" model="account.tax">
-                    <field name="name">IEPS (53%) COMPRAS</field>
-                    <field name="amount_type">percent</field>
-                    <field name="include_base_amount" eval="True"></field>
-                    <field name="type_tax_use">purchase</field>
-                    <field name="amount">53.0</field>
-                    <field name="description">IEPS (53%)</field>
-                </record>
+        <!-- COMPRA -->
+        <record id="account_tax_ieps_2_56992593_purchase" model="account.tax">
+            <field name="name">IEPS (2.57%) COMPRAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount">2.56992593</field>
+            <field name="description">IEPS (2.56992593%) para bebidas saborizadas</field>
+            <field name="price_include" eval="True"></field>
+        </record>
+        <record id="account_tax_ieps_26_5_purchase" model="account.tax">
+            <field name="name">IEPS (26.5%) COMPRAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount">26.5</field>
+            <field name="description">IEPS (26.5%)</field>
+        </record>
+        <record id="account_tax_ieps_30_purchase" model="account.tax">
+            <field name="name">IEPS (30%) COMPRAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount">30.0</field>
+            <field name="description">IEPS (30%)</field>
+        </record>
+        <record id="account_tax_ieps_53_purchase" model="account.tax">
+            <field name="name">IEPS (53%) COMPRAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">purchase</field>
+            <field name="amount">53.0</field>
+            <field name="description">IEPS (53%)</field>
+        </record>
 
-            <!-- VENTA -->
-                <record id="account_tax_ieps_2_56992593_sale" model="account.tax">
-                     <field name="name">IEPS (2.57%) VENTAS</field>
-                     <field name="amount_type">percent</field>
-                     <field name="include_base_amount" eval="True"></field>
-                     <field name="type_tax_use">sale</field>
-                     <field name="amount">2.56992593</field>
-                     <field name="description">IEPS (2.56992593%) para bebidas saborizadas</field>
-                     <field name="price_include" eval="True"></field>
-                </record>
-                 <record id="account_tax_ieps_26_5_sale" model="account.tax">
-                     <field name="name">IEPS (26.5%) VENTAS</field>
-                     <field name="amount_type">percent</field>
-                     <field name="include_base_amount" eval="True"></field>
-                     <field name="type_tax_use">sale</field>
-                     <field name="amount">26.5</field>
-                     <field name="description">IEPS (26.5%)</field>
-                     <field name="price_include" eval="True"></field>
-                </record>
-                 <record id="account_tax_ieps_30_sale" model="account.tax">
-                     <field name="name">IEPS (30%) VENTAS</field>
-                     <field name="amount_type">percent</field>
-                     <field name="include_base_amount" eval="True"></field>
-                     <field name="type_tax_use">sale</field>
-                     <field name="amount">30.0</field>
-                     <field name="description">IEPS (30%)</field>
-                     <field name="price_include" eval="True"></field>
-                </record>
-                <record id="account_tax_ieps_53_sale" model="account.tax">
-                    <field name="name">IEPS (53%) VENTAS</field>
-                    <field name="amount_type">percent</field>
-                    <field name="include_base_amount" eval="True"></field>
-                    <field name="type_tax_use">sale</field>
-                    <field name="amount">53.0</field>
-                    <field name="description">IEPS (53%)</field>
-                    <field name="price_include" eval="True"></field>
-                </record>
+        <!-- VENTA -->
+        <record id="account_tax_ieps_2_56992593_sale" model="account.tax">
+            <field name="name">IEPS (2.57%) VENTAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount">2.56992593</field>
+            <field name="description">IEPS (2.56992593%) para bebidas saborizadas</field>
+            <field name="price_include" eval="True"></field>
+        </record>
+        <record id="account_tax_ieps_26_5_sale" model="account.tax">
+            <field name="name">IEPS (26.5%) VENTAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount">26.5</field>
+            <field name="description">IEPS (26.5%)</field>
+            <field name="price_include" eval="True"></field>
+        </record>
+        <record id="account_tax_ieps_30_sale" model="account.tax">
+            <field name="name">IEPS (30%) VENTAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount">30.0</field>
+            <field name="description">IEPS (30%)</field>
+            <field name="price_include" eval="True"></field>
+        </record>
+        <record id="account_tax_ieps_53_sale" model="account.tax">
+            <field name="name">IEPS (53%) VENTAS</field>
+            <field name="amount_type">percent</field>
+            <field name="include_base_amount" eval="True"></field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount">53.0</field>
+            <field name="description">IEPS (53%)</field>
+            <field name="price_include" eval="True"></field>
+        </record>
 
     </data>
 </odoo>

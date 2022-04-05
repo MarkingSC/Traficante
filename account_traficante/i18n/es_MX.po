@@ -4,43 +4,267 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20200205\n"
+"Project-Id-Version: Odoo Server 13.0-20211018\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-23 19:00+0000\n"
-"PO-Revision-Date: 2020-02-23 13:01-0600\n"
+"POT-Creation-Date: 2022-04-04 01:19+0000\n"
+"PO-Revision-Date: 2022-04-03 20:28-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: es_MX\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. module: account_traficante
 #: model:account.payment.term,name:account_traficante.account_payment_term_10days
 msgid "10 Días"
-msgstr ""
+msgstr "10 Días"
+
+#. module: account_traficante
+#: model:account.payment.term,name:account_traficante.account_payment_term_20days
+msgid "20 Días"
+msgstr "20 Días"
+
+#. module: account_traficante
+#: model:account.payment.term,name:account_traficante.account_payment_term_5days
+msgid "5 Días"
+msgstr "5 Días"
 
 #. module: account_traficante
 #: model:account.payment.term,name:account_traficante.account_payment_term_8days
 msgid "8 Días"
+msgstr "8 Días"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<br/>\n"
+"\n"
+"                                    <strong>Sello del SAT</strong>\n"
+"                                    <br/>"
 msgstr ""
+"<br/>\n"
+"\n"
+"                                    <strong>Sello del SAT</strong>\n"
+"                                    <br/>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<br/>\n"
+"\n"
+"                                    <strong>Sello digital del CFDI</"
+"strong>\n"
+"                                    <br/>"
+msgstr ""
+"<br/>\n"
+"\n"
+"                                    <strong>Sello digital del CFDI</"
+"strong>\n"
+"                                    <br/>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<br/>Regimen fiscal:"
+msgstr "<br/>Regimen fiscal:"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<br/>Rfc Emisor:"
+msgstr "<br/>Rfc Emisor:"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<span>Taxes on</span>"
+msgstr "<span>Impuestos sobre</span>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<strong>Cadena Original del Complemento digital del SAT</strong>\n"
+"                                    <br/>"
+msgstr ""
+"<strong>Cadena Original del Complemento digital del SAT</strong>\n"
+"                                    <br/>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Certificado SAT</strong>"
+msgstr "<strong>Certificado SAT</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<strong>Datos emisor:</strong>\n"
+"                                <br/>Nombre emisor:"
+msgstr ""
+"<strong>Datos emisor:</strong>\n"
+"                                <br/>Nombre emisor:"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<strong>Datos receptor:</strong>\n"
+"                                <br/>"
+msgstr ""
+"<strong>Datos receptor:</strong>\n"
+"                                <br/>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<strong>ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI</strong>"
+msgstr ""
+"<strong>ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Fecha de factura: </strong>"
+msgstr "<strong>Fecha de factura: </strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Fecha de vencimiento: </strong>"
+msgstr "<strong>Fecha de vencimiento: </strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Fecha y hora de certificación</strong>"
+msgstr "<strong>Fecha y hora de certificación</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Folio fiscal</strong>"
+msgstr "<strong>Folio fiscal</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<strong>Forma de pago: </strong>\n"
+"                                        <br/>"
+msgstr ""
+"<strong>Forma de pago: </strong>\n"
+"                                        <br/>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Moneda</strong>"
+msgstr "<strong>Moneda</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<strong>Método de pago: </strong>\n"
+"                                        <br/>"
+msgstr ""
+"<strong>Método de pago: </strong>\n"
+"                                        <br/>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Número de certificado</strong>"
+msgstr "<strong>Número de certificado</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Subtotal</strong>"
+msgstr "<strong>Subtotal</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Tipo comprobante:</strong>"
+msgstr "<strong>Tipo comprobante:</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Tipo de cambio</strong>"
+msgstr "<strong>Tipo de cambio</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "<strong>Total</strong>"
+msgstr "<strong>Total</strong>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid ""
+"<strong>Uso: </strong>\n"
+"                                        <br/>"
+msgstr ""
+"<strong>Uso: </strong>\n"
+"                                        <br/>"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "CANTIDAD"
+msgstr "CANTIDAD"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "CLAVE PRODUCTO"
+msgstr "CLAVE PRODUCTO"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Cancelled Invoice"
+msgstr "Factura cancelada"
 
 #. module: account_traficante
 #: model:account.payment.term,name:account_traficante.account_payment_term_consigna
 msgid "Consigna"
-msgstr ""
+msgstr "Consigna"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Credit Note"
+msgstr "Nota de crédito"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "DESCRIPCIÓN"
+msgstr "DESCRIPCIÓN"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "DESCUENTO"
+msgstr "DESCUENTO"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Draft Invoice"
+msgstr "Borrador de factura"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Email:"
+msgstr "Correo electrónico:"
 
 #. module: account_traficante
 #: model_terms:ir.ui.view,arch_db:account_traficante.view_account_payment_search_traficante
 msgid "En efectivo a proveedores esta semana"
-msgstr ""
+msgstr "En efectivo a proveedores esta semana"
 
 #. module: account_traficante
 #: model_terms:ir.ui.view,arch_db:account_traficante.view_account_payment_search_traficante
 msgid "En efectivo de clientes esta semana"
 msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "IMPORTE"
+msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "IMPUESTO"
+msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Invoice"
+msgstr "Factura"
 
 #. module: account_traficante
 #: model:ir.model.fields,field_description:account_traficante.field_account_move__invoice_file
@@ -58,13 +282,49 @@ msgid "Logistics"
 msgstr "Logística"
 
 #. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Logo"
+msgstr ""
+
+#. module: account_traficante
+#: model:ir.model.fields,field_description:account_traficante.field_account_move__partner_commercial_name
+#: model_terms:ir.ui.view,arch_db:account_traficante.view_move_form_traficante
+msgid "Nombre Comercial"
+msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "PRECIO UNITARIO"
+msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Page: <span class=\"page\"/> / <span class=\"topage\"/>"
+msgstr "Página: <span class=\"page\"/> / <span class=\"topage\"/>"
+
+#. module: account_traficante
 #: model:ir.model,name:account_traficante.model_account_payment
 msgid "Payments"
 msgstr "Pagos"
 
 #. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Phone (s):"
+msgstr "Teléfono (s):"
+
+#. module: account_traficante
 #: model:account.payment.term,note:account_traficante.account_payment_term_10days
 msgid "Plazo de pago: 10 días."
+msgstr ""
+
+#. module: account_traficante
+#: model:account.payment.term,note:account_traficante.account_payment_term_20days
+msgid "Plazo de pago: 20 días."
+msgstr ""
+
+#. module: account_traficante
+#: model:account.payment.term,note:account_traficante.account_payment_term_5days
+msgid "Plazo de pago: 5 días."
 msgstr ""
 
 #. module: account_traficante
@@ -73,8 +333,28 @@ msgid "Plazo de pago: 8 días."
 msgstr ""
 
 #. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Please use the following communication for your payment :"
+msgstr "Por favor utilice la siguiente referencia al realizar su pago:"
+
+#. module: account_traficante
 #: model_terms:ir.ui.view,arch_db:account_traficante.view_account_payment_search_traficante
 msgid "Por"
+msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.view_move_form_traficante
+msgid "Razón Social"
+msgstr ""
+
+#. module: account_traficante
+#: model:ir.model.fields,field_description:account_traficante.field_account_move__partner_business_name
+msgid "Razón social"
+msgstr ""
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "UNIDAD"
 msgstr ""
 
 #. module: account_traficante
@@ -88,3 +368,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_traficante.view_account_invoice_filter_traficante_inherit
 msgid "Unpaid"
 msgstr "Pendientes de pago"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Vendor Bill"
+msgstr "Factura de proveedor"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Vendor Credit Note"
+msgstr "Nota de crédito de proveedor"
+
+#. module: account_traficante
+#: model_terms:ir.ui.view,arch_db:account_traficante.report_cfdi_invoice_traficante
+msgid "Web:"
+msgstr ""

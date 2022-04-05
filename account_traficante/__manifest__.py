@@ -35,6 +35,7 @@
         'views/account_fiscal_position_views.xml',
         'views/ir_ui_menu_views.xml',
         'report/sale_order_report_templates.xml',
+        'report/invoice_report.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

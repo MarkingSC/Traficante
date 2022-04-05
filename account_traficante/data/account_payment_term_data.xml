@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="account_payment_term_5days" model="account.payment.term">
             <field name="name">5 Días</field>
             <field name="note">Plazo de pago: 5 días.</field>
