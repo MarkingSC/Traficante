@@ -21,7 +21,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account', 'partner_traficante', 'sale', 'cdfi_invoice', 'partner_business_name'],
+    'depends': ['partner_traficante', 'sale', 'cdfi_invoice'],
 
     # always loaded
     'data': [
