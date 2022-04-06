@@ -21,14 +21,15 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale'],
+    'depends': ['base', 'sale', 'base_accounting_kit'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'data/uom_uom_data.xml',
-        'views/stock_quant_views.xml',
-        'report/stock_reports.xml'
+        'security/ir.model.access.csv',
+        'views/sales_goal_views.xml',
+        'wizard/report_view.xml',
+        'report/report.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

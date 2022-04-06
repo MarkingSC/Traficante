@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sales_goals_report_view" model="ir.ui.view">
+        <field name="name">Goals Report</field>
+        <field name="model">sales.goal.report</field>
+        <field name="inherit_id" ref="account.account_common_report_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="journal_ids" position="replace"/>
+                <field name="target_move" position="replace"/>
+                <xpath expr="//field[@name='date_from']" position="attributes">
+
+                </xpath>
+                <xpath expr="//field[@name='date_to']" position="attributes">
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="action_sales_goals_report" model="ir.actions.act_window">
+        <field name="name">Sales Goals</field>
+        <field name="res_model">sales.goal.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sales_goals_report_view"/>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sales_goals_report"
+              name="Goals Report"
+              sequence="10"
+              action="action_sales_goals_report"
+              parent="base_accounting_kit.account_reports_audit"
+              groups="account.group_account_manager,account.group_account_user"/>
+
+</odoo>

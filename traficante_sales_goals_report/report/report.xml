@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    # Sales goals report    -->
+    <report
+            id="action_report_sales_goals"
+            model="sales.goal.report"
+            string="Sales Goals Report"
+            report_type="qweb-pdf"
+            name="traficante_Sales_goals_report.sales_goals_report"
+            file="traficante_Sales_goals_report.sales_goals_report"
+    />
+</odoo>
