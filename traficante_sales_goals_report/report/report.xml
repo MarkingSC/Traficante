@@ -3,10 +3,10 @@
     <!--    # Sales goals report    -->
     <report
             id="action_report_sales_goals"
-            model="sales.goal.report"
+            model="sales.goals.report.wizard"
             string="Sales Goals Report"
-            report_type="qweb-pdf"
-            name="traficante_Sales_goals_report.sales_goals_report"
-            file="traficante_Sales_goals_report.sales_goals_report"
+            report_type="xlsx"
+            name="sales.goals.report"
+            file="sales_goals_report"
     />
 </odoo>

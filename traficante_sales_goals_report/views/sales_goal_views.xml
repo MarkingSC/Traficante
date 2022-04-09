@@ -6,7 +6,8 @@
         <field name="model">sales.goal</field>
         <field name="priority">8</field>
         <field name="arch" type="xml">
-            <tree string="Goals">
+            <tree string="Goals" default_order='active, sequence'>
+                <field name='sequence' widget='handle'/>
                 <field name="name"/>
                 <field name="description" optional="show"/>
                 <field name="parent_id"/>
@@ -19,6 +20,7 @@
                 <field name="show_total" optional="hidden"/>
                 <field name="period_month"/>
                 <field name="period_year"/>
+                <field name="active" widget="boolean_toggle"/>
             </tree>
         </field>
     </record>
@@ -39,16 +41,18 @@
                     <notebook>
                         <page name="Definition" string="Definition">
                             <group>
-                                <field name="parent_id"/>
-                                <field name="goal_amount"/>
-                                <field name="parent_domain" readonly="1"/>
-                                <field name="all_domain"/>
+                                
                                 <field name="type"/>
                                 <field name="sales_user_id" attrs="{'invisible':[('type','!=','salesperson')]}"/>
                                 <field name="partner_id" attrs="{'invisible':[('type','!=','customer')]}"/>
                                 <field name="product_category_id" attrs="{'invisible':[('type','!=','product')]}"/>
                                 <field name="sales_origin_id" attrs="{'invisible':[('type','!=','s_origin')]}"/>
                                 <field name="invoice_origin_id" attrs="{'invisible':[('type','!=','i_origin')]}"/>
+                                
+                                <field name="parent_id"/>
+                                <field name="goal_amount"/>
+                                <field name="parent_domain" readonly="1"/>
+                                <field name="all_domain"/>
                                 <field name="period_month"/>
                                 <field name="period_year"/>
                             </group>
