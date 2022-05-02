@@ -84,8 +84,13 @@ class SalesDetailedReport(models.AbstractModel):
 
         # Imprime los encabezados del excel
         product_image = io.BytesIO(base64.b64decode(self.env.user.company_id.logo))
-        sheet.insert_image(0, 0, "image.png", {'image_data': product_image, 'object_position': 1, 'text_wrap': True})
+        sheet.insert_image(0, 0, "image.png", {'image_data': product_image, 'y_scale': 0.16, 'x_scale': 0.16})
         sheet.set_row(0, 120)
+        sheet.set_column(0, 2, 20)
+        sheet.set_column(3, 3, 50)
+        sheet.set_column(5, 6, 15)
+        sheet.set_column(7, 11, 20)
+        sheet.set_column(12, 16, 50)
 
         #sheet.insert_image('A1', self.env.user.company_id.logo)
         sheet.merge_range('A2:E2', self.env.company.name, company_format)
@@ -116,7 +121,6 @@ class SalesDetailedReport(models.AbstractModel):
         # busca las metas que se van a mostrar en el reporte
         lines = self.env['account.move.line'].search([
             ('display_type', 'not in', ('line_section', 'line_note')),
-            ('move_id.estado_factura', '=', 'factura_correcta'),
             ('date', '<=', date_end), 
             ('date', '>=', date_start),
             ('product_id', '!=', False)], order='date,move_id')
