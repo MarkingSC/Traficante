@@ -3,7 +3,7 @@ from dataclasses import field
 import logging
 from odoo import models, fields, api, _, exceptions
 import odoo
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date, time
 import calendar
 import pytz
 from odoo.exceptions import AccessError, UserError, ValidationError
@@ -58,17 +58,17 @@ class salesGoal(models.Model):
     # Si se muestra el total de la venta en el footer
     show_total = fields.Boolean(default=True, help="Set active to false to hide the total amount as footer on the sales report.")
 
-
+    currency_id = fields.Many2one('res.currency', string='Currency')
     # Estructura: Porcentaje de la fila en función del total de ventas
-    structure = fields.Float(string='Structure', compute='_compute_structure', store=False)
+    structure = fields.Float(string='Structure', compute='_compute_values', store=False)
     # Porcentaje de venta
-    sales_percentage = fields.Float(string='Percentage', compute='_compute_sales_pct', store=False) 
+    sales_percentage = fields.Float(string='Percentage', compute='_compute_values', store=False) 
     # Ventas a la fecha: Total vendido en el día en que se obtiene el reporte
-    sales_at_date = fields.Float(string='Day', compute='_compute_sales_at_date', store=False)
+    sales_at_date = fields.Monetary(string='Day', compute='_compute_values', store=False)
     # Ventas en la semana: Total de lunes a viernes truncado al mes, a la fecha en que se obtiene el reporte
-    sales_total_week = fields.Float(string='Week', compute='_compute_sales_total_week', store=False)
+    sales_total_week = fields.Monetary(string='Week', compute='_compute_values', store=False)
     # Ventas al mes: Total vendido en todo el mes hasta la fecha en que se obtiene el reporte
-    sales_total_month = fields.Float(string='Month', compute='_compute_sales_total_month', store=False)
+    sales_total_month = fields.Monetary(string='Month', compute='_compute_values', store=False)
 
     # Establece el día al que se quiere obtener el reporte
     date_filter = fields.Date(string='At date', help='Set the date at you want to get the report.')
@@ -81,6 +81,7 @@ class salesGoal(models.Model):
 
     @api.depends('parent_id')
     def _get_move_lines(self):
+        _logger.info('**** ENTRA A _get_move_lines ****')   
         for record in self:
 
             today = datetime.now()
@@ -91,116 +92,125 @@ class salesGoal(models.Model):
             else:
                 fdom = datetime.now().replace(day=1)
 
+            _logger.info('**** PRIMER DIA DEL MES: ' + str(fdom))
+
             lines = []
             if record.type == 'salesperson':
-                lines = self.env['account.move.line'].search([('date', '<=', today),('date', '>=', fdom), ('move_id.invoice_user_id', '=', record.sales_user_id)])
+                lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_user_id', '=', record.sales_user_id.id)])
             elif record.type == 'customer':
-                lines = self.env['account.move.line'].search([('date', '<=', today),('date', '>=', fdom), ('partner_id', '=', record.partner_id)])
+                lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('partner_id', '=', record.partner_id.id)])
             elif record.type == 'product':
-                lines = self.env['account.move.line'].search([('date', '<=', today),('date', '>=', fdom), ('product_id.categ_id', '=', record.product_category_id)])
+                lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('product_id.categ_id', '=', record.product_category_id.id)])
             elif record.type == 's_origin':
                 orders = self.env['sale.order'].search([('sales_origin_id', '=', record.sales_origin_id)])
                 orders_names = orders.read('name')
                 _logger.info('**** orders_names: ' + str(orders_names))
 
-                lines = self.env['account.move.line'].search([('date', '<=', today),('date', '>=', fdom), ('move_id.invoice_origin', 'in', orders_names)])
+                lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_origin', 'in', orders_names)])
             elif record.type == 'i_origin':
-                lines = self.env['account.move.line'].search([('date', '<=', today),('date', '>=', fdom), ('move_id.invoice_origin_id', '=', record.invoice_origin_id)])
+                lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_origin_id', '=', record.invoice_origin_id.id)])
             else: 
                 lines = []
 
+            _logger.info('**** LINEAS: ' + str(lines))
+
+        _logger.info('**** TERMINA _get_move_lines ****')   
         return lines
 
     def _compute_values(self):
+        _logger.info('**** INICIA _compute_values ****')   
         for record in self:
 
-            record_lines = record._get_move_lines()
+            invoice_lines = record._get_move_lines()
+            _logger.info('**** LINEAS: ' + str(invoice_lines))
 
+            #####
             # total del mes hasta la fecha
             total_month = 0
             today = datetime.now()
             if record.date_filter:
                 today = record.date_filter
+            
+            today = datetime.combine(today, time.max)
+
+            _logger.info('**** DÍA DEL REPORTE: ' + str(today))
 
             _, days_month = calendar.monthrange(today.year, today.month)
-            first_day = datetime(today.year, today.month, 1)
-            last_day = datetime(today.year, today.month, days_month)
+            first_day = datetime.combine(date(today.year, today.month, 1), time.min)
+            last_day = datetime.combine(date(today.year, today.month, days_month), time.max)
 
-            week_lines = invoice_lines.search([('date', '<=', last_day), ('date', '>=', first_day)])
+            _logger.info('**** PRIMER DIA DEL MES: ' + str(first_day))
+            _logger.info('**** ULTIMO DIA DEL MES: ' + str(last_day))
 
-            for line in week_lines:
-                total_month += line.amount_currency
+            if invoice_lines:
+                month_lines = invoice_lines.filtered(lambda line: datetime.combine(line.move_id.date, time.min) <= last_day and datetime.combine(line.move_id.date, time.min) >= first_day)
 
+                _logger.info('**** month_lines: ' + str(month_lines))
+
+                for line in month_lines:    
+                    total_month += abs(line.price_total)
+
+            _logger.info('**** total_month: ' + str(total_month))
             record.sales_total_month = total_month
+            _logger.info('**** record.sales_total_month: ' + str(record.sales_total_month))
+            _logger.info('**** record.goal_amount: ' + str(record.goal_amount))
 
+            #####
             # porcentaje de ventas
             if record.goal_amount:
                 record.sales_percentage = record.sales_total_month/record.goal_amount
             else:
                 record.sales_percentage = 0
 
+            _logger.info('**** record.sales_percentage : ' + str(record.sales_percentage ))
+
+            #####   
             # total de la semana
             total_week = 0
-            if record.all_domain:
-                invoice_lines = self.env['account.move.line'].search(eval(record.all_domain))
+            
+            timedelta_monday = timedelta(today.weekday())
+            last_monday = today - timedelta_monday
+            last_monday = datetime.combine(last_monday, time.min)
 
-                today = datetime.now()
-                if record.date_filter:
-                    today = record.date_filter
-                
-                timedelta_monday = timedelta(today.weekday())
-                timedelta_friday = timedelta(4-today.weekday())
-                last_monday = today - timedelta_monday
-                next_friday = today + timedelta_friday
+            _logger.info('**** last_monday : ' + str(last_monday))
 
-                week_lines = invoice_lines.search([('date', '<=', next_friday), ('date', '>=', last_monday)])
+            if invoice_lines:
+                week_lines = invoice_lines.filtered(lambda line: datetime.combine(line.move_id.date, time.min) <= today and datetime.combine(line.move_id.date, time.min) >= last_monday)
 
                 for line in week_lines:
-                    total_week += line.amount_currency
+                    _logger.info('**** line.move_id.name : ' + str(line.move_id.name))
+                    _logger.info('**** abs(line.price_total) : ' + str(abs(line.price_total)))
+                    total_week += abs(line.price_total)
 
             record.sales_total_week = total_week
+            _logger.info('**** record.sales_total_week : ' + str(record.sales_total_week))
 
+            #####
             # total a la fecha
             total_at_date = 0
-            if record.all_domain:
-                fdom = ''
-                # primer día del mes
-                if record.date_filter:
-                    fdom = record.date_filter.replace(day=1)
-                else:
-                    fdom = datetime.now().replace(day=1)
+            
+            if invoice_lines:
+                lines_to_date = invoice_lines.filtered(lambda line: datetime.combine(line.move_id.date, time.min) <= today)
 
-                _logger.info('**** record.all_domain: ' + str(record.all_domain))
-                # busca todas las lineas de factura que coincidan con los filtros
-                invoice_lines = self.env['account.move.line'].search(eval(record.all_domain)+[('date', '>=', fdom)])
-                # Obtiene las lineas que son solo de la fecha del reporte
-                invoice_lines = invoice_lines.search([('date', '=', record.date_filter)])
-
-                for line in invoice_lines:
-                    total_at_date += line.amount_currency
+                for line in lines_to_date:
+                    total_at_date += abs(line.price_total)
             
             # setea el monto en el registro de la meta
             record.sales_at_date = total_at_date
 
+            _logger.info('**** record.sales_at_date : ' + str(record.sales_at_date))
+
+            #####
             # estructura
-            total_amount = 0
-            if record.all_domain:
-                fdom = ''
-                # primer día del mes
-                if record.date_filter:
-                    fdom = record.date_filter.replace(day=1)
-                else:
-                    fdom = datetime.now().replace(day=1)
-
-                _logger.info('**** record.all_domain: ' + str(record.all_domain))
-                # busca todas las lineas de factura que coincidan con los filtros
-                all_lines = self.env['account.move.line'].search(eval(record.all_domain)+[('date', '>=', fdom)])
-                # Hace la suma de los montos de las líneas
-                for line in all_lines:
-                    total_amount += line.amount_currency
-
             # Obtene el porcentaje de la estrucutura
+            _logger.info('**** record.goal_amount : ' + str(record.goal_amount))
+            _logger.info('**** record.sales_at_date : ' + str(record.sales_at_date))
+
             if record.goal_amount > 0:
-                record.structure = total_amount/record.goal_amount
+                record.structure = record.sales_at_date/record.goal_amount
             else:
                 record.structure = 0
+
+            _logger.info('**** record.structure : ' + str(record.structure))
+        
+        _logger.info('**** TERMINA _compute_values ****')   

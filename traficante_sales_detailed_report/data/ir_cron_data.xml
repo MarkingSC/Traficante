@@ -1,0 +1,25 @@
+<odoo>
+<record model="ir.cron" id="planned_get_taxes_action">
+    <field name="name">Get taxes description and amount for invoice lines</field>
+    <field name="model_id" ref="account.model_account_move_line"></field>
+    <field name="active" eval="False"></field>
+    <field name="state">code</field>
+    <field name="code">
+        # Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - model: Odoo Model of the record on which the action is triggered; is a void recordset
+#  - record: record on which the action is triggered; may be void
+#  - records: recordset of all records on which the action is triggered in multi-mode; may be void
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {...}
+
+lines = env['account.move.line'].search([('display_type', 'not in', ('line_section', 'line_note')),('move_id.state', '=', 'posted'),('product_id', '!=', False)])
+
+for line in lines:
+    line._get_taxes_amount()
+        
+    </field>
+</record>
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    # Sales goals report    -->
+    <report
+            id="action_report_sales_detailed"
+            model="sales.detailed.report.wizard"
+            string="Sales Detailed Report"
+            report_type="xlsx"
+            name="sales.detailed.report"
+            file="sales_detailed_report"
+    />
+</odoo>

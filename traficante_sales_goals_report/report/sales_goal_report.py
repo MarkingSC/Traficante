@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _, exceptions
-import datetime
+from datetime import datetime, time, timedelta
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 class SalesGoalReportWizard(models.TransientModel):
     _name = 'sales.goals.report.wizard'
 
-    date_filter = fields.Date(string='At date', help='Set the date at you want to get the report.', default = datetime.datetime.today(), store = True)
+    date_filter = fields.Date(string='At date', help='Set the date at you want to get the report.', default = datetime.today(), store = True)
 
     def get_report(self):
         data = {
@@ -29,7 +29,7 @@ class SalesGoalReport(models.AbstractModel):
 
         date_filter = data['form']['date_filter'] 
         _logger.info('**** date_filter: ' + str(date_filter))  
-        date_filter = datetime.datetime.strptime(date_filter, '%Y-%m-%d')
+        date_filter = datetime.strptime(date_filter, '%Y-%m-%d')
 
         company_format = workbook.add_format({'font_size': 10, 'align': 'vcenter', 'bold': True})
         header_col_format = workbook.add_format({'font_size': 10, 'align': 'vcenter', 'bold': True, 'bg_color': '#DB3545', 'font_color': 'white'})
@@ -37,18 +37,31 @@ class SalesGoalReport(models.AbstractModel):
 
         sheet = workbook.add_worksheet('Ventas mes')
 
+        today = datetime.now()
+        if date_filter:
+            today = date_filter
+        today = datetime.combine(today, time.max)
+
         sheet.write(1,0, 'Compañia', company_format)
-        sheet.write(2,0, 'REPORTE DIARIO Y ACUMULADO DE ENERO 2021', align_center)
+        sheet.write(2,0, 'REPORTE DIARIO Y ACUMULADO DE ' + today.strftime("%B") + ' ' + today.strftime("%Y") , align_center)
         sheet.write(3,0, '(Cifras en pesos)', align_center)
-        sheet.write(4,0, 'Fecha de generación', align_center)
+
+        sheet.write(4,0, str(today.day) + (today.strftime(" de %B del %Y")), align_center)
+
+        sheet.write(5,4, (today.strftime("%A")))
 
         sheet.write(6,0, 'DIA/MES', header_col_format)
         sheet.write(6,1, 'META', header_col_format)
         sheet.write(6,2, 'ESTRUCTURA', header_col_format)
         sheet.write(6,3, 'PORCENTAJE', header_col_format)
-        sheet.write(6,4, 'FECHA_DIA', header_col_format)
-        sheet.write(6,5, 'TOTAL_SEMANA', header_col_format)
-        sheet.write(6,6, 'TOTAL_MES', header_col_format)
+        sheet.write(6,4, str(today.day), header_col_format)
+
+        timedelta_monday = timedelta(today.weekday())
+        last_monday = today - timedelta_monday
+        last_monday = datetime.combine(last_monday, time.min)
+
+        sheet.write(6,5, ('Total Semana (' + str(last_monday.day) + last_monday.strftime(" de %B al ") + str(today.day) + ')') , header_col_format)
+        sheet.write(6,6, (today.strftime('%B')), header_col_format)
 
         # busca las metas que se van a mostrar en el reporte
         goals = self.env['sales.goal'].search([
@@ -68,33 +81,30 @@ class SalesGoalReport(models.AbstractModel):
 
     def print_goal_row(self, row, sheet, goal, date_filter):
         _logger.info('**** Inicio print_goal_row ****')   
+        _logger.info('**** Meta: ' + str(goal.name))
 
         goal.date_filter = date_filter
         date_year = date_filter.year
         date_month = date_filter.month
 
         # ejecuta la obtención de los datos
-        goal._compute_structure()
-        goal._compute_sales_pct()
-        goal._compute_sales_at_date()
-        goal._compute_sales_total_week()
-        goal._compute_sales_total_month()
+        goal._compute_values()
 
         if goal.show_name != False:
             _logger.info('**** goal.show_name ****')   
             sheet.write(row,0, goal.name)
-            sheet.write(row,1, goal.goal_amount)
 
             if goal.show_goal_pct != False:
                 _logger.info('**** goal.show_goal_pct ****')   
-                sheet.write(row,2, goal.structure)
-                sheet.write(row,3, goal.sales_percentage)
+                sheet.write(row,2, str(round((goal.structure * 100), 2))+'%')
+                sheet.write(row,3, str(round((goal.sales_percentage * 100), 2))+'%')
             
             if goal.show_sales_amount != False:
                 _logger.info('**** goal.show_sales_amount ****')   
-                sheet.write(row,4, goal.sales_at_date)
-                sheet.write(row,5, goal.sales_total_week)
-                sheet.write(row,6, goal.sales_total_month)
+                sheet.write(row,4, str("${:,.2f}".format(goal.sales_at_date)))
+                sheet.write(row,5, str("${:,.2f}".format(goal.sales_total_week)))
+                sheet.write(row,6, str("${:,.2f}".format(goal.sales_total_month)))
+                sheet.write(row,1, str("${:,.2f}".format(goal.goal_amount)))
 
             row += 1
 
@@ -136,12 +146,12 @@ class SalesGoalReport(models.AbstractModel):
             
 
             sheet.write(row,0, 'TOTAL')
-            sheet.write(row,1, total_goal_amount)
-            sheet.write(row,2, total_structure)
-            sheet.write(row,3, total_sales_percentage)
-            sheet.write(row,4, total_sales_at_date)
-            sheet.write(row,5, total_sales_total_week)
-            sheet.write(row,6, total_sales_total_month)
+            sheet.write(row,1, str("${:,.2f}".format(total_goal_amount)))
+            sheet.write(row,2, str(round((total_structure * 100), 2))+'%')
+            sheet.write(row,3, str(round((total_sales_percentage * 100), 2))+'%')
+            sheet.write(row,4, str("${:,.2f}".format(total_sales_at_date)))
+            sheet.write(row,5, str("${:,.2f}".format(total_sales_total_week)))
+            sheet.write(row,6, str("${:,.2f}".format(total_sales_total_month)))
 
         _logger.info('**** Fin print_goal_row ****')   
         return row

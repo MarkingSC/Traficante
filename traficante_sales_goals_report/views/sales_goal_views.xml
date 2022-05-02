@@ -13,7 +13,6 @@
                 <field name="parent_id"/>
                 <field name="section_type_id" optional="hidden"/>
                 <field name="goal_amount"/>
-                <field name="parent_domain" groups="base.group_no_one"/>
                 <field name="show_name" optional="hidden"/>
                 <field name="show_goal_pct" optional="hidden"/>
                 <field name="show_sales_amount" optional="hidden"/>
@@ -51,8 +50,6 @@
                                 
                                 <field name="parent_id"/>
                                 <field name="goal_amount"/>
-                                <field name="parent_domain" readonly="1"/>
-                                <field name="all_domain"/>
                                 <field name="period_month"/>
                                 <field name="period_year"/>
                             </group>
@@ -63,16 +60,6 @@
                                 <field name="show_goal_pct"/>
                                 <field name="show_sales_amount" />
                                 <field name="show_total"/>
-                            </group>
-                        </page>
-                        <page name="Calculated" string="Calculated">
-                            <group>
-                                <field name="date_filter" readonly="1"/>
-                                <field name="structure"/>
-                                <field name="sales_percentage"/>
-                                <field name="sales_at_date" />
-                                <field name="sales_total_week"/>
-                                <field name="sales_total_month"/>
                             </group>
                         </page>
                     </notebook>

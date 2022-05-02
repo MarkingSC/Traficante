@@ -95,6 +95,12 @@ class AccountMove(models.Model):
             #_logger.info('**** Factura enviada. ')
         return result
 
+    # Pinta en el log los parámetros a envair para un CFDI
+    @api.model
+    def to_json(self):
+        result = super(AccountMove, self).to_json()
+        _logger.info('**** JSON que se envía a timbrar: ' + str(result))
+
     # Envía de forma automática el correo de la Nota de crédito cuando se timbre
     def action_cfdi_cancel(self):
         _logger.info('***** entra a action_cfdi_cancel *****')

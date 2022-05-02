@@ -513,6 +513,7 @@ class AccountMove(models.Model):
 
         request_params.update({'conceptos': invoice_lines})
 
+        _logger.info('**** JSON que se envía a timbrar: ' + str(request_params))
         return request_params
 
     def set_decimals(self, amount, precision):
@@ -643,6 +644,7 @@ class AccountMove(models.Model):
                 raise UserError(_('Error para timbrar factura, Factura ya generada y cancelada.'))
 
             values = invoice.to_json()
+            _logger.info('**** JSON que se envía a timbrar: ' + str(values))
             if invoice.company_id.proveedor_timbrado == 'multifactura':
                 url = '%s' % ('http://facturacion.itadmin.com.mx/api/invoice')
             elif invoice.company_id.proveedor_timbrado == 'multifactura2':

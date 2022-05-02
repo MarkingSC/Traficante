@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sales_detailed_report_tree_view" model="ir.ui.view">
+        <field name="name">sales.detailed.report.tree.view</field>
+        <field name="model">account.move.line</field>
+        <field name="priority">8</field>
+        <field name="arch" type="xml">
+            <tree string="Journal Items" create="false" edit="false">
+                <field name='id' optional="hide" string="ID"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide" string="Company"/>
+                <field name="currency_id" readonly="1" optional="hide" string="Currency"/>
+                <field name="move_id" optional="show" string="Invoice"/>
+                <field name="date" optional="show" string="Date"/>
+                <field name="product_code" optional="show" string="Code"/>
+                <field name="product_name" optional="show" string="Description"/>
+                <field name="quantity" optional="show" string="Quantity"/>
+                <field name="price_unit" widget='monetary' optional="show" string="Price unit"/>
+                <field name="price_subtotal" widget='monetary' optional="show" string="Subtotal"/>
+                <field name="ieps_taxes" widget="many2many_tags" optional="show" string="IEPS"/>
+                <field name="ieps_percent" widget="percentage" optional="show" string="IEPS Pct."/>
+                <field name="ieps_amount" widget='monetary' optional="show" string="IEPS Amt."/>
+                <field name="iva_amount" widget='monetary' optional="show" string="IVA"/>
+                <field name="price_total" widget='monetary' optional="show" string="Total"/>
+                <field name="business_name" optional="show" string="Business Name"/>
+                <field name="commercial_name" optional="show" string="Commercial Name"/>
+                <field name="salesperson" optional="show" string="Salesperson"/>
+                <field name="product_cost" widget='monetary' optional="hide" string="Cost"/>
+                <field name="move_id_state" optional="show" string="Move status"/>
+                <field name="move_id_estado_factura" optional="show" string="Invoice status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_account_move_line_filter_date_range" model="ir.ui.view">
+        <field name="name">account.move.line.search.date.range</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="date" string="Desde" filter_domain="[('date', '&gt;=', self)]"/>
+                <field name="date" string="Hasta" filter_domain="[('date', '&lt;=', self)]"/>
+            </xpath>
+            <xpath expr="//filter[@name='posted']" position="after">
+                <separator/>
+                <filter string="CFDI Ready" name="cfdiready" domain="[('move_id.estado_factura', '=', 'factura_no_generada')]" help="CFDI Ready Journal Items"/>
+                <filter string="CFDI Posted" name="cfdiposted" domain="[('move_id.estado_factura', '=', 'factura_correcta')]" help="CFDI Posted Journal Items"/>
+                <filter string="CFDI Cancelled" name="cfdicancelled" domain="[('move_id.estado_factura', '=', 'factura_cancelada')]" help="CFDI Cancelled Journal Items"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_sales_detailed_report_tree" model="ir.actions.act_window">
+        <field name="name">Detailed Sales</field>
+        <field name="res_model">account.move.line</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sales_detailed_report_tree_view"/>
+        <field name="search_view_id" ref="view_account_move_line_filter_date_range"/>
+        <field name="domain">[('product_id', '!=', False)]</field>
+    </record>
+
+    
+
+    <menuitem 
+        id="menu_sales_detailed_report_tree" 
+        name="Detailed sales" 
+        sequence="10" 
+        action="action_sales_detailed_report_tree" 
+        parent="sale.menu_sale_report" 
+        groups="sales_team.group_sale_salesman"/>
+
+</odoo>
+
+
