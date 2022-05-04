@@ -9,7 +9,7 @@ from lxml import etree
 from odoo import fields, models, api,_ 
 import odoo.addons.decimal_precision as dp
 from odoo.exceptions import UserError, Warning
-from odoo.tools import date_utils
+from odoo.tools import date_utils, float_is_zero
 from reportlab.graphics.barcode import createBarcodeDrawing
 from reportlab.lib.units import mm
 from . import amount_to_text_es_MX
@@ -127,6 +127,9 @@ class AccountMove(models.Model):
     )
     uuid_relacionado = fields.Char(string=_('CFDI Relacionado'))
     confirmacion = fields.Char(string=_('Confirmación'))
+    total_factura = fields.Float("Total factura")
+    subtotal = fields.Float("Subtotal factura")
+    discount = fields.Float("Descuento factura")
     facatradquirente = fields.Char(string=_('Fac Atr Adquirente'))
     exportacion = fields.Selection(
         selection=[('01', 'No aplica'), 
@@ -136,6 +139,37 @@ class AccountMove(models.Model):
     )
     proceso_timbrado = fields.Boolean(string=_('Proceso de timbrado'))
     tax_payment = fields.Text(string=_('Taxes'))
+    factura_global = fields.Boolean('Factura global')
+    fg_periodicidad = fields.Selection(
+        selection=[('01', '01 - Diario'),
+                   ('02', '02 - Semanal'),
+                   ('03', '03 - Quincenal'),
+                   ('04', '04 - Mensual'),
+                   ('05', '05 - Bimestral'),],
+        string=_('Periodicidad'),
+    )
+    fg_meses = fields.Selection(
+        selection=[('01', '01 - Enero'),
+                   ('02', '02 - Febrero'),
+                   ('03', '03 - Marzo'),
+                   ('04', '04 - Abril'),
+                   ('05', '05 - Mayo'),
+                   ('06', '06 - Junio'),
+                   ('07', '07 - Julio'),
+                   ('08', '08 - Agosto'),
+                   ('09', '09 - Septiembre'),
+                   ('10', '10 - Octubre'),
+                   ('11', '11 - Noviembre'),
+                   ('12', '12 - Diciembre'),
+                   ('13', '13 - Enero - Febrero'),
+                   ('14', '14 - Marzo - Abril'),
+                   ('15', '15 - Mayo - Junio'),
+                   ('16', '16 - Julio - Agosto'),
+                   ('17', '17 - Septiembre - Octubre'),
+                   ('18', '18 - Noviembre - Diciembre'),],
+        string=_('Mes'),
+    )
+    fg_ano =  fields.Char(string=_('Año'))
 
     @api.model
     def _reverse_move_vals(self,default_values, cancel=True):
@@ -155,7 +189,7 @@ class AccountMove(models.Model):
             values['fecha_factura'] = None
             values['folio_fiscal'] = None
             values['invoice_datetime'] = None
-            values['estado_factura'] = None
+            values['estado_factura'] = 'factura_no_generada'
             values['factura_cfdi'] = False
         return values
 
@@ -216,8 +250,8 @@ class AccountMove(models.Model):
     
     @api.model
     def to_json(self):
-        if self.partner_id.vat == 'XAXX010101000':
-            nombre = 'PUBLICO GENERAL'
+        if self.partner_id.vat == 'XAXX010101000' and self.factura_global:
+            nombre = 'PUBLICO EN GENERAL'
         else:
             nombre = self.partner_id.name.upper()
 
@@ -289,6 +323,15 @@ class AccountMove(models.Model):
                 },
         }
 
+        if self.factura_global:
+           request_params.update({
+                'InformacionGlobal': {
+                      'Periodicidad': self.fg_periodicidad,
+                      'Meses': self.fg_meses,
+                      'Año': self.fg_ano,
+                },
+           })
+
         if self.uuid_relacionado:
            cfdi_relacionado = []
            uuids = self.uuid_relacionado.replace(' ','').split(',')
@@ -300,9 +343,9 @@ class AccountMove(models.Model):
 
         amount_total = 0.0
         amount_untaxed = 0.0
-        subtotal = 0
+        self.subtotal = 0
         total = 0
-        discount = 0
+        self.discount = 0
         tras_tot = 0
         ret_tot = 0
         tax_grouped_tras = {}
@@ -326,9 +369,10 @@ class AccountMove(models.Model):
                 self.env.cr.commit()
                 raise UserError(_('El producto %s no tiene unidad de medida del SAT configurado.') % (line.product_id.name))
 
-            price_wo_discount = round(line.price_unit * (1 - (line.discount / 100.0)), no_decimales_prod)
+            price_wo_discount = line.price_unit * (1 - (line.discount / 100.0))
 
-            taxes_prod = line.tax_ids.compute_all(price_wo_discount, line.currency_id, line.quantity, product=line.product_id, partner=line.move_id.partner_id)
+            taxes_prod = line.tax_ids.compute_all(price_wo_discount, currency=line.currency_id, quantity=line.quantity, product=line.product_id, partner=line.move_id.partner_id,)
+
             tax_ret = []
             tax_tras = []
             tax_items = {}
@@ -393,13 +437,13 @@ class AccountMove(models.Model):
                    if taxes['amount'] >= 0.0:
                       tax_local_tras_tot += taxes['amount']
                       tax_local_tras.append({'ImpLocTrasladado': tax.impuesto_local,
-                                             'TasadeTraslado': self.set_decimals(tax.amount / 100.0,6),
-                                             'Importe': self.set_decimals(taxes['amount'], no_decimales),})
+                                             'TasadeTraslado': self.set_decimals(tax.amount,2),
+                                             'Importe': self.set_decimals(taxes['amount'], 2),})
                    else:
                       tax_local_ret_tot += taxes['amount']
                       tax_local_ret.append({'ImpLocRetenido': tax.impuesto_local,
-                                            'TasadeRetencion': self.set_decimals(tax.amount / 100.0 * -1,6),
-                                            'Importe': self.set_decimals(taxes['amount'] * -1, no_decimales),})
+                                            'TasadeRetencion': self.set_decimals(tax.amount * -1,2),
+                                            'Importe': self.set_decimals(taxes['amount'] * -1, 2),})
 
             if tax_tras:
                tax_items.update({'Traslados': tax_tras})
@@ -409,8 +453,8 @@ class AccountMove(models.Model):
             total_wo_discount = round(line.price_unit * line.quantity - tax_included, no_decimales_prod)
             discount_prod = round(total_wo_discount - line.price_subtotal, no_decimales_prod) if line.discount else 0
             precio_unitario = round(total_wo_discount / line.quantity, no_decimales_prod)
-            subtotal += total_wo_discount
-            discount += discount_prod
+            self.subtotal += total_wo_discount
+            self.discount += discount_prod
 
             #probar con varios pedimentos
             pedimentos = []
@@ -460,7 +504,8 @@ class AccountMove(models.Model):
         ret_tot = round(ret_tot, no_decimales)
         tax_local_tras_tot = round(tax_local_tras_tot, no_decimales)
         tax_local_ret_tot = round(tax_local_ret_tot, no_decimales)
-        discount = round(discount, no_decimales)
+        self.discount = round(self.discount, no_decimales)
+        self.subtotal = self.roundTraditional(self.subtotal,no_decimales)
         if tax_grouped_tras or tax_grouped_ret:
                 impuestos = {}
                 retenciones = []
@@ -498,28 +543,39 @@ class AccountMove(models.Model):
 
         if tax_local_ret or tax_local_tras:
            if tax_local_tras and not tax_local_ret:
-               request_params.update({'implocal10': {'TotaldeTraslados': tax_local_tras_tot, 'TotaldeRetenciones': tax_local_ret_tot, 'TrasladosLocales': tax_local_tras,}})
+               request_params.update({'implocal10': {'TotaldeTraslados': self.set_decimals(tax_local_tras_tot, 2),
+                                                     'TotaldeRetenciones': self.set_decimals(tax_local_ret_tot,2), 
+                                                     'TrasladosLocales': tax_local_tras,}})
            if tax_local_ret and not tax_local_tras:
-               request_params.update({'implocal10': {'TotaldeTraslados': tax_local_tras_tot, 'TotaldeRetenciones': tax_local_ret_tot * -1, 'RetencionesLocales': tax_local_ret,}})
+               request_params.update({'implocal10': {'TotaldeTraslados': self.set_decimals(tax_local_tras_tot,2), 
+                                                     'TotaldeRetenciones': self.set_decimals(tax_local_ret_tot * -1,2), 
+                                                     'RetencionesLocales': tax_local_ret,}})
            if tax_local_ret and tax_local_tras:
-               request_params.update({'implocal10': {'TotaldeTraslados': tax_local_tras_tot, 'TotaldeRetenciones': tax_local_ret_tot * -1, 'TrasladosLocales': tax_local_tras, 'RetencionesLocales': tax_local_ret,}})
+               request_params.update({'implocal10': {'TotaldeTraslados': self.set_decimals(tax_local_tras_tot,2),
+                                                     'TotaldeRetenciones': self.set_decimals(tax_local_ret_tot * -1,2),
+                                                     'TrasladosLocales': tax_local_tras,
+                                                     'RetencionesLocales': tax_local_ret,}})
 
         if self.tipo_comprobante == 'T':
             request_params['factura'].update({'subtotal': '0.00','total': '0.00'})
+            self.total_factura = 0
         else:
-            request_params['factura'].update({'descuento': self.set_decimals(discount, no_decimales),
-                                              'subtotal': self.set_decimals(subtotal, no_decimales),
-                                              'total':  self.set_decimals(subtotal + tras_tot - ret_tot - discount + tax_local_ret_tot + tax_local_tras_tot, no_decimales)})
+            self.total_factura = round(self.subtotal + tras_tot - ret_tot - self.discount + tax_local_ret_tot + tax_local_tras_tot,2)
+            request_params['factura'].update({'descuento': self.set_decimals(self.discount, no_decimales),
+                                              'subtotal': self.set_decimals(self.subtotal, no_decimales),
+                                              'total':  self.set_decimals(self.total_factura, no_decimales)})
 
         request_params.update({'conceptos': invoice_lines})
 
-        _logger.info('**** JSON que se envía a timbrar: ' + str(request_params))
         return request_params
 
     def set_decimals(self, amount, precision):
         if amount is None or amount is False:
             return None
         return '%.*f' % (precision, amount)
+
+    def roundTraditional(self, val,digits):
+       return round(val+10**(-len(str(val))-1), digits)
 
     def clean_text(self, text):
         clean_text = text.replace('\n', ' ').replace('\\', ' ').replace('-', ' ').replace('/', ' ').replace('|', ' ')
@@ -581,6 +637,7 @@ class AccountMove(models.Model):
             if TimbreFiscalDigital:
                 break
 
+        self.total_factura = xml_data.attrib['Total']
         self.tipocambio = xml_data.attrib['TipoCambio']
         self.moneda = xml_data.attrib['Moneda']
         self.numero_cetificado = xml_data.attrib['NoCertificado']
@@ -623,7 +680,6 @@ class AccountMove(models.Model):
     
     def action_cfdi_generate(self):
         # after validate, send invoice data to external system via http post
-        _logger.info('**** entra a action_cfdi_generate del modulo original: ')
         for invoice in self:
             if invoice.proceso_timbrado:
                 return True
@@ -644,7 +700,6 @@ class AccountMove(models.Model):
                 raise UserError(_('Error para timbrar factura, Factura ya generada y cancelada.'))
 
             values = invoice.to_json()
-            _logger.info('**** JSON que se envía a timbrar: ' + str(values))
             if invoice.company_id.proveedor_timbrado == 'multifactura':
                 url = '%s' % ('http://facturacion.itadmin.com.mx/api/invoice')
             elif invoice.company_id.proveedor_timbrado == 'multifactura2':
@@ -808,6 +863,9 @@ class AccountMove(models.Model):
                  ('res_model', '=', invoice._name),
                  ('name', '=', invoice.name.replace('/', '_') + '.xml')]
             xml_file = self.env['ir.attachment'].search(domain, limit=1)
+            if not xml_file:
+               _logger.info('No se encontró XML de la factura %s', invoice.folio_fiscal)
+               continue
             values = {
                  'rfc': invoice.company_id.vat,
                  'api_key': invoice.company_id.proveedor_timbrado,
@@ -837,7 +895,7 @@ class AccountMove(models.Model):
                    return
 
                json_response = response.json()
-               #_logger.info('something ... %s', response.text)
+             #  _logger.info('something ... %s', response.text)
             except Exception as e:
                _logger.info('log de la exception ... %s', response.text)
                json_response = {}
@@ -915,6 +973,51 @@ class AccountMove(models.Model):
                'target': 'new'
            }
 
+    def _get_reconciled_info_JSON_values(self):
+        self.ensure_one()
+        foreign_currency = self.currency_id if self.currency_id != self.company_id.currency_id else False
+
+        reconciled_vals = []
+        pay_term_line_ids = self.line_ids.filtered(lambda line: line.account_id.user_type_id.type in ('receivable', 'payable'))
+        partials = pay_term_line_ids.mapped('matched_debit_ids') + pay_term_line_ids.mapped('matched_credit_ids')
+        for partial in partials:
+            counterpart_lines = partial.debit_move_id + partial.credit_move_id
+            # In case we are in an onchange, line_ids is a NewId, not an integer. By using line_ids.ids we get the correct integer value.
+            counterpart_line = counterpart_lines.filtered(lambda line: line.id not in self.line_ids.ids)
+
+            if foreign_currency and partial.currency_id == foreign_currency:
+                amount = partial.amount_currency
+                amount_mxn = partial.amount * self.currency_id.with_context(date=self.invoice_date).rate
+                #_logger.info('entra a amount_mxn %s', amount_mxn)
+            else:
+                #_logger.info('no entra a foraneo')
+                amount = partial.company_currency_id._convert(partial.amount, self.currency_id, self.company_id, self.date)
+                amount_mxn = partial.company_currency_id._convert(partial.amount, self.currency_id, self.company_id, self.date)
+
+            if float_is_zero(amount, precision_rounding=self.currency_id.rounding):
+                continue
+
+            ref = counterpart_line.move_id.name
+            if counterpart_line.move_id.ref:
+                ref += ' (' + counterpart_line.move_id.ref + ')'
+
+            reconciled_vals.append({
+                'name': counterpart_line.name,
+                'journal_name': counterpart_line.journal_id.name,
+                'amount': amount,
+                'amount_mxn': amount_mxn,
+                'currency': self.currency_id.symbol,
+                'digits': [69, self.currency_id.decimal_places],
+                'position': self.currency_id.position,
+                'date': counterpart_line.date,
+                'payment_id': counterpart_line.id,
+                'account_payment_id': counterpart_line.payment_id.id,
+                'payment_method_name': counterpart_line.payment_id.payment_method_id.name if counterpart_line.journal_id.type == 'bank' else None,
+                'move_id': counterpart_line.move_id.id,
+                'ref': ref,
+            })
+        return reconciled_vals
+
 class MailTemplate(models.Model):
     "Templates for sending email"
     _inherit = 'mail.template'
@@ -960,28 +1063,13 @@ class MailTemplate(models.Model):
                     results[res_id]['attachments'] = attachments
         return results
 
+
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     pedimento = fields.Char('Pedimento')
     predial = fields.Char('No. Predial')
-    
-    
-class AccountPartialReconcile(models.Model):
-    _inherit = "account.partial.reconcile"
-    
-    def unlink(self):
-        full_to_unlink = self.env['account.full.reconcile']
-        for rec in self:
-            if rec.full_reconcile_id:
-                full_to_unlink |= rec.full_reconcile_id
-        for move in self.env['account.move'].search([('tax_cash_basis_rec_id', 'in', self._ids)]):
-            move.tax_cash_basis_rec_id = False
-            move.state = 'cancel'
-        res = super(AccountPartialReconcile, self).unlink()
-        if full_to_unlink:
-            full_to_unlink.unlink()
-        return res
+
 
 class MyModuleMessageWizard(models.TransientModel):
     _name = 'mymodule.message.wizard'
@@ -989,6 +1077,7 @@ class MyModuleMessageWizard(models.TransientModel):
 
     message = fields.Text('Message', required=True)
 
-#    @api.multi
+    #    @api.multi
     def action_close(self):
         return {'type': 'ir.actions.act_window_close'}
+

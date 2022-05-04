@@ -66,10 +66,12 @@ class import_account_payment_from_xml(models.TransientModel):
 
         Emisor = xml_data.find('cfdi:Emisor', NSMAP)
         Receptor = xml_data.find('cfdi:Receptor', NSMAP)
-        Complemento = xml_data.find('cfdi:Complemento', NSMAP)
-        TimbreFiscalDigital = Complemento.find('tfd:TimbreFiscalDigital', NSMAP)
-        
-        #xml_file_link = invoice_id.company_id.factura_dir + '/' + invoice_id.number.replace('/', '_') + '.xml'
+        Complemento = xml_data.findall('cfdi:Complemento', NSMAP)
+
+        for complementos in Complemento:
+            TimbreFiscalDigital = complementos.find('tfd:TimbreFiscalDigital', NSMAP)
+            if TimbreFiscalDigital:
+                break
 
         amount_str = str(xml_data.attrib['Total']).split('.')
         qr_value = 'https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?&id=%s&re=%s&rr=%s&tt=%s.%s&fe=%s' % (TimbreFiscalDigital.attrib['UUID'],
@@ -84,6 +86,7 @@ class import_account_payment_from_xml(models.TransientModel):
         qrcode_image = base64.encodestring(ret_val.asString('jpg'))
 
         cargar_values = {
+            'total_factura': xml_data.attrib['Total'],
             'methodo_pago': 'MetodoPago' in xml_data.attrib and xml_data.attrib['MetodoPago'] or '',
             'forma_pago' : 'FormaPago' in xml_data.attrib and xml_data.attrib['FormaPago'] or '',
             'uso_cfdi': Receptor.attrib['UsoCFDI'],
@@ -117,7 +120,10 @@ class import_account_payment_from_xml(models.TransientModel):
               if traslados:
                  for traslado in traslados:
                     if 'TasaOCuota' in traslado.attrib:
-                       tasa = str(float(traslado.attrib['TasaOCuota'])*100)
+                       if traslado.attrib['TipoFactor'] == 'Cuota':
+                          tasa = str(float(traslado.attrib['TasaOCuota']))
+                       else:
+                          tasa = str(float(traslado.attrib['TasaOCuota'])*100)
                     else:
                        tasa = str(0)
                     tax_exist = self.env['account.tax'].search([('impuesto','=',traslado.attrib['Impuesto']), ('type_tax_use','=','sale'), 
@@ -139,7 +145,7 @@ class import_account_payment_from_xml(models.TransientModel):
                     else:
                         tax_grouped_tras[key]['base'] += float(traslado.attrib['Base'])
                         tax_grouped_tras[key]['amount'] += float(importe)
-              _logger.info('traslado %s', tax_grouped_tras)
+              #_logger.info('traslado %s', tax_grouped_tras)
 
               retenciones = imp_prod.find('cfdi:Retenciones', NSMAP)
               if retenciones:
@@ -167,7 +173,7 @@ class import_account_payment_from_xml(models.TransientModel):
                     else:
                         tax_grouped_ret[key]['base'] += float(retencion.attrib['Base'])
                         tax_grouped_ret[key]['amount'] += float(importe)
-              _logger.info('retenciones %s', tax_grouped_ret)
+              #_logger.info('retenciones %s', tax_grouped_ret)
 
         if tax_grouped_tras or tax_grouped_ret:
                 impuestos = {}
@@ -202,7 +208,7 @@ class import_account_payment_from_xml(models.TransientModel):
                                          })
                    impuestos.update({'retenciones': retenciones,})
                 invoice_id.write({'tax_payment': json.dumps(impuestos)})
-                _logger.info('total: %s', impuestos)
+                #_logger.info('total: %s', impuestos)
 
         #xml_file = open(xml_file_link, 'w')
         #xml_invoice = base64.b64decode(self.import_file)
