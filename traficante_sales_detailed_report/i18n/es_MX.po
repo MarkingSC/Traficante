@@ -1,0 +1,392 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* traficante_sales_detailed_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20211018\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-02 18:29+0000\n"
+"PO-Revision-Date: 2022-05-02 13:40-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__business_name
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Business Name"
+msgstr "Razón Social"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "CFDI Cancelled"
+msgstr "CFDI Cancelado"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "CFDI Cancelled Journal Items"
+msgstr "Entradas con CFDI cancelado"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "CFDI Posted"
+msgstr "CFDI Timbrado"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "CFDI Posted Journal Items"
+msgstr "Entradas con CFDI timbrado"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "CFDI Ready"
+msgstr "CFDI sin timbrar"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "CFDI Ready Journal Items"
+msgstr "Entradas con CFDI sin timbrar"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__solicitud_cancelar
+msgid "Cancelación en proceso"
+msgstr "Cancelación en proceso"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__solicitud_rechazada
+msgid "Cancelación rechazada"
+msgstr "Cancelación rechazada"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_state__cancel
+msgid "Cancelled"
+msgstr "Cancelada"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,help:traficante_sales_detailed_report.field_account_tax_group__ieps_section
+msgid "Check if this group should be shown as IEPS on sales reports"
+msgstr "Marcar si los impuestos de este grupo deben mostrarse como IEPS en los reportes de ventas"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,help:traficante_sales_detailed_report.field_account_tax_group__iva_section
+msgid "Check if this group should be shown as IVA on sales reports"
+msgstr "Marcar si este grupo de impuestos debe mostrarse como IVA en los reportes de ventas"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Code"
+msgstr "Código"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__commercial_name
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Commercial Name"
+msgstr "Nombre Comercial"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Company"
+msgstr "Compañía"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Cost"
+msgstr "Costo"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Date"
+msgstr "Fecha"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Description"
+msgstr "Descripción"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "Desde"
+msgstr "Desde"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.actions.act_window,name:traficante_sales_detailed_report.action_sales_detailed_report_tree
+msgid "Detailed Sales"
+msgstr "Detallado de ventas"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.ui.menu,name:traficante_sales_detailed_report.menu_sales_detailed_report
+msgid "Detailed Sales Report"
+msgstr "Reporte detallado de ventas"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.ui.menu,name:traficante_sales_detailed_report.menu_sales_detailed_report_tree
+msgid "Detailed sales"
+msgstr "Detallado de ventas"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_report_sales_detailed_report__display_name
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_state__draft
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__move_id_estado_factura
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__move_id_estado_factura
+msgid "Estado de factura"
+msgstr "Estado de factura"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__factura_cancelada
+msgid "Factura cancelada"
+msgstr "Factura cancelada"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__factura_correcta
+msgid "Factura correcta"
+msgstr "Factura correcta"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__factura_no_generada
+msgid "Factura no generada"
+msgstr "Factura no generada"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__date_start
+msgid "From date"
+msgstr "Desde"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_wizard
+msgid "Get report"
+msgstr "Descargar reporte"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.actions.server,name:traficante_sales_detailed_report.planned_get_taxes_action_ir_actions_server
+#: model:ir.cron,cron_name:traficante_sales_detailed_report.planned_get_taxes_action
+#: model:ir.cron,name:traficante_sales_detailed_report.planned_get_taxes_action
+msgid "Get taxes description and amount for invoice lines"
+msgstr "Obtener descripción y monto de los impuestos para las líneas de factura."
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
+msgid "Hasta"
+msgstr "Hasta"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_report_sales_detailed_report__id
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__id
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "ID"
+msgstr "ID"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__ieps_taxes
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "IEPS"
+msgstr "IEPS"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "IEPS Amt."
+msgstr "Mto. IEPS"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__ieps_percent
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "IEPS Pct."
+msgstr "Porc. IEPS"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__ieps_amount
+msgid "IEPS amount"
+msgstr "Monto de IEPS"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_tax_group__ieps_section
+msgid "IEPS seciton on reports."
+msgstr "Sección de IEPS en reportes"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__iva_taxes
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "IVA"
+msgstr "IVA"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__iva_amount
+msgid "IVA amount"
+msgstr "Monto de IVA"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_tax_group__iva_section
+msgid "IVA seciton on reports."
+msgstr "Sección de IVA en reportes"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Invoice status"
+msgstr "Estatus de la factura"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model,name:traficante_sales_detailed_report.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Journal Items"
+msgstr "Apuntes contables"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_report_sales_detailed_report____last_update
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Move status"
+msgstr "Estatus de la factura"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_state__posted
+msgid "Posted"
+msgstr "Validado"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Price unit"
+msgstr "Precio unitario"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__product_code
+msgid "Product Code"
+msgstr "Código de producto"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__product_cost
+msgid "Product Cost"
+msgstr "Costo del producto"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__product_name
+msgid "Product Name"
+msgstr "Nombre del producto"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_wizard
+msgid "Report Options"
+msgstr "Opciones del reporte"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.actions.act_window,name:traficante_sales_detailed_report.action_sales_detailed_report
+msgid "Sales Detailed"
+msgstr "Detallado de ventas"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.actions.report,name:traficante_sales_detailed_report.action_report_sales_detailed
+msgid "Sales Detailed Report"
+msgstr "Reporte detallado de ventas"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__salesperson
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Salesperson"
+msgstr "Ejecutivo"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,help:traficante_sales_detailed_report.field_sales_detailed_report_wizard__date_start
+msgid "Set the date from you want to get the report."
+msgstr "Establezca la fecha desde la cual desea obtener el reporte."
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,help:traficante_sales_detailed_report.field_sales_detailed_report_wizard__date_end
+msgid "Set the date to you want to get the report."
+msgstr "Establezca la fecha hasta la que desea obtener el reporte."
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__move_id_state
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__move_id_state
+msgid "Status"
+msgstr "Estatus"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model,name:traficante_sales_detailed_report.model_account_tax_group
+msgid "Tax Group"
+msgstr "Grupo de impuestos"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__date_end
+msgid "To date"
+msgstr "Hasta"
+
+#. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+msgid "Total"
+msgstr "Total"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model,name:traficante_sales_detailed_report.model_report_sales_detailed_report
+msgid "report.sales.detailed.report"
+msgstr "report.sales.detailed.report"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model,name:traficante_sales_detailed_report.model_sales_detailed_report_wizard
+msgid "sales.detailed.report.wizard"
+msgstr "sales.detailed.report.wizard"

@@ -31,30 +31,25 @@ class AccountMoveLine(models.Model):
         'ieps_tax_move_lines',
         'move_line_id',
         'account_tax_id',
-        'IEPS', compute = "_get_taxes_amount")
-    ieps_amount = fields.Float(string='IEPS amount', compute = "_get_taxes_amount")
-    ieps_percent= fields.Float(string='IEPS Pct.', compute = "_get_taxes_amount", digits=(16, 4))
+        'IEPS', compute = "_get_taxes_amount", store=True)
+    ieps_amount = fields.Float(string='IEPS amount', compute = "_get_taxes_amount", store=True)
+    ieps_percent= fields.Float(string='IEPS Pct.', compute = "_get_taxes_amount", store=True, digits=(16, 4))
 
     iva_taxes = fields.Many2many(
         'account.tax',
         'iva_tax_move_lines',
         'move_line_id',
         'account_tax_id',
-        'IVA', compute = "_get_taxes_amount")
-    iva_amount = fields.Float(string='IVA amount', compute = "_get_taxes_amount")
+        'IVA', compute = "_get_taxes_amount", store=True)
+    iva_amount = fields.Float(string='IVA amount', compute = "_get_taxes_amount", store=True)
     
     @api.depends('product_id')
     def _get_product_code(self):
         _logger.info('**** entra a _get_product_code ***** ')
         _logger.info('**** total lineas: ' + str(len(self)))
         for record in self:
-            _logger.info('**** línea: ' + str(record))
-            _logger.info('**** compañia de la línea: ' + str(record.company_id.name))
             if record.product_id:
-                _logger.info('**** existe el producto: ' + str(record.product_id))
                 record.product_code = record.product_id.default_code
-            else:
-                _logger.info('**** NO existe producto en esta linea. *****')
         _logger.info('**** termina _get_product_code ***** ')
 
     @api.depends('product_id')
@@ -70,12 +65,8 @@ class AccountMoveLine(models.Model):
         _logger.info('**** entra a _get_product_cost: ')
         for record in self:
             if record.product_id:
-                _logger.info('**** Obtener el costo del proecuto: ' + str(record.product_id))
                 product_cost_pp = record.product_id.standard_price
                 qtty = record.quantity
-                _logger.info('**** product_cost por pieza: ' + str(product_cost_pp))
-                _logger.info('**** Cantidad en la linea: ' + str(qtty))
-                _logger.info('**** Total: ' + str(product_cost_pp * qtty))
                 record.product_cost = product_cost_pp * qtty
         _logger.info('**** termina _get_product_cost: ')
 
@@ -84,8 +75,6 @@ class AccountMoveLine(models.Model):
         for record in self:
             _logger.info('**** _get_taxes_amount para a linea: ' + str(record))
             if record.product_id != False:
-
-                _logger.info('**** record.tax_ids: ' + str(record.tax_ids))
 
                 #### IEPS
                 ieps_taxes = record.tax_ids.filtered(lambda tax: tax.tax_group_id.ieps_section == True)
@@ -104,8 +93,6 @@ class AccountMoveLine(models.Model):
 
                 record.ieps_amount = total_ieps
                 record.ieps_taxes = ieps_taxes
-
-                _logger.info('**** record.price_subtotal: ' + str(record.price_subtotal))
 
                 if record.price_subtotal:
                     record.ieps_percent = record.ieps_amount / record.price_subtotal
@@ -131,11 +118,9 @@ class AccountMoveLine(models.Model):
                 record.iva_amount = total_iva
                 record.iva_taxes = iva_taxes
 
-                _logger.info('**** record.ieps_percent: ' + str(record.ieps_percent))
-                _logger.info('**** record.ieps_amount: ' + str(record.ieps_amount))
-                _logger.info('**** record.ieps_taxes: ' + str(record.ieps_taxes))
-                _logger.info('**** record.iva_amount: ' + str(record.iva_amount))
-                _logger.info('**** record.iva_taxes: ' + str(record.iva_taxes))
-
+                if record.id == 25516:
+                    _logger.info('**** record.id: ' + str(record.id))
+                    _logger.info('**** record.iva_amount: ' + str(record.iva_amount))
+                    _logger.info('**** compañía de la línea: ' + str(record.company_id.name))
 
         _logger.info('**** termina _get_taxes_amount: ')
