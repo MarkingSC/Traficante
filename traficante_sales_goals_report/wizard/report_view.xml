@@ -8,6 +8,7 @@
             <form string="Report Options" version="13.0">
                 <group col="4">
                     <field name="date_filter" />
+                    <field name="full_period" />
                 </group>
                 <footer>
                     <button name="get_report" string="Get report" type="object" default_focus="1" class="oe_highlight"/>
@@ -31,7 +32,14 @@
               name="Goals Report"
               sequence="10"
               action="action_sales_goals_report"
-              parent="base_accounting_kit.account_reports_audit"
+              parent="account.account_reports_management_menu"
+              groups="account.group_account_manager,account.group_account_user"/>
+    
+    <menuitem id="menu_sales_goals_report"
+              name="Goals Report"
+              sequence="20"
+              action="action_sales_goals_report"
+              parent="sale.menu_sale_report"
               groups="account.group_account_manager,account.group_account_user"/>
 
 </odoo>

@@ -64,7 +64,7 @@ class salesGoal(models.Model):
     # Porcentaje de venta
     sales_percentage = fields.Float(string='Percentage', compute='_compute_values', store=False) 
     # Ventas a la fecha: Total vendido en el día en que se obtiene el reporte
-    sales_at_date = fields.Monetary(string='Day', compute='_compute_values', store=False)
+    sales_on_date = fields.Monetary(string='Day', compute='_compute_values', store=False)
     # Ventas en la semana: Total de lunes a viernes truncado al mes, a la fecha en que se obtiene el reporte
     sales_total_week = fields.Monetary(string='Week', compute='_compute_values', store=False)
     # Ventas al mes: Total vendido en todo el mes hasta la fecha en que se obtiene el reporte
@@ -79,10 +79,11 @@ class salesGoal(models.Model):
     period_year  = fields.Integer(string='Year', help='Set the year when the goal applies. Leve empty if it is a group.')
 
 
-    @api.depends('parent_id')
     def _get_move_lines(self):
-        _logger.info('**** ENTRA A _get_move_lines ****')   
+        
         for record in self:
+
+            _logger.info('**** ENTRA A _get_move_lines de la meta:' + str(record.name))   
 
             today = datetime.now()
             fdom = ''
@@ -94,7 +95,7 @@ class salesGoal(models.Model):
 
             _logger.info('**** PRIMER DIA DEL MES: ' + str(fdom))
 
-            lines = []
+            lines = self.env['account.move.line']
             if record.type == 'salesperson':
                 lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_user_id', '=', record.sales_user_id.id)])
             elif record.type == 'customer':
@@ -109,8 +110,24 @@ class salesGoal(models.Model):
                 lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_origin', 'in', orders_names)])
             elif record.type == 'i_origin':
                 lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_origin_id', '=', record.invoice_origin_id.id)])
+            
+            elif record.type == 'group':
+                if record.child_ids:
+                    for child in record.child_ids:
+                        child_lines = child._get_move_lines()    
+
+                        _logger.info('**** child_lines: ' + str(child_lines))
+                        _logger.info('**** child_lines type: ' + str(type(child_lines)))
+                        
+                        _logger.info('**** lines: ' + str(lines))    
+                        _logger.info('**** lines type: ' + str(type(lines)))    
+
+                        lines = lines | child._get_move_lines()    
+                        
+                        _logger.info('**** child_lines type: ' + str(type(child_lines)))
+                        _logger.info('**** lines type: ' + str(type(lines)))               
             else: 
-                lines = []
+                lines = ()
 
             _logger.info('**** LINEAS: ' + str(lines))
 
@@ -186,31 +203,39 @@ class salesGoal(models.Model):
             _logger.info('**** record.sales_total_week : ' + str(record.sales_total_week))
 
             #####
-            # total a la fecha
-            total_at_date = 0
-            
-            if invoice_lines:
-                lines_to_date = invoice_lines.filtered(lambda line: datetime.combine(line.move_id.date, time.min) <= today)
-
-                for line in lines_to_date:
-                    total_at_date += abs(line.price_total)
-            
+            # total vendido en la fecha
             # setea el monto en el registro de la meta
-            record.sales_at_date = total_at_date
+            record.sales_on_date = record._get_on_date(today)
 
-            _logger.info('**** record.sales_at_date : ' + str(record.sales_at_date))
+            _logger.info('**** record.sales_on_date : ' + str(record.sales_on_date))
 
             #####
             # estructura
             # Obtene el porcentaje de la estrucutura
             _logger.info('**** record.goal_amount : ' + str(record.goal_amount))
-            _logger.info('**** record.sales_at_date : ' + str(record.sales_at_date))
 
             if record.goal_amount > 0:
-                record.structure = record.sales_at_date/record.goal_amount
+                record.structure = record.sales_total_month/record.goal_amount
             else:
                 record.structure = 0
 
             _logger.info('**** record.structure : ' + str(record.structure))
         
         _logger.info('**** TERMINA _compute_values ****')   
+
+    # Función para obtener el monto vendido en X fecha para self meta
+    def _get_on_date(self, filter_date):
+        for record in self:
+
+            invoice_lines = record._get_move_lines()
+            filter_date = datetime.combine(filter_date, time.min)
+
+            total_on_date = 0
+                
+            if invoice_lines:
+                lines_on_date = invoice_lines.filtered(lambda line: datetime.combine(line.move_id.date, time.min) == filter_date)
+
+                for line in lines_on_date:
+                    total_on_date += abs(line.price_total)
+                
+            return total_on_date
