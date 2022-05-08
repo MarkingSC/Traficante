@@ -1,6 +1,8 @@
 
 from dataclasses import field
 import logging
+
+from pkg_resources import require
 from odoo import models, fields, api, _, exceptions
 import odoo
 from datetime import timedelta, datetime, date, time
@@ -23,48 +25,58 @@ class salesGoal(models.Model):
     # nombre del registro de la meta
     name = fields.Char(string='Name', required=True, help='Set the name of the section')
     # descripcion del registro de la meta
-    description = fields.Char(string='Description', required=True, help='Set the description of the section')
+    #description = fields.Char(string='Description', required=True, help='Set the description of the section')
     # meta padre
     parent_id = fields.Many2one(string='Parent goal', comodel_name='sales.goal', help='Set parent goal. Children will take invoice lines from parent.')
     # metas hijas
     child_ids = fields.One2many('sales.goal', 'parent_id', string='Child Goals')
     # tipo de sección relacionado con sales_goal_section_type
-    section_type_id = fields.Many2one(string="Section type", comodel_name='sales.goal.section.type', help="Section type fot this goal. This may apply some conditions.")
+    section_type_id = fields.Many2one(
+        string="Section type", 
+        comodel_name='sales.goal.section.type', 
+        help="Section type fot this goal to format in report.",
+        required=True)
     # Monto de la meta
     goal_amount = fields.Float(string='Goal amount')
     # Secuencia en que aparece en el reporte
     sequence = fields.Integer(index=True, help="Gives the sequence order when displaying goals on list views and report.", default=1)
 
     # tipo de la meta, si es por cliente, producto, origen de venta u origen de factura
-    type = fields.Selection([('group', 'Group'),('salesperson', 'Sales Person'),('customer', 'Customer'), ('product', 'Product Category'), ('s_origin', 'Sales Origin'), ('i_origin', 'Invoice Origin')], string='Type', default='salesperson', help='Type of element which this goal is defined.')
+    type = fields.Selection(
+        [
+            ('group', 'Group'),
+            ('salesperson', 'Sales Person'),
+            ('customer', 'Customer'), 
+            ('product', 'Product Category'), 
+            ('s_origin', 'Sales Origin'), 
+            ('i_origin', 'Invoice Origin')
+            ], 
+            string='Type', 
+            default='salesperson', 
+            help='Type of element which this goal is defined.',
+            required=True)
 
     # Si se asocia a un ejecutivo
     sales_user_id = fields.Many2one(string='Sales Person', help='Sales person to meet conditions', comodel_name='res.users')
     # Si se asocia a un cliente
     partner_id = fields.Many2one(string='Customer', help='Parner to meet conditions.', comodel_name='res.partner')
     # Si se asocia a una categoría de producto
-    product_category_id = fields.Many2one(string='Category', help='Product category to meet conditions.', comodel_name='product.category')
+    product_category_ids = fields.Many2many(
+        'product.category',
+        'product_categories_per_sales_goal',
+        'goal_id',
+        'category_id',
+        string = 'Categories')
     # Si se asocia a un origen de venta
     sales_origin_id = fields.Many2one(string='Sales Origin', help='Sales origin to meet conditions.', comodel_name='sales.origin')
     # Si se asocia a un origen de factura
     invoice_origin_id = fields.Many2one(string='Invoice Origin', help='Invoice origin to meet conditions.', comodel_name='invoice.origin')
-
-    # si se muestra el nombre en el encabezado
-    show_name = fields.Boolean(default=True, help="Set active to false to hide the name as header on the sales report.")
-    # Si se muestra el porcentaje de la meta en el encabezado
-    show_goal_pct = fields.Boolean(default=True, help="Set active to false to hide goal percentages on header.")
-    # Si se muestra el monto de la venta en el encabezado
-    show_sales_amount = fields.Boolean(default=True, help="Set active to false to hide sales amount on header.")
-    # Si se muestra el total de la venta en el footer
-    show_total = fields.Boolean(default=True, help="Set active to false to hide the total amount as footer on the sales report.")
 
     currency_id = fields.Many2one('res.currency', string='Currency')
     # Estructura: Porcentaje de la fila en función del total de ventas
     structure = fields.Float(string='Structure', compute='_compute_values', store=False)
     # Porcentaje de venta
     sales_percentage = fields.Float(string='Percentage', compute='_compute_values', store=False) 
-    # Ventas a la fecha: Total vendido en el día en que se obtiene el reporte
-    sales_on_date = fields.Monetary(string='Day', compute='_compute_values', store=False)
     # Ventas en la semana: Total de lunes a viernes truncado al mes, a la fecha en que se obtiene el reporte
     sales_total_week = fields.Monetary(string='Week', compute='_compute_values', store=False)
     # Ventas al mes: Total vendido en todo el mes hasta la fecha en que se obtiene el reporte
@@ -73,11 +85,23 @@ class salesGoal(models.Model):
     # Establece el día al que se quiere obtener el reporte
     date_filter = fields.Date(string='At date', help='Set the date at you want to get the report.')
 
-    # Mes en que aplica la meta
-    period_month = fields.Integer(string='Month', help='Set the month when the goal applies. Leve empty if it is a group.')
-    # Año en que aplica la meta
-    period_year  = fields.Integer(string='Year', help='Set the year when the goal applies. Leve empty if it is a group.')
+    def _get_years():
+        year_list = []
+        today = datetime.now()
+        today_less10 = today.year - 10
+        today_plus10 = today.year + 10
 
+        for i in range(today_less10, today_plus10):
+            year_list.append((str(i), str(i)))
+        return year_list
+
+    # Mes en que aplica la meta
+    period_month = fields.Selection([('01', 'January'), ('02', 'February'), ('03', 'March'), ('04', 'April'),
+                          ('05', 'May'), ('06', 'June'), ('07', 'July'), ('08', 'August'), 
+                          ('09', 'September'), ('10', 'October'), ('11', 'November'), ('12', 'December')], 
+                          string='Month', help='Set the month when the goal applies. Leve empty if it is a group.')
+    # Año en que aplica la meta
+    period_year  = fields.Selection(_get_years(), string='Year', help='Set the year when the goal applies. Leve empty if it is a group.')
 
     def _get_move_lines(self):
         
@@ -101,7 +125,7 @@ class salesGoal(models.Model):
             elif record.type == 'customer':
                 lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('partner_id', '=', record.partner_id.id)])
             elif record.type == 'product':
-                lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('product_id.categ_id', '=', record.product_category_id.id)])
+                lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('product_id.categ_id', 'in', record.product_category_ids.ids)])
             elif record.type == 's_origin':
                 orders = self.env['sale.order'].search([('sales_origin_id', '=', record.sales_origin_id)])
                 orders_names = orders.read('name')
@@ -202,14 +226,6 @@ class salesGoal(models.Model):
             record.sales_total_week = total_week
             _logger.info('**** record.sales_total_week : ' + str(record.sales_total_week))
 
-            #####
-            # total vendido en la fecha
-            # setea el monto en el registro de la meta
-            record.sales_on_date = record._get_on_date(today)
-
-            _logger.info('**** record.sales_on_date : ' + str(record.sales_on_date))
-
-            #####
             # estructura
             # Obtene el porcentaje de la estrucutura
             _logger.info('**** record.goal_amount : ' + str(record.goal_amount))

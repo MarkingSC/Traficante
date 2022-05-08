@@ -42,14 +42,17 @@ class SalesGoalReport(models.AbstractModel):
         _logger.info('**** full_period: ' + str(full_period))  
 
         company_format = workbook.add_format({'font_size': 10, 'align': 'vcenter', 'bold': True})
-        header_col_format = workbook.add_format({'font_size': 10, 'align': 'vcenter', 'bold': True, 'bg_color': '#DB3545', 'font_color': 'white'})
+        header_col_format = workbook.add_format(
+            {'font_size': 10, 
+            'align': 'vcenter', 
+            'bold': True, 
+            'bg_color': '#DB3545', 
+            'font_color': 'white',
+            'border': 1})
         align_center = workbook.add_format({'font_size': 10, 'align': 'vcenter'})
-        # Add a number format for cells with money.
-        money_format = workbook.add_format({'num_format': '$#,##0.00'})
 
-        sheet = workbook.add_worksheet('Ventas mes')
+        sheet = workbook.add_worksheet('Ventas ' + date_filter.strftime("%B"))
 
-        sheet.set_row(0, 120)
         sheet.set_column(0, 0, 20)
         sheet.set_column(1, 3, 15)
 
@@ -58,8 +61,8 @@ class SalesGoalReport(models.AbstractModel):
         #    today = date_filter
         date_filter = datetime.combine(date_filter, time.max)
 
-        sheet.write(1,0, 'Compañia', company_format)
-        sheet.write(2,0, 'REPORTE DIARIO Y ACUMULADO DE ' + date_filter.strftime("%B") + ' ' + date_filter.strftime("%Y") , align_center)
+        sheet.write(1,0, self.env.company.name, company_format)
+        sheet.write(2,0, 'REPORTE DIARIO Y ACUMULADO DE ' + date_filter.strftime("%B").upper() + ' ' + date_filter.strftime("%Y") , align_center)
         sheet.write(3,0, '(Cifras en pesos)', align_center)
 
         sheet.write(4,0, str(date_filter.day) + (date_filter.strftime(" de %B del %Y")), align_center)
@@ -108,27 +111,41 @@ class SalesGoalReport(models.AbstractModel):
             sheet.set_column(5, 6, 20)
 
         # busca las metas que se van a mostrar en el reporte
+        #goals = self.env['sales.goal'].search([
+        #    ('active', '=', True),
+        #    '|',
+        #    ('type', '=', 'group'), 
+        #    '&',
+        #    ('period_month', '=', False), 
+        #    ('period_year', '=', False),
+        #    ('parent_id', '=', False)], order='sequence')
+
         goals = self.env['sales.goal'].search([
             ('active', '=', True),
-            '|',
-            ('type', '=', 'group'), 
-            '&',
-            ('period_month', '=', False), 
-            ('period_year', '=', False),
             ('parent_id', '=', False)], order='sequence')
 
+        tree_level = 1
         row = 7
         for goal in goals:
-            row = self.print_goal_row(row, workbook, sheet, goal, date_filter, full_period)
+            row = self.print_goal_row(row, workbook, sheet, goal, date_filter, full_period, tree_level)
 
         _logger.info('**** Fin generate_xlsx_report ****')   
 
-    def print_goal_row(self, row, workbook, sheet, goal, date_filter, full_period):
+    def print_goal_row(self, row, workbook, sheet, goal, date_filter, full_period, tree_level):
         _logger.info('**** Inicio print_goal_row ****')   
         _logger.info('**** Meta: ' + str(goal.name))
 
-        # Add a number format for cells with money.
-        money_format = workbook.add_format({'num_format': '$#,##0.00'})
+        
+        # Add a number format for cells with money and color format
+        money_format = workbook.add_format(
+            {'num_format': '$#,##0.00', 
+            'bg_color': goal.section_type_id.bg_color, 
+            'font_color': goal.section_type_id.font_color, 
+            'border': 1})
+        bg_format = workbook.add_format(
+            {'bg_color': goal.section_type_id.bg_color, 
+            'font_color': goal.section_type_id.font_color, 
+            'border': 1})
 
         goal.date_filter = date_filter
         date_year = date_filter.year
@@ -139,17 +156,20 @@ class SalesGoalReport(models.AbstractModel):
         # ejecuta la obtención de los datos
         goal._compute_values()
 
-        if goal.show_name != False:
-            _logger.info('**** goal.show_name ****')   
-            sheet.write(row,0, goal.name)
+        if goal.section_type_id.show_name != False:
+            _logger.info('**** goal.section_type_id.show_name ****') 
+            tab_prefix = '';  
+            for i in range(1, tree_level):
+                tab_prefix += '    '
+            sheet.write(row,0, tab_prefix + goal.name, bg_format)
 
-            if goal.show_goal_pct != False:
-                _logger.info('**** goal.show_goal_pct ****')   
-                sheet.write(row,2, str(round((goal.structure * 100), 2))+'%')
-                sheet.write(row,3, str(round((goal.sales_percentage * 100), 2))+'%')
+            if goal.section_type_id.show_goal_pct != False:
+                _logger.info('**** goal.section_type_id.show_goal_pct ****')   
+                sheet.write(row,2, str(round((goal.structure * 100), 2))+'%', bg_format)
+                sheet.write(row,3, str(round((goal.sales_percentage * 100), 2))+'%', bg_format)
             
-            if goal.show_sales_amount != False:
-                _logger.info('**** goal.show_sales_amount ****')   
+            if goal.section_type_id.show_sales_amount != False:
+                _logger.info('**** goal.section_type_id.show_sales_amount ****')   
 
                 if full_period:
                     # Itera los días entre el rango de fechas desde el inicio del mes hasta la fecha de obtención del reporte
@@ -165,7 +185,6 @@ class SalesGoalReport(models.AbstractModel):
                         column += 1
                     # fin de la iteración
 
-                    #sheet.write_number(row, column, float(goal.sales_on_date), money_format)
                     sheet.write_number(row, column, float(goal.sales_total_week), money_format)
                     sheet.write_number(row, column+1, float(goal.sales_total_month), money_format)
                 else:
@@ -182,17 +201,19 @@ class SalesGoalReport(models.AbstractModel):
         if goal.child_ids != False:
             _logger.info('**** goal.child_ids ****')   
             filtered_childs = goal.child_ids.filtered(lambda child: child.active == True and (
-                (child.type == 'group') or (child.period_month == int(date_month) and child.period_year == int(date_year)))
+                (child.type == 'group') or (int(child.period_month) == int(date_month) and int(child.period_year) == int(date_year)))
                 )
-            for child in filtered_childs:
-                row = self.print_goal_row(row, workbook, sheet, child, date_filter, full_period)
 
-        if goal.show_total != False:
-            _logger.info('**** goal.show_total ****')   
+            tree_level += 1
+            for child in filtered_childs:
+                row = self.print_goal_row(row, workbook, sheet, child, date_filter, full_period, tree_level)
+
+        if goal.section_type_id.show_total != False:
+            _logger.info('**** goal.section_type_id.show_total ****')   
 
             total_goal_amount = 0
-            total_structure = 0
-            total_sales_percentage = 0
+            #total_structure = 0
+            #total_sales_percentage = 0
             total_sales_total_week = 0
             total_sales_total_month = 0
             
@@ -201,16 +222,14 @@ class SalesGoalReport(models.AbstractModel):
                 for child in goal.child_ids:
                     
                     total_goal_amount += child.goal_amount
-                    total_structure += child.structure
-                    total_sales_percentage += child.sales_percentage
-                    #total_sales_on_date += child.sales_on_date
+                    #total_structure += child.structure
+                    #total_sales_percentage += child.sales_percentage
                     total_sales_total_week += child.sales_total_week
                     total_sales_total_month += child.sales_total_month
             else:
                 total_goal_amount = goal.goal_amount
-                total_structure = goal.structure
-                total_sales_percentage = goal.sales_percentage
-                #total_sales_on_date = goal.sales_on_date
+                #total_structure = goal.structure
+                #total_sales_percentage = goal.sales_percentage
                 total_sales_total_week = goal.sales_total_week
                 total_sales_total_month = goal.sales_total_month
             
@@ -226,17 +245,25 @@ class SalesGoalReport(models.AbstractModel):
 
                     column += 1
                 # fin de la iteración
+
+                sheet.write_number(row, column, float(total_sales_total_week), money_format)
+                sheet.write_number(row, column+1, float(total_sales_total_month), money_format)
             else:
                 total_day_sales = goal._get_on_date(date_filter)
                 sheet.write_number(row, 4, float(total_day_sales), money_format)
 
-            sheet.write(row,0, 'TOTAL')
+                sheet.write_number(row, 5, float(total_sales_total_week), money_format)
+                sheet.write_number(row, 6, float(total_sales_total_month), money_format)
+
+            sheet.write(row,0, goal.section_type_id.total_row_name, bg_format)
             sheet.write_number(row,1, float(total_goal_amount), money_format)
-            sheet.write(row,2, str(round((total_structure * 100), 2))+'%')
-            sheet.write(row,3, str(round((total_sales_percentage * 100), 2))+'%')
-            #sheet.write_number(row,4, float(total_sales_on_date), money_format)
-            sheet.write_number(row, column, float(total_sales_total_week), money_format)
-            sheet.write_number(row, column, float(total_sales_total_month), money_format)
+            total_structure = goal.sales_total_month/total_goal_amount
+            sheet.write(row,2, str(round((total_structure * 100), 2))+'%', bg_format)
+            total_sales_percentage = goal.sales_total_month/total_goal_amount
+            sheet.write(row,3, str(round((total_sales_percentage * 100), 2))+'%', bg_format)
+
+            row += 1
+            
 
         _logger.info('**** Fin print_goal_row ****')   
         return row

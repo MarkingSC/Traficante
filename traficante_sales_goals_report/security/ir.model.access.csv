@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sales_goal_user,sales.goal.user,model_sales_goal,base.group_user,1,1,1,1
+access_sales_goal_section_type_user,sales.goal.section.type.user,model_sales_goal_section_type,base.group_user,1,1,1,1
 sales_origin_user,sales.origin.user,model_sales_origin,base.group_user,1,1,1,1
 invoice_origin_user,invoice.origin.user,model_invoice_origin,base.group_user,1,1,1,1
 access_sales_goal_report_user,report_sales_goals_report.user,model_report_sales_goals_report,base.group_user,1,1,1,1

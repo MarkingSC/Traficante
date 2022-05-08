@@ -9,14 +9,9 @@
             <tree string="Goals" default_order='active, sequence'>
                 <field name='sequence' widget='handle'/>
                 <field name="name"/>
-                <field name="description" optional="show"/>
                 <field name="parent_id"/>
-                <field name="section_type_id" optional="hidden"/>
+                <field name="section_type_id"/>
                 <field name="goal_amount"/>
-                <field name="show_name" optional="hidden"/>
-                <field name="show_goal_pct" optional="hidden"/>
-                <field name="show_sales_amount" optional="hidden"/>
-                <field name="show_total" optional="hidden"/>
                 <field name="period_month"/>
                 <field name="period_year"/>
                 <field name="active" widget="boolean_toggle"/>
@@ -35,31 +30,27 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                    <field name="description"/>
 
                     <notebook>
                         <page name="Definition" string="Definition">
                             <group>
                                 
                                 <field name="type"/>
-                                <field name="sales_user_id" attrs="{'invisible':[('type','!=','salesperson')]}"/>
-                                <field name="partner_id" attrs="{'invisible':[('type','!=','customer')]}"/>
-                                <field name="product_category_id" attrs="{'invisible':[('type','!=','product')]}"/>
-                                <field name="sales_origin_id" attrs="{'invisible':[('type','!=','s_origin')]}"/>
-                                <field name="invoice_origin_id" attrs="{'invisible':[('type','!=','i_origin')]}"/>
+                                <field name="sales_user_id" attrs="{'invisible':[('type','!=','salesperson')], 'required': [('type', '=', 'salesperson')]}"/>
+                                <field name="partner_id" attrs="{'invisible':[('type','!=','customer')], 'required': [('type', '=', 'customer')]}"/>
+                                <field name="product_category_ids" widget="many2many_tags" attrs="{'invisible':[('type','!=','product')], 'required': [('type', '=', 'product')]}"/>
+                                <field name="sales_origin_id" attrs="{'invisible':[('type','!=','s_origin')], 'required': [('type', '=', 's_origin')]}"/>
+                                <field name="invoice_origin_id" attrs="{'invisible':[('type','!=','i_origin')], 'required': [('type', '=', 'i_origin')]}"/>
                                 
                                 <field name="parent_id"/>
                                 <field name="goal_amount"/>
-                                <field name="period_month"/>
-                                <field name="period_year"/>
+                                <field name="period_month" attrs="{'required': [('type', '!=', 'group')]}"/>
+                                <field name="period_year" attrs="{'required': [('type', '!=', 'group')]}"/>
                             </group>
                         </page>
                         <page name="Report view" string="Report view">
                             <group>
-                                <field name="show_name"/>
-                                <field name="show_goal_pct"/>
-                                <field name="show_sales_amount" />
-                                <field name="show_total"/>
+                                <field name="section_type_id"/>
                             </group>
                         </page>
                     </notebook>

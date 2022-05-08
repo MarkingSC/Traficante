@@ -28,6 +28,7 @@
         # 'security/ir.model.access.csv',
         'security/ir.model.access.csv',
         'views/sales_goal_views.xml',
+        'views/sales_goal_section_type_views.xml',
         'wizard/report_view.xml',
         'report/report.xml'
     ],

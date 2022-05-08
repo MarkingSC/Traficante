@@ -1,10 +1,9 @@
 
+from email.policy import default
 import logging
 from odoo import models, fields, api, _, exceptions
 import odoo
 from datetime import timedelta, datetime
-import pytz
-from odoo.exceptions import AccessError, UserError, ValidationError
 
 datetime.today()
 
@@ -15,9 +14,20 @@ class SalesGoalSectionType(models.Model):
     _description = 'Section type for goals'
 
     name = fields.Char(string='Name', required=True, help='Set the name of the section')
-    description = fields.Char(string='Description', required=True, help='Set the description of the section')
-    active = fields.Boolean(default=True, help="Set active to false to hide the section type without removing it.")
 
-    domain = fields.Char(string='Conditions', help='Set conditions for invoice lines to meet')
+    # si se muestra el nombre en el encabezado
+    show_name = fields.Boolean(default=True, help="Set active to false to hide the name as header on the sales report.")
+    # Si se muestra el porcentaje de la meta en el encabezado
+    show_goal_pct = fields.Boolean(default=True, help="Set active to false to hide goal percentages on header.")
+    # Si se muestra el monto de la venta en el encabezado
+    show_sales_amount = fields.Boolean(default=True, help="Set active to false to hide sales amount on header.")
+    # Si se muestra el total de la venta en el footer
+    show_total = fields.Boolean(default=True, help="Set active to false to hide the total amount as footer on the sales report.")
 
+    total_row_name = fields.Char(string='Total row name', help='Text to display on total row.')
+
+    bg_color = fields.Char(string='Background color', help='Set the color for background on report.', default='#ffffff')
+    font_color = fields.Char(string='Font color', help='Set the font color on report.', default='#000000')
+
+    
 
