@@ -7,13 +7,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 13.0-20220126\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-11 13:38+0000\n"
-"PO-Revision-Date: 2022-05-11 13:38+0000\n"
+"PO-Revision-Date: 2022-05-11 09:00-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_year__2012
@@ -138,67 +140,68 @@ msgstr ""
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__active
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__04
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__04
 msgid "April"
-msgstr ""
+msgstr "Abril"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__date_filter
 msgid "At date"
-msgstr ""
+msgstr "A la fehca"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__08
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__08
 msgid "August"
-msgstr ""
+msgstr "Agosto"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__bg_color
 msgid "Background color"
-msgstr ""
+msgstr "Color de fondo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__active
 msgid "By unchecking the active field, this goal/section will not be used."
 msgstr ""
+"Desactivando el campo 'activo', esta meta o grupo no se tomará en cuenta."
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_duplicate_multi
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goals_report_wizard
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__product_category_ids
 msgid "Categories"
-msgstr ""
+msgstr "Categorías"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_duplicate_multi
 msgid "Change the period"
-msgstr ""
+msgstr "Cambiar el período"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_account_move__reinvoice
 msgid "Check if this invoice is defined as extemporaneups reinvoicing."
-msgstr ""
+msgstr "Marcar si esta factura se considera como facturación extemporánea."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goals_report_wizard__full_period
 msgid ""
 "Check to show all saler per day since the first day in month until the "
 "specified date."
-msgstr ""
+msgstr "Marcar para mostrar todas las ventas por día."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__child_ids
 msgid "Children"
-msgstr ""
+msgstr "Dependientes"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__create_uid
@@ -207,7 +210,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__create_uid
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__create_date
@@ -216,34 +219,34 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__create_date
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__currency_id
 msgid "Currency"
-msgstr ""
+msgstr "Moneda"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__partner_id
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__type__customer
 msgid "Customer"
-msgstr ""
+msgstr "Cliente"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__12
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__12
 msgid "December"
-msgstr ""
+msgstr "Diciembre"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_form_view
 msgid "Definition"
-msgstr ""
+msgstr "Definición"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__description
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_report_sales_goals_report__display_name
@@ -253,106 +256,106 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__display_name
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre mostrado"
 
 #. module: traficante_sales_goals_report
 #: code:addons/traficante_sales_goals_report/models/sales_goal.py:0
 #, python-format
 msgid "Duplicar metas"
-msgstr ""
+msgstr "Duplicar metas"
 
 #. module: traficante_sales_goals_report
 #: model:ir.actions.server,name:traficante_sales_goals_report.action_duplicate_wizard
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_duplicate_multi
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicar"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__duplicate_children
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_duplicate_multi
 msgid "Duplicate children"
-msgstr ""
+msgstr "Duplicar dependientes"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_sales_goal_duplicate_wizard
 msgid "Duplicate goals"
-msgstr ""
+msgstr "Duplicar metas"
 
 #. module: traficante_sales_goals_report
 #: code:addons/traficante_sales_goals_report/models/sales_goal.py:0
 #, python-format
 msgid "Duplicate goals and groups"
-msgstr ""
+msgstr "Duplicar metas y grupos"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_account_move__reinvoice
 msgid "Extemporaneous reinvoice"
-msgstr ""
+msgstr "Refacturación extemporánea"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__02
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__02
 msgid "February"
-msgstr ""
+msgstr "Febrero"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__font_color
 msgid "Font color"
-msgstr ""
+msgstr "Color de la fuente"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__section_type_id
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__section_type_id
 msgid "Format configuration for this goal on report."
-msgstr ""
+msgstr "Configuración de formato para esta meta en el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__date_start
 msgid "From date"
-msgstr ""
+msgstr "Desde"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__full_period
 msgid "Full Period"
-msgstr ""
+msgstr "Período completo"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goals_report_wizard
 msgid "Get report"
-msgstr ""
+msgstr "Obtener reporte"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__sequence
 msgid ""
 "Gives the sequence order when displaying goals on list views and report."
-msgstr ""
+msgstr "Permite ordenar las metas en las listas y reportes."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__goal_amount
 msgid "Goal amount"
-msgstr ""
+msgstr "Meta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__goal_ids
 #: model:ir.ui.menu,name:traficante_sales_goals_report.menu_sales_goals
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_tree_view
 msgid "Goals"
-msgstr ""
+msgstr "Metas"
 
 #. module: traficante_sales_goals_report
 #: model:ir.ui.menu,name:traficante_sales_goals_report.menu_sales_goals_report
 msgid "Goals Report"
-msgstr ""
+msgstr "Reporte de metas"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__parent_id
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__type__group
 msgid "Group"
-msgstr ""
+msgstr "Grupo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_report_sales_goals_report__id
@@ -362,13 +365,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__id
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__id
 msgid "ID"
-msgstr ""
+msgstr "Id"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__01
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__01
 msgid "January"
-msgstr ""
+msgstr "Enero"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_account_move
@@ -379,13 +382,13 @@ msgstr "Asientos contables"
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__07
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__07
 msgid "July"
-msgstr ""
+msgstr "Julio"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__06
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__06
 msgid "June"
-msgstr ""
+msgstr "Junio"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_report_sales_goals_report____last_update
@@ -395,7 +398,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard____last_update
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificación"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__write_uid
@@ -404,7 +407,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__write_uid
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última actualización por"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__write_date
@@ -413,19 +416,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__write_date
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última actualización"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__03
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__03
 msgid "March"
-msgstr ""
+msgstr "Marzo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__05
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__05
 msgid "May"
-msgstr ""
+msgstr "Mayo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__period_month
@@ -433,78 +436,78 @@ msgstr ""
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__period_month
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_duplicate_multi
 msgid "Month"
-msgstr ""
+msgstr "Mes"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__name
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__name
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__name
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__11
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__11
 msgid "November"
-msgstr ""
+msgstr "Noviembre"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__10
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__10
 msgid "October"
-msgstr ""
+msgstr "Octubre"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sale_order__sales_origin_id
 msgid "Origin"
-msgstr ""
+msgstr "Origen"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__partner_id
 msgid "Parner to meet conditions."
-msgstr ""
+msgstr "Cliente"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__sales_percentage
 msgid "Percentage"
-msgstr ""
+msgstr "Porcentaje"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__type__product
 msgid "Product Category"
-msgstr ""
+msgstr "Categoría del producto"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__type__reinvoice
 msgid "Refacturación extemporánea"
-msgstr ""
+msgstr "Refacturación extemporánea"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goals_report_wizard
 msgid "Report Options"
-msgstr ""
+msgstr "Opciones del reporte"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_form_view
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_section_type_form_view
 msgid "Report view"
-msgstr ""
+msgstr "Vista del reporte"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_form_view
 msgid "Sales Goal"
-msgstr ""
+msgstr "Meta para ventas"
 
 #. module: traficante_sales_goals_report
 #: model:ir.actions.act_window,name:traficante_sales_goals_report.action_sales_goals_report
 #: model:ir.actions.act_window,name:traficante_sales_goals_report.action_sales_goals_tree
 msgid "Sales Goals"
-msgstr ""
+msgstr "Metas para ventas"
 
 #. module: traficante_sales_goals_report
 #: model:ir.actions.report,name:traficante_sales_goals_report.action_report_sales_goals
 msgid "Sales Goals Report"
-msgstr ""
+msgstr "Reporte de metas"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_sale_order
@@ -515,145 +518,150 @@ msgstr "Pedido de venta"
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__sales_origin_id
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__type__s_origin
 msgid "Sales Origin"
-msgstr ""
+msgstr "Origen de la venta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__sales_user_id
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__type__salesperson
 msgid "Sales Person"
-msgstr ""
+msgstr "Ejecutivo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_sales_goal
 msgid "Sales goal"
-msgstr ""
+msgstr "Meta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_sales_origin
 msgid "Sales origin"
-msgstr ""
+msgstr "Origen de la venta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__sales_origin_id
 msgid "Sales origin to meet conditions."
-msgstr ""
+msgstr "Origen de la venta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__sales_user_id
 msgid "Sales person to meet conditions"
-msgstr ""
+msgstr "Cliente"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_section_type_form_view
 msgid "Section type"
-msgstr ""
+msgstr "Formato"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_sales_goal_section_type
 msgid "Section type for goals"
-msgstr ""
+msgstr "Formato para la meta en el reporte"
 
 #. module: traficante_sales_goals_report
 #: model:ir.actions.act_window,name:traficante_sales_goals_report.action_sales_goals_section_type_tree
 #: model:ir.ui.menu,name:traficante_sales_goals_report.menu_sales_goals_section_type
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_section_type_tree_view
 msgid "Section types for sales goals report"
-msgstr ""
+msgstr "Formatos para la meta en el reporte"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__09
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal_duplicate_wizard__period_month__09
 msgid "September"
-msgstr ""
+msgstr "Septiembre"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__sequence
 msgid "Sequence"
-msgstr ""
+msgstr "Secuencia"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__show_goal_pct
 msgid "Set active to false to hide goal percentages on header."
-msgstr ""
+msgstr "Desmarcar para ocultar por porcentajes de ventas en el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__show_sales_amount
 msgid "Set active to false to hide sales amount on header."
-msgstr ""
+msgstr "Desmarcar para ocultar los montos de ventas en el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__show_name
 msgid "Set active to false to hide the name as header on the sales report."
-msgstr ""
+msgstr "Desmarcar para ocultar el nombre de la meta en el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__show_total
 msgid ""
 "Set active to false to hide the total amount as footer on the sales report."
-msgstr ""
+msgstr "Desmarcar para ocultar la fila de totales en el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__parent_id
 msgid "Set parent goal. Children will take invoice lines from parent."
 msgstr ""
+"Establezca el agrupador. Las metas dependientes tomarán las líneas de esta."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sale_order__sales_origin_id
 msgid "Set sales origin for reporting"
-msgstr ""
+msgstr "Establezca el origen de ventas para el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__bg_color
 msgid "Set the color for background on report."
-msgstr ""
+msgstr "Establezca el color de fondo para la fila en el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__date_filter
 msgid "Set the date at you want to get the report."
-msgstr ""
+msgstr "Establezca la fecha a la cual desea obtener el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goals_report_wizard__date_start
 msgid "Set the date from want to get the report."
-msgstr ""
+msgstr "Establezca la fecha desde la cual desea obtener el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goals_report_wizard__date_filter
 msgid "Set the date until you want to get the report."
-msgstr ""
+msgstr "Establezca la fecha hasta la cual desea obtener el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_origin__description
 msgid "Set the description."
-msgstr ""
+msgstr "Establezca la descripción."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__font_color
 msgid "Set the font color on report."
-msgstr ""
+msgstr "Establezca el color de la fuente para la fila en el reporte."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__period_month
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__period_month
 msgid "Set the month when the goal applies. Leve empty if it is a group."
 msgstr ""
+"Establezca el mes al cual aplica la meta. Puede dejarlo vacío si se trata "
+"de un grupo."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_origin__name
 msgid "Set the name of the origin."
-msgstr ""
+msgstr "Establezca el nombre del origen"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__name
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__name
 msgid "Set the name of the section"
-msgstr ""
+msgstr "Establezca el nombre del formato."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__period_year
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__period_year
 msgid "Set the year when the goal applies. Leave empty if it is a group."
 msgstr ""
+"Establezca el año al cual aplica la meta. Puede dejarlo vacío si se trata "
+"de un grupo."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__structure_base
@@ -661,78 +669,80 @@ msgid ""
 "Set true if the calculated strucuture will be used to calculate children "
 "structure."
 msgstr ""
+"Marcar si el monto de este registro se usará para calcular la estructura "
+"de los dependientes."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__duplicate_children
 msgid "Set true if you want to duplicate children also."
-msgstr ""
+msgstr "Marcar si desea duplicar también las metas dependientes."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__show_goal_pct
 msgid "Show Goal Pct"
-msgstr ""
+msgstr "Mostrar porcentaje de la meta."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__show_name
 msgid "Show Name"
-msgstr ""
+msgstr "Mostrar nombre"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__show_sales_amount
 msgid "Show Sales Amount"
-msgstr ""
+msgstr "Mostrar monto de ventas"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__show_total
 msgid "Show Total"
-msgstr ""
+msgstr "Mostar total"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__structure
 msgid "Structure"
-msgstr ""
+msgstr "Estructura"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__structure_base
 msgid "Structure base"
-msgstr ""
+msgstr "Base para la estructura"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__total_row_name
 msgid "Text to display on total row."
-msgstr ""
+msgstr "Texto a mostrar en la fila de totales."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goals_report_wizard__date_filter
 msgid "To date"
-msgstr ""
+msgstr "A la fecha"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__total_row_name
 msgid "Total row name"
-msgstr ""
+msgstr "Nombre de la fila de total"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__type
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__type
 msgid "Type of element which this goal is defined."
-msgstr ""
+msgstr "Tipo de elemento sobre el que se define esta meta."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__sales_total_week
 msgid "Week"
-msgstr ""
+msgstr "Semana"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__period_year
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__period_year
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_duplicate_multi
 msgid "Year"
-msgstr ""
+msgstr "Año"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_report_sales_goals_report
