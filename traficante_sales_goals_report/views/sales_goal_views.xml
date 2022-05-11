@@ -41,10 +41,9 @@
                                 <field name="partner_id" attrs="{'invisible':[('type','!=','customer')], 'required': [('type', '=', 'customer')]}"/>
                                 <field name="product_category_ids" widget="many2many_tags" attrs="{'invisible':[('type','!=','product')], 'required': [('type', '=', 'product')]}"/>
                                 <field name="sales_origin_id" attrs="{'invisible':[('type','!=','s_origin')], 'required': [('type', '=', 's_origin')]}"/>
-                                <field name="invoice_origin_id" attrs="{'invisible':[('type','!=','i_origin')], 'required': [('type', '=', 'i_origin')]}"/>
                                 
                                 <field name="parent_id"/>
-                                <field name="structure_base" attrs="{'readonly':[('structure_base','=',True)]}"/>
+                                <field name="structure_base"/>
                                 <field name="goal_amount"/>
                                 <field name="period_month" attrs="{'required': [('type', '!=', 'group')]}"/>
                                 <field name="period_year" attrs="{'required': [('type', '!=', 'group')]}"/>

@@ -8,7 +8,8 @@ _logger = logging.getLogger(__name__)
 class SalesGoalReportWizard(models.TransientModel):
     _name = 'sales.goals.report.wizard'
 
-    date_filter = fields.Date(string='At date', help='Set the date at you want to get the report.', default = datetime.today(), store = True)
+    date_start = fields.Date(string='From date', help='Set the date from want to get the report.', default = datetime.today().replace(day=1))
+    date_filter = fields.Date(string='To date', help='Set the date until you want to get the report.', default = datetime.today())
     full_period = fields.Boolean(default=True, help="Check to show all saler per day since the first day in month until the specified date.")
 
     def get_report(self):
@@ -17,6 +18,7 @@ class SalesGoalReportWizard(models.TransientModel):
             'model': self._name,
             'form': {
                 'date_filter': self.date_filter,
+                'date_start': self.date_start,
                 'full_period': self.full_period
             },
         }
@@ -37,6 +39,10 @@ class SalesGoalReport(models.AbstractModel):
         date_filter = data['form']['date_filter'] 
         _logger.info('**** date_filter: ' + str(date_filter))  
         date_filter = datetime.strptime(date_filter, '%Y-%m-%d')
+
+        date_start = data['form']['date_start'] 
+        _logger.info('**** date_start: ' + str(date_start))  
+        date_start = datetime.strptime(date_start, '%Y-%m-%d')
 
         full_period = data['form']['full_period'] 
         _logger.info('**** full_period: ' + str(full_period))  
@@ -79,7 +85,10 @@ class SalesGoalReport(models.AbstractModel):
         last_monday = date_filter - timedelta_monday
         last_monday = datetime.combine(last_monday, time.min)
 
+        # Establece la fecha inicial al primer día del mes, pero si hay una fecha inicial entonces usa esa
         first_day = datetime.combine(date(date_filter.year, date_filter.month, 1), time.min)
+        if date_start:
+            first_day = datetime.combine(date_start, time.min)
 
         if full_period:
 
@@ -117,11 +126,11 @@ class SalesGoalReport(models.AbstractModel):
         tree_level = 1
         row = 7
         for goal in goals:
-            row = self.print_goal_row(row, workbook, sheet, goal, date_filter, full_period, tree_level)
+            row = self.print_goal_row(row, workbook, sheet, goal, first_day, date_filter, full_period, tree_level)
 
         _logger.info('**** Fin generate_xlsx_report ****')   
 
-    def print_goal_row(self, row, workbook, sheet, goal, date_filter, full_period, tree_level):
+    def print_goal_row(self, row, workbook, sheet, goal, date_start, date_filter, full_period, tree_level):
         _logger.info('**** Inicio print_goal_row ****')   
         _logger.info('**** Meta: ' + str(goal.name))
 
@@ -141,7 +150,7 @@ class SalesGoalReport(models.AbstractModel):
         date_year = date_filter.year
         date_month = date_filter.month
 
-        first_day = datetime.combine(date(date_filter.year, date_filter.month, 1), time.min)
+        first_day = datetime.combine(date_start, time.min)
 
         # ejecuta la obtención de los datos
         _logger.info('**** Pasa a _compute_values ****')   
@@ -197,7 +206,7 @@ class SalesGoalReport(models.AbstractModel):
 
             tree_level += 1
             for child in filtered_childs:
-                row = self.print_goal_row(row, workbook, sheet, child, date_filter, full_period, tree_level)
+                row = self.print_goal_row(row, workbook, sheet, child, date_start, date_filter, full_period, tree_level)
 
         if goal.section_type_id.show_total != False:
             _logger.info('**** goal.section_type_id.show_total ****')   
@@ -224,7 +233,7 @@ class SalesGoalReport(models.AbstractModel):
 
                 for day in self.daterange(first_day, date_filter + timedelta(days=1) ):
                     _logger.info('**** Obteniendo total al: ' + str(day.strftime("%d-%m-%Y")))
-                    total_day_sales = goal._get_on_date(day)
+                    total_day_sales = goal._get_on_date(day, False)
                     _logger.info('**** Total del día: ' + str(total_day_sales))
                     sheet.write_number(row,column, float(total_day_sales), money_format)
 
@@ -248,7 +257,7 @@ class SalesGoalReport(models.AbstractModel):
             total_structure = goal.goal_amount/base_goal_amount
             sheet.write(row,2, str(round((total_structure * 100), 2))+'%', bg_format)
 
-            total_sales_percentage = goal.sales_total_month/base_goal_amount
+            total_sales_percentage = total_sales_total_month/base_goal_amount
             sheet.write(row,3, str(round((total_sales_percentage * 100), 2))+'%', bg_format)
 
             row += 1

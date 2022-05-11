@@ -29,6 +29,7 @@
         'security/ir.model.access.csv',
         'views/sales_goal_views.xml',
         'views/sales_goal_section_type_views.xml',
+        'views/account_move_views.xml',
         'wizard/report_view.xml',
         'report/report.xml'
     ],

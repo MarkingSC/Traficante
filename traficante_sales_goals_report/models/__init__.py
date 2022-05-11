@@ -1,1 +1,1 @@
-from . import sales_goal, sales_goal_section_type, sales_origin, invoice_origin
+from . import sales_goal, sales_goal_section_type, sales_origin, account_move
