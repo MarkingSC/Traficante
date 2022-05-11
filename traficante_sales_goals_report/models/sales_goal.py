@@ -27,14 +27,14 @@ class salesGoal(models.Model):
     # descripcion del registro de la meta
     #description = fields.Char(string='Description', required=True, help='Set the description of the section')
     # meta padre
-    parent_id = fields.Many2one(string='Parent goal', comodel_name='sales.goal', help='Set parent goal. Children will take invoice lines from parent.')
+    parent_id = fields.Many2one(string='Group', comodel_name='sales.goal', help='Set parent goal. Children will take invoice lines from parent.')
     # metas hijas
-    child_ids = fields.One2many('sales.goal', 'parent_id', string='Child Goals')
+    child_ids = fields.One2many('sales.goal', 'parent_id', string='Children')
     # tipo de sección relacionado con sales_goal_section_type
     section_type_id = fields.Many2one(
-        string="Section type", 
+        string="Format", 
         comodel_name='sales.goal.section.type', 
-        help="Section type fot this goal to format in report.",
+        help="Format configuration for this goal on report.",
         required=True)
     # Monto de la meta
     goal_amount = fields.Float(string='Goal amount')
@@ -75,6 +75,8 @@ class salesGoal(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency')
     # Estructura: Porcentaje de la fila en función del total de ventas
     structure = fields.Float(string='Structure', compute='_compute_values', store=False)
+    # Base para la estructura: Determina si la suma de las metas hijas será la base para su estructura
+    structure_base = fields.Boolean(string="Structure base", help="Set true if the calculated strucuture will be used to calculate children structure.")
     # Porcentaje de venta
     sales_percentage = fields.Float(string='Percentage', compute='_compute_values', store=False) 
     # Ventas en la semana: Total de lunes a viernes truncado al mes, a la fecha en que se obtiene el reporte
@@ -85,6 +87,50 @@ class salesGoal(models.Model):
     # Establece el día al que se quiere obtener el reporte
     date_filter = fields.Date(string='At date', help='Set the date at you want to get the report.')
 
+    @api.depends('structure_base')
+    def _validate_structure_base(self):
+        _logger.info('**** ENTRA A _validate_structure_base *****')   
+        existing = self.env['sales.goal'].search([('structure_base', '!=', False)], limit = 1)
+
+        if existing and self.structure_base:
+            self.structure_base = False
+            raise ValidationError('Only one goal set as base structure is allowed.')
+
+
+    def action_duplicate(self, month, year, duplicate_children):
+        _logger.info('**** ENTRA A action_duplicate para: ' + str(self))  
+        
+        new_record = self.copy()
+        if self.child_ids and duplicate_children:
+            for child in self.child_ids:
+                _logger.info('**** duplica el hijo: ' + str(child.name))  
+                new_child = child.action_duplicate(month, year, duplicate_children)
+                _logger.info('**** duplicó el hijo: ' + str(child.name))  
+                new_child.parent_id = new_record
+        
+        new_record.period_month = month
+        new_record.period_year = year
+            
+        return new_record
+
+    def action_duplicate_goal_set_period(self):
+        _logger.info("**** INICIA action_duplicate_goal_set_period")  
+        active_ids = self.env.context.get('active_ids')
+
+        if not active_ids:
+            return ''
+
+        return {
+            'name': _('Duplicar metas'),
+            'res_model': 'stock.picking.route.register',
+            'view_mode': 'form',
+            'view_id': self.env.ref('stock_traficante.stock_picking_delivery_route_date_multi').id,
+            'context': self.env.context,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+        }
+
+            
     def _get_years():
         year_list = []
         today = datetime.now()
@@ -101,7 +147,21 @@ class salesGoal(models.Model):
                           ('09', 'September'), ('10', 'October'), ('11', 'November'), ('12', 'December')], 
                           string='Month', help='Set the month when the goal applies. Leve empty if it is a group.')
     # Año en que aplica la meta
-    period_year  = fields.Selection(_get_years(), string='Year', help='Set the year when the goal applies. Leve empty if it is a group.')
+    period_year  = fields.Selection(_get_years(), string='Year', help='Set the year when the goal applies. Leave empty if it is a group.')
+
+    def write(self, values):
+        """Override default Odoo write function and extend."""
+        # Do your custom logic here
+        _logger.info('**** ENTRA A write para cambiar el periodo de las metas hijas *****')   
+
+        res = super(salesGoal, self).write(values)
+
+        if 'period_year' in values or 'period_month' in values:
+            for child in self.child_ids:
+                child.period_month = self.period_month
+                child.period_year = self.period_year
+
+        return res
 
     def _get_move_lines(self):
         
@@ -164,6 +224,21 @@ class salesGoal(models.Model):
 
             invoice_lines = record._get_move_lines()
             _logger.info('**** LINEAS: ' + str(invoice_lines))
+
+            ##### Estructura si está marcada como la base
+            if record.structure_base:
+                _logger.info('**** Calcula la estructura base *****')
+                _logger.info('**** goal.date_filter: ' + str(record.date_filter))
+                goal_amt_sum = 0
+
+                month_children = record.child_ids.filtered(lambda goal: int(goal.period_month) == int(record.date_filter.month) and int(goal.period_year) == int(record.date_filter.year))
+                _logger.info('**** month_children: ' + str(month_children))
+                for child in month_children:
+                    _logger.info('**** Suma a la estructura base: ' +str(child.goal_amount))
+                    goal_amt_sum += child.goal_amount
+
+                _logger.info('**** Total de la estructura base: ' +str(goal_amt_sum))
+                record.goal_amount = goal_amt_sum
 
             #####
             # total del mes hasta la fecha
@@ -231,7 +306,8 @@ class salesGoal(models.Model):
             _logger.info('**** record.goal_amount : ' + str(record.goal_amount))
 
             if record.goal_amount > 0:
-                record.structure = record.sales_total_month/record.goal_amount
+                base_goal_amount = self.env['sales.goal'].search([('structure_base', '!=', False)], limit = 1).goal_amount
+                record.structure = record.goal_amount/base_goal_amount
             else:
                 record.structure = 0
 
@@ -255,3 +331,87 @@ class salesGoal(models.Model):
                     total_on_date += abs(line.price_total)
                 
             return total_on_date
+
+    def action_set_duplicate(self):
+        _logger.info("**** INICIA action_set_duplicate")  
+        active_ids = self.env.context.get('active_ids')
+
+        if not active_ids:
+            return ''
+
+        return {
+            'name': _('Duplicate goals and groups'),
+            'res_model': 'sales.goal.duplicate.wizard',
+            'view_mode': 'form',
+            'view_id': self.env.ref('traficante_sales_goals_report.sales_goal_duplicate_multi').id,
+            'context': self.env.context,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+        }
+
+class salesGoalDuplicate(models.TransientModel):
+    _name = 'sales.goal.duplicate.wizard'
+    _description = 'Duplicate goals'
+
+    def _get_years():
+        year_list = []
+        today = datetime.now()
+        today_less10 = today.year - 10
+        today_plus10 = today.year + 10
+
+        for i in range(today_less10, today_plus10):
+            year_list.append((str(i), str(i)))
+        return year_list
+
+    # Mes en que aplica la meta
+    period_month = fields.Selection([('01', 'January'), ('02', 'February'), ('03', 'March'), ('04', 'April'),
+                          ('05', 'May'), ('06', 'June'), ('07', 'July'), ('08', 'August'), 
+                          ('09', 'September'), ('10', 'October'), ('11', 'November'), ('12', 'December')], 
+                          string='Month', help='Set the month when the goal applies. Leve empty if it is a group.')
+    # Año en que aplica la meta
+    period_year  = fields.Selection(_get_years(), string='Year', help='Set the year when the goal applies. Leave empty if it is a group.')
+
+    duplicate_children = fields.Boolean(string="Duplicate children", help="Set true if you want to duplicate children also.")
+
+    goal_ids = fields.Many2many("sales.goal",
+                                         "sales_goal_duplicate_wizard_rel_transient",
+                                         "wizard_id","goal_id",
+                                         string="Goals", copy=False, readonly=True)
+
+    # Función para obtener los datos del contexto incluidas las metas seleccionadas
+    @api.model
+    def default_get(self, fields):
+        _logger.info("**** INICIA default_get")  
+
+        rec = super(salesGoalDuplicate, self).default_get(fields)
+
+        if self._context.get('params'):            
+            _logger.info("***** self._context.get('params').get('id'): " + str (self._context.get('params').get('id')))  
+            active_ids = self._context.get('params').get('id')
+        else:
+            _logger.info("***** self._context.get('active_ids'): " + str(self._context.get('active_ids')))  
+            active_ids = self._context.get('active_ids')
+
+        # Si aun no están asignadas las asigna a partir de los active_ids
+        if not active_ids:
+            return rec
+        goals = self.env['sales.goal'].browse(active_ids)
+
+        if 'goal_ids' not in rec:
+            rec['goal_ids'] = [(6, 0, goals.ids)]
+        return rec
+
+    def action_duplicate(self):
+        _logger.info("**** INICIA action_duplicate del wizard")  
+
+        for record in self.goal_ids:
+            record.action_duplicate(self.period_month, self.period_year, self.duplicate_children)
+
+        # Una vez realizada la acción refresca la pantalla para ver los resultados
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
+
+
+    

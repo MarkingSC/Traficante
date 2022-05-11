@@ -110,16 +110,6 @@ class SalesGoalReport(models.AbstractModel):
             sheet.set_column(4, 4, 10)
             sheet.set_column(5, 6, 20)
 
-        # busca las metas que se van a mostrar en el reporte
-        #goals = self.env['sales.goal'].search([
-        #    ('active', '=', True),
-        #    '|',
-        #    ('type', '=', 'group'), 
-        #    '&',
-        #    ('period_month', '=', False), 
-        #    ('period_year', '=', False),
-        #    ('parent_id', '=', False)], order='sequence')
-
         goals = self.env['sales.goal'].search([
             ('active', '=', True),
             ('parent_id', '=', False)], order='sequence')
@@ -154,6 +144,7 @@ class SalesGoalReport(models.AbstractModel):
         first_day = datetime.combine(date(date_filter.year, date_filter.month, 1), time.min)
 
         # ejecuta la obtención de los datos
+        _logger.info('**** Pasa a _compute_values ****')   
         goal._compute_values()
 
         if goal.section_type_id.show_name != False:
@@ -212,8 +203,6 @@ class SalesGoalReport(models.AbstractModel):
             _logger.info('**** goal.section_type_id.show_total ****')   
 
             total_goal_amount = 0
-            #total_structure = 0
-            #total_sales_percentage = 0
             total_sales_total_week = 0
             total_sales_total_month = 0
             
@@ -221,15 +210,11 @@ class SalesGoalReport(models.AbstractModel):
                 _logger.info('**** goal.child_ids ****')   
                 for child in goal.child_ids:
                     
-                    total_goal_amount += child.goal_amount
-                    #total_structure += child.structure
-                    #total_sales_percentage += child.sales_percentage
+                    #total_goal_amount += child.goal_amount
                     total_sales_total_week += child.sales_total_week
                     total_sales_total_month += child.sales_total_month
             else:
-                total_goal_amount = goal.goal_amount
-                #total_structure = goal.structure
-                #total_sales_percentage = goal.sales_percentage
+                #total_goal_amount = goal.goal_amount
                 total_sales_total_week = goal.sales_total_week
                 total_sales_total_month = goal.sales_total_month
             
@@ -256,10 +241,14 @@ class SalesGoalReport(models.AbstractModel):
                 sheet.write_number(row, 6, float(total_sales_total_month), money_format)
 
             sheet.write(row,0, goal.section_type_id.total_row_name, bg_format)
-            sheet.write_number(row,1, float(total_goal_amount), money_format)
-            total_structure = goal.sales_total_month/total_goal_amount
+
+            sheet.write_number(row,1, goal.goal_amount, money_format)
+
+            base_goal_amount = self.env['sales.goal'].search([('structure_base', '!=', False)], limit = 1).goal_amount
+            total_structure = goal.goal_amount/base_goal_amount
             sheet.write(row,2, str(round((total_structure * 100), 2))+'%', bg_format)
-            total_sales_percentage = goal.sales_total_month/total_goal_amount
+
+            total_sales_percentage = goal.sales_total_month/base_goal_amount
             sheet.write(row,3, str(round((total_sales_percentage * 100), 2))+'%', bg_format)
 
             row += 1
