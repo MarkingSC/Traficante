@@ -1,0 +1,1 @@
+from . import product_template, purchase_order_line

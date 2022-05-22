@@ -70,8 +70,6 @@ class salesGoal(models.Model):
         string = 'Categories')
     # Si se asocia a un origen de venta
     sales_origin_id = fields.Many2one(string='Sales Origin', help='Sales origin to meet conditions.', comodel_name='sales.origin')
-    # Si se asocia a un origen de factura
-    #invoice_origin_id = fields.Many2one(string='Invoice Origin', help='Invoice origin to meet conditions.', comodel_name='invoice.origin')
 
     currency_id = fields.Many2one('res.currency', string='Currency')
     # Estructura: Porcentaje de la fila en función del total de ventas
@@ -87,15 +85,6 @@ class salesGoal(models.Model):
 
     # Establece el día al que se quiere obtener el reporte
     date_filter = fields.Date(string='At date', help='Set the date at you want to get the report.')
-
-    @api.depends('structure_base')
-    def _validate_structure_base(self):
-        _logger.info('**** ENTRA A _validate_structure_base *****')   
-        existing = self.env['sales.goal'].search([('structure_base', '!=', False)], limit = 1)
-
-        if existing and self.structure_base:
-            self.structure_base = False
-            raise ValidationError('Only one goal set as base structure is allowed.')
 
 
     def action_duplicate(self, month, year, duplicate_children):
@@ -150,6 +139,15 @@ class salesGoal(models.Model):
     # Año en que aplica la meta
     period_year  = fields.Selection(_get_years(), string='Year', help='Set the year when the goal applies. Leave empty if it is a group.')
 
+    def name_get(self):
+        res = []
+        for record in self:
+            month = dict(self._fields['period_month'].selection).get(record.period_month)
+            year = dict(self._fields['period_year'].selection).get(record.period_year)
+            res.append((record.id, _('%s %s %s') % (record.name, str(month or ''), str(year or ''))))
+                
+        return res
+
     def write(self, values):
         """Override default Odoo write function and extend."""
         # Do your custom logic here
@@ -161,6 +159,16 @@ class salesGoal(models.Model):
             for child in self.child_ids:
                 child.period_month = self.period_month
                 child.period_year = self.period_year
+
+        if 'structure_base' in values:
+            _logger.info('**** ENTRA A _validate_structure_base *****')   
+            existing = self.env['sales.goal'].search([('structure_base', '!=', False), ('id', '!=', self.id)], limit = 1)
+
+            _logger.info('**** len(existing): ' + str(len(existing)))   
+
+            if (len(existing) > 0 ) and self.structure_base:
+                self.structure_base = False
+                raise ValidationError('Only one goal set as base structure is allowed.')
 
         return res
 
@@ -180,73 +188,123 @@ class salesGoal(models.Model):
             fdom = datetime.combine(fdom, time.min)
 
             _logger.info('**** PRIMER DIA DEL MES: ' + str(fdom))
-            _logger.info('**** type(today): ' + str(type(today)))
-            _logger.info('**** type(fdom): ' + str(type(fdom)))
 
             lines = self.env['account.move.line']
             if record.type == 'salesperson':
+                
                 if record.parent_id:
                     lines = record.parent_id._get_move_lines().filtered(lambda line: 
                     line.move_id.journal_id.type == 'sale' and 
-                    line.move_id.state == 'posted' and
+                    line.move_id.estado_factura == 'factura_correcta' and
                     line.product_id != False and
                     datetime.combine(line.move_id.date, time.min) <= today and
                     datetime.combine(line.move_id.date, time.min) >= fdom and
                     line.move_id.invoice_user_id == record.sales_user_id and
-                    line.move_id.reinvoice == False)
+                    line.move_id.reinvoice == False and 
+                    not line.sales_origin_id)
                 else:
-                    lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_user_id', '=', record.sales_user_id.id), ('move_id.reinvoice', '=', False)])
+                    lines = self.env['account.move.line'].search([
+                        ('move_id.journal_id.type', '=', 'sale'), 
+                        ('move_id.estado_factura', '=', 'factura_correcta'), 
+                        ('product_id', '!=', False), 
+                        ('move_id.date', '<=', today),
+                        ('move_id.date', '>=', fdom), 
+                        ('move_id.invoice_user_id', '=', record.sales_user_id.id), 
+                        ('move_id.reinvoice', '=', False),
+                        ('sales_origin_id', '=', False)])
+
             elif record.type == 'customer':
                 if record.parent_id:
                     lines = record.parent_id._get_move_lines().filtered(lambda line: 
                     line.move_id.journal_id.type == 'sale' and 
-                    line.move_id.state == 'posted' and
+                    line.move_id.estado_factura == 'factura_correcta' and
                     line.product_id != False and
                     datetime.combine(line.move_id.date, time.min) <= today and
                     datetime.combine(line.move_id.date, time.min) >= fdom and
                     line.partner_id == record.partner_id and
-                    line.move_id.reinvoice == False)
+                    line.move_id.reinvoice == False and 
+                    not line.sales_origin_id)
                 else:
-                    lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('partner_id', '=', record.partner_id.id), ('move_id.reinvoice', '=', False)])
+                    lines = self.env['account.move.line'].search([
+                        ('move_id.journal_id.type', '=', 'sale'), 
+                        ('move_id.estado_factura', '=', 'factura_correcta'), 
+                        ('product_id', '!=', False), 
+                        ('move_id.date', '<=', today),
+                        ('move_id.invoice_date', '>=', fdom), 
+                        ('partner_id', '=', record.partner_id.id), 
+                        ('move_id.reinvoice', '=', False),
+                        ('sales_origin_id', '=', False)])
             elif record.type == 'product':
                 if record.parent_id:
                     lines = record.parent_id._get_move_lines().filtered(lambda line: 
                     line.move_id.journal_id.type == 'sale' and 
-                    line.move_id.state == 'posted' and
+                    line.move_id.estado_factura == 'factura_correcta' and
                     line.product_id != False and
                     datetime.combine(line.move_id.date, time.min) <= today and
                     datetime.combine(line.move_id.date, time.min) >= fdom and
                     line.product_id.categ_id in record.product_category_ids and
-                    line.move_id.reinvoice == False)
+                    line.move_id.reinvoice == False and 
+                    not line.sales_origin_id)
                 else:
-                    lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('product_id.categ_id', 'in', record.product_category_ids.ids), ('move_id.reinvoice', '=', False)])
+                    lines = self.env['account.move.line'].search([
+                        ('move_id.journal_id.type', '=', 'sale'), 
+                        ('move_id.estado_factura', '=', 'factura_correcta'), 
+                        ('product_id', '!=', False), 
+                        ('move_id.date', '<=', today),
+                        ('move_id.invoice_date', '>=', fdom), 
+                        ('product_id.categ_id', 'in', record.product_category_ids.ids), 
+                        ('move_id.reinvoice', '=', False),
+                        ('sales_origin_id', '=', False)])
+
             elif record.type == 's_origin':
-                orders = self.env['sale.order'].search([('sales_origin_id', '=', record.sales_origin_id)])
-                orders_names = orders.read('name')
+                orders = self.env['sale.order'].search([('sales_origin_id', '=', record.sales_origin_id.id)])
+                orders_names = [] 
+                for order in orders:
+                    orders_names.append(order.name)
+
                 _logger.info('**** orders_names: ' + str(orders_names))
+                _logger.info('**** record.sales_origin_id: ' + str(record.sales_origin_id))
 
                 if record.parent_id:
                     lines = record.parent_id._get_move_lines().filtered(lambda line: 
                     line.move_id.journal_id.type == 'sale' and 
-                    line.move_id.state == 'posted' and
+                    line.move_id.estado_factura == 'factura_correcta' and
                     line.product_id != False and
                     datetime.combine(line.move_id.date, time.min) <= today and
                     datetime.combine(line.move_id.date, time.min) >= fdom and
                     line.move_id.invoice_origin in orders_names and
-                    line.move_id.reinvoice == False)
+                    line.move_id.reinvoice == False and 
+                    line.sales_origin_id == record.sales_origin_id)
                 else:
-                    lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.invoice_origin', 'in', orders_names), ('move_id.reinvoice', '=', False)])
+                    lines = self.env['account.move.line'].search([
+                        ('move_id.journal_id.type', '=', 'sale'), 
+                        ('move_id.estado_factura', '=', 'factura_correcta'), 
+                        ('product_id', '!=', False), 
+                        ('move_id.date', '<=', today),
+                        ('move_id.invoice_date', '>=', fdom), 
+                        ('move_id.invoice_origin', 'in', orders_names), 
+                        ('move_id.reinvoice', '=', False),
+                        ('sales_origin_id', '=', record.sales_origin_id.id)])
+
             elif record.type == 'reinvoice':
                 if record.parent_id:
                     lines = record.parent_id._get_move_lines().filtered(lambda line: 
                     line.move_id.journal_id.type == 'sale' and 
-                    line.move_id.state == 'posted' and
+                    line.move_id.estado_factura == 'factura_correcta' and
                     line.product_id != False and
                     datetime.combine(line.move_id.date, time.min) <= today and
                     datetime.combine(line.move_id.date, time.min) >= fdom and
-                    line.move_id.reinvoice == False)
+                    line.move_id.reinvoice == True and 
+                    not line.sales_origin_id)
                 else:
-                    lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom), ('move_id.reinvoice', '=', True)])
+                    lines = self.env['account.move.line'].search([
+                        ('move_id.journal_id.type', '=', 'sale'), 
+                        ('move_id.estado_factura', '=', 'factura_correcta'), 
+                        ('product_id', '!=', False), 
+                        ('move_id.date', '<=', today),
+                        ('move_id.invoice_date', '>=', fdom), 
+                        ('move_id.reinvoice', '=', True),
+                        ('sales_origin_id', '=', False)])
             
             elif record.type == 'group':
                 if record.child_ids:
@@ -257,7 +315,12 @@ class salesGoal(models.Model):
                             
                             _logger.info('**** lines type: ' + str(type(lines)))
                     else:
-                        lines = self.env['account.move.line'].search([('move_id.journal_id.type', '=', 'sale'), ('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.date', '<=', today),('move_id.invoice_date', '>=', fdom)])          
+                        lines = self.env['account.move.line'].search([
+                            ('move_id.journal_id.type', '=', 'sale'), 
+                            ('move_id.estado_factura', '=', 'factura_correcta'), 
+                            ('product_id', '!=', False), 
+                            ('move_id.date', '<=', today),
+                            ('move_id.invoice_date', '>=', fdom)])       
             else:   
                 lines = ()
 
@@ -273,9 +336,9 @@ class salesGoal(models.Model):
             invoice_lines = record._get_move_lines()
             _logger.info('**** LINEAS: ' + str(invoice_lines))
 
-            ##### Estructura si está marcada como la base
-            if record.structure_base:
-                _logger.info('**** Calcula la estructura base *****')
+            ##### Si la meta tiene hijas suma su estructura
+            if record.child_ids:
+                _logger.info('**** Calcula la estructura de la meta *****')
                 _logger.info('**** goal.date_filter: ' + str(record.date_filter))
                 goal_amt_sum = 0
 

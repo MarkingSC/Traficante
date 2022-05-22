@@ -1,6 +1,6 @@
 from odoo import models, fields, api, _, exceptions
 from datetime import datetime, time, timedelta, date
-import calendar
+import locale
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -35,6 +35,11 @@ class SalesGoalReport(models.AbstractModel):
 
     def generate_xlsx_report(self, workbook, data, goals):
         _logger.info('**** Inicio generate_xlsx_report ****') 
+
+        user = self.env['res.users'].browse(self._context.get('uid'))
+        _logger.info('**** user.lang: ' + str(user.lang)) 
+
+        locale.setlocale(locale.LC_TIME, self.env.context['lang'] + '.utf8')
 
         date_filter = data['form']['date_filter'] 
         _logger.info('**** date_filter: ' + str(date_filter))  
@@ -163,40 +168,43 @@ class SalesGoalReport(models.AbstractModel):
                 tab_prefix += '    '
             sheet.write(row,0, tab_prefix + goal.name, bg_format)
 
-            if goal.section_type_id.show_goal_pct != False:
-                _logger.info('**** goal.section_type_id.show_goal_pct ****')   
-                sheet.write(row,2, str(round((goal.structure * 100), 2))+'%', bg_format)
-                sheet.write(row,3, str(round((goal.sales_percentage * 100), 2))+'%', bg_format)
+        if goal.section_type_id.show_goal_pct != False:
+            _logger.info('**** goal.section_type_id.show_goal_pct ****')   
+            sheet.write(row,2, str(round((goal.structure * 100), 2))+'%', bg_format)
+            sheet.write(row,3, str(round((goal.sales_percentage * 100), 2))+'%', bg_format)
             
-            if goal.section_type_id.show_sales_amount != False:
-                _logger.info('**** goal.section_type_id.show_sales_amount ****')   
+        if goal.section_type_id.show_sales_amount != False:
+            _logger.info('**** goal.section_type_id.show_sales_amount ****')   
 
-                if full_period:
-                    # Itera los días entre el rango de fechas desde el inicio del mes hasta la fecha de obtención del reporte
-                    column = 4
+            if full_period:
+                # Itera los días entre el rango de fechas desde el inicio del mes hasta la fecha de obtención del reporte
+                column = 4
 
-                    for day in self.daterange(first_day, date_filter + timedelta(days=1) ):
-                        _logger.info('**** Calculando ventas al: ' + str(day.strftime("%d-%m-%Y")))
-                        day_sales = goal._get_on_date(day)
-                        _logger.info('**** Ventas del dia: ' + str(day_sales))                        
+                for day in self.daterange(first_day, date_filter + timedelta(days=1) ):
+                    _logger.info('**** Calculando ventas al: ' + str(day.strftime("%d-%m-%Y")))
+                    day_sales = goal._get_on_date(day)
+                    _logger.info('**** Ventas del dia: ' + str(day_sales))                        
 
-                        sheet.write_number(row,column, float(day_sales), money_format)
+                    sheet.write_number(row,column, float(day_sales), money_format)
 
-                        column += 1
-                    # fin de la iteración
+                    column += 1
+                # fin de la iteración
 
-                    sheet.write_number(row, column, float(goal.sales_total_week), money_format)
-                    sheet.write_number(row, column+1, float(goal.sales_total_month), money_format)
-                else:
-                    day_sales = goal._get_on_date(date_filter)
-                    sheet.write_number(row, 4, float(day_sales), money_format)
+                sheet.write_number(row, column, float(goal.sales_total_week), money_format)
+                sheet.write_number(row, column+1, float(goal.sales_total_month), money_format)
+            else:
+                day_sales = goal._get_on_date(date_filter)
+                sheet.write_number(row, 4, float(day_sales), money_format)
 
-                    sheet.write_number(row, 5, float(goal.sales_total_week), money_format)
-                    sheet.write_number(row, 6, float(goal.sales_total_month), money_format)
+                sheet.write_number(row, 5, float(goal.sales_total_week), money_format)
+                sheet.write_number(row, 6, float(goal.sales_total_month), money_format)
 
-                sheet.write_number(row,1, float(goal.goal_amount), money_format)
-
+            sheet.write_number(row,1, float(goal.goal_amount), money_format)
+        
+        if goal.section_type_id.show_name or goal.section_type_id.show_goal_pct or goal.section_type_id.show_sales_amount:
             row += 1
+
+        ### Terminó de pintar la fila de la meta y va por las de las hijas
 
         if goal.child_ids != False:
             _logger.info('**** goal.child_ids ****')   
@@ -208,10 +216,10 @@ class SalesGoalReport(models.AbstractModel):
             for child in filtered_childs:
                 row = self.print_goal_row(row, workbook, sheet, child, date_start, date_filter, full_period, tree_level)
 
+        ### Imprime la fila de totales
         if goal.section_type_id.show_total != False:
             _logger.info('**** goal.section_type_id.show_total ****')   
 
-            total_goal_amount = 0
             total_sales_total_week = 0
             total_sales_total_month = 0
             
@@ -219,11 +227,9 @@ class SalesGoalReport(models.AbstractModel):
                 _logger.info('**** goal.child_ids ****')   
                 for child in goal.child_ids:
                     
-                    #total_goal_amount += child.goal_amount
                     total_sales_total_week += child.sales_total_week
                     total_sales_total_month += child.sales_total_month
             else:
-                #total_goal_amount = goal.goal_amount
                 total_sales_total_week = goal.sales_total_week
                 total_sales_total_month = goal.sales_total_month
             
@@ -257,7 +263,10 @@ class SalesGoalReport(models.AbstractModel):
             total_structure = goal.goal_amount/base_goal_amount
             sheet.write(row,2, str(round((total_structure * 100), 2))+'%', bg_format)
 
-            total_sales_percentage = total_sales_total_month/base_goal_amount
+            if goal.goal_amount:
+                total_sales_percentage = total_sales_total_month/goal.goal_amount
+            else:
+                 total_sales_percentage = 0
             sheet.write(row,3, str(round((total_sales_percentage * 100), 2))+'%', bg_format)
 
             row += 1

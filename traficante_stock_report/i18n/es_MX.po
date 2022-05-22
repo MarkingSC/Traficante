@@ -1,0 +1,353 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* traficante_stock_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20211018\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-22 19:17+0000\n"
+"PO-Revision-Date: 2022-05-22 14:19-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "% IEPS"
+msgstr ""
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "% IVA"
+msgstr ""
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__avg_cost
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__avg_cost
+msgid "Average Cost"
+msgstr "Costo promedio"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Average cost"
+msgstr "Costo promedio"
+
+#. module: traficante_stock_report
+#: model:ir.actions.server,name:traficante_stock_report.get_product_latest_cost_ir_actions_server
+#: model:ir.cron,cron_name:traficante_stock_report.get_product_latest_cost
+#: model:ir.cron,name:traficante_stock_report.get_product_latest_cost
+msgid "Calculates latest cost on products"
+msgstr "Calcular el último costo en los productos"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Category"
+msgstr "Categoría"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Code"
+msgstr "Código"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__product_cost
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__product_cost
+msgid "Cost"
+msgstr "Costo"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Cost, IEPS incl."
+msgstr "Costo con IEPS"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__ieps_cost
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__ieps_cost
+msgid "Cost, IEPS included"
+msgstr "Costo con IEPS"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Cost, Tax incl."
+msgstr "Costo con Impuestos"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__taxes_cost
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__taxes_cost
+msgid "Cost, taxes included"
+msgstr "Costo con Impuestos"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.product_template_margins_only_form_view
+msgid "Costo"
+msgstr ""
+
+#. module: traficante_stock_report
+#: model_terms:ir.actions.act_window,help:traficante_stock_report.action_stock_margin_report_tree
+msgid "Crear un nuevo producto"
+msgstr ""
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Description"
+msgstr "Descripción"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_report_stock_margin_report__display_name
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_wizard
+msgid "Get report"
+msgstr "Obtener reporte"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_report_stock_margin_report__id
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard__id
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "ID"
+msgstr ""
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__iva_tax_pct
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__iva_tax_pct
+msgid "IEPS Pct"
+msgstr "Pct. IEPS"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__ieps_tax_pct
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__ieps_tax_pct
+msgid "IVA Pct."
+msgstr "Pct. IVA"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,help:traficante_stock_report.field_product_template__standard_price
+msgid ""
+"In Standard Price & AVCO: value of the product (automatically computed in AVCO).\n"
+"        In FIFO: value of the last unit that left the stock (automatically computed).\n"
+"        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n"
+"        Used to compute margins on sale orders."
+msgstr ""
+"En Standard Price & AVCO: valor del producto (calculado automáticamente en AVCO).\n"
+"En FIFO: valor de la última unidad que salió del stock (calculado automáticamente).\n"
+"Se utiliza para valorar el producto cuando se desconoce el coste de compra (por ejemplo, ajuste de inventario).\n"
+"Se utiliza para calcular los márgenes de las órdenes de venta."
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_report_stock_margin_report____last_update
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__latest_cost
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__latest_cost
+msgid "Latest Cost"
+msgstr "Último costo"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Latest cost"
+msgstr "Último costo"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.product_template_margins_only_form_view
+msgid "Margen sobre costo"
+msgstr ""
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__price_margin
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__price_margin
+msgid "Margin"
+msgstr "Margen"
+
+#. module: traficante_stock_report
+#: model:ir.ui.menu,name:traficante_stock_report.menu_stock_margin_report
+msgid "Margin Report"
+msgstr "Descargar reporte de margen"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__total_margin_amt
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__total_margin_amt
+msgid "Margin amount"
+msgstr "Monto del margen"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Margin on cost pct."
+msgstr "Pct. de margen sobre el costo"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__price_margin_pct
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__price_margin_pct
+msgid "Margin on price"
+msgstr "Margen sobre el precio"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Margin on price pct."
+msgstr "Pct. de margen sobre el precio"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__cost_margin_pct
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__cost_margin_pct
+msgid "Margin over cost"
+msgstr "Margen sobre el costo"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__standard_price
+#: model:ir.model.fields,field_description:traficante_stock_report.field_purchase_order_line__standard_price
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Price"
+msgstr "Precio antes de imp."
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,help:traficante_stock_report.field_product_product__list_price
+#: model:ir.model.fields,help:traficante_stock_report.field_product_template__list_price
+msgid "Price at which the product is sold to customers."
+msgstr "Precio al que se vende el producto a los clientes."
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Price, IVA incl."
+msgstr "Precio con IVA"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__iva_price
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__iva_price
+msgid "Price, IVA included"
+msgstr "Precio con IVA"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Price, Tax incl."
+msgstr "Precio con impuestos"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__taxes_price
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__taxes_price
+msgid "Price, taxes included"
+msgstr "Precio con impuestos"
+
+#. module: traficante_stock_report
+#: code:addons/traficante_stock_report/models/product_template.py:0
+#: code:addons/traficante_stock_report/report/stock_margin_report.py:0
+#, python-format
+msgid "Product %s has more than one IVA tax."
+msgstr "El producto %s tiene más de un impuesto de IVA."
+
+#. module: traficante_stock_report
+#: model:ir.model,name:traficante_stock_report.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_purchase_order_line__product_cost
+msgid "Product cost"
+msgstr "Costo del producto"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Products"
+msgstr "Productos"
+
+#. module: traficante_stock_report
+#: model:ir.model,name:traficante_stock_report.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Línea de pedido de compra"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_wizard
+msgid "Report Options"
+msgstr "Opciones del reporte"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_product__list_price
+#: model:ir.model.fields,field_description:traficante_stock_report.field_product_template__list_price
+#: model:ir.model.fields,field_description:traficante_stock_report.field_purchase_order_line__list_price
+msgid "Sales Price"
+msgstr "Precio de venta"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,help:traficante_stock_report.field_stock_margin_report_wizard__report_on_date
+msgid "Set the date until you want to get the report."
+msgstr "Establezca la fecha a la cual desea generar el reporte"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Status"
+msgstr "Estatus"
+
+#. module: traficante_stock_report
+#: model:ir.actions.act_window,name:traficante_stock_report.action_stock_margin_report
+msgid "Stock Margin"
+msgstr "Margen"
+
+#. module: traficante_stock_report
+#: model:ir.actions.report,name:traficante_stock_report.stock_margin_report_xlsx
+#: model:ir.ui.menu,name:traficante_stock_report.menu_stock_margin_report_tree
+msgid "Stock Margin Report"
+msgstr "Reporte de margen"
+
+#. module: traficante_stock_report
+#: model:ir.actions.act_window,name:traficante_stock_report.action_stock_margin_report_tree
+msgid "Stock margin"
+msgstr "Margen"
+
+#. module: traficante_stock_report
+#: model:ir.model.fields,field_description:traficante_stock_report.field_stock_margin_report_wizard__report_on_date
+msgid "To date"
+msgstr "A la fecha"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "Total margin amt."
+msgstr "Monto de margen bruto"
+
+#. module: traficante_stock_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_report.stock_margin_report_tree_view
+msgid "UoM"
+msgstr "Unidad"
+
+#. module: traficante_stock_report
+#: model:ir.model,name:traficante_stock_report.model_report_stock_margin_report
+msgid "report.stock.margin.report"
+msgstr ""
+
+#. module: traficante_stock_report
+#: model:ir.model,name:traficante_stock_report.model_stock_margin_report_wizard
+msgid "stock.margin.report.wizard"
+msgstr ""

@@ -4,18 +4,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20200205\n"
+"Project-Id-Version: Odoo Server 13.0-20211018\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-24 06:23+0000\n"
-"PO-Revision-Date: 2020-02-24 00:26-0600\n"
+"POT-Creation-Date: 2022-05-22 19:37+0000\n"
+"PO-Revision-Date: 2022-05-22 14:39-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: es_MX\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. module: stock_traficante
 #: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_delivery_route_date_multi
@@ -47,6 +47,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_delivery_route_date_multi
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_quant__product_category
+#: model_terms:ir.ui.view,arch_db:stock_traficante.quant_search_traficante_view
+msgid "Category"
+msgstr "Categoría"
 
 #. module: stock_traficante
 #: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_list_view
@@ -101,14 +107,29 @@ msgid "Fecha para la ruta"
 msgstr ""
 
 #. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.view_picking_internal_search_traficante
+msgid "From"
+msgstr "Desde"
+
+#. module: stock_traficante
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register__id
 msgid "ID"
-msgstr ""
+msgstr "ID (identificación)"
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_type_kanban_traficante
+msgid "Immediate Transfer"
+msgstr "Transferencia inmediata"
 
 #. module: stock_traficante
 #: model_terms:ir.ui.view,arch_db:stock_traficante.view_picking_form_traficante
 msgid "Invoices"
 msgstr "Facturas"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__invoice_amounts
+msgid "Invoices amount"
+msgstr "Monto de las facturas"
 
 #. module: stock_traficante
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking_route_register____last_update
@@ -139,6 +160,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__on_delivery_route
 msgid "On delivery route"
 msgstr "En ruta de entrega"
+
+#. module: stock_traficante
+#: model:ir.model,name:stock_traficante.model_stock_quant
+msgid "Quants"
+msgstr "Cantidades"
 
 #. module: stock_traficante
 #: model_terms:ir.ui.view,arch_db:stock_traficante.stock_picking_on_route_list_view
@@ -184,6 +210,16 @@ msgid "Scheduled Date"
 msgstr "Fecha programada"
 
 #. module: stock_traficante
+#: model:ir.model.fields,help:stock_traficante.field_stock_quant__product_category
+msgid "Select category for the current product"
+msgstr "Seleccione la categoría para el producto actual."
+
+#. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.view_picking_form_traficante
+msgid "Send to route"
+msgstr "Enviar a ruta"
+
+#. module: stock_traficante
 #: code:addons/stock_traficante/models/stock_picking.py:0
 #, python-format
 msgid "Set delivery route date"
@@ -200,6 +236,11 @@ msgid "Stock moves"
 msgstr "Movimientos de inventario"
 
 #. module: stock_traficante
+#: model_terms:ir.ui.view,arch_db:stock_traficante.view_picking_internal_search_traficante
+msgid "To"
+msgstr "Hasta"
+
+#. module: stock_traficante
 #: model:ir.model,name:stock_traficante.model_stock_picking
 msgid "Transfer"
 msgstr "Albarán"
@@ -208,10 +249,3 @@ msgstr "Albarán"
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__invoice_ids
 msgid "invoices"
 msgstr "Facturas"
-
-
-#. module: stock
-#: selection:stock.move,state:0 selection:stock.pack.operation,state:0
-#: selection:stock.picking,state:0
-msgid "Available"
-msgstr "Disponible"

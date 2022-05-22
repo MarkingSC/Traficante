@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="1">
         <record model="uom.uom" id="uom.product_uom_unit">
             <field name="name">Piezas</field>
         </record>

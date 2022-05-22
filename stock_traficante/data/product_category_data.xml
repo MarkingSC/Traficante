@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="1">
 
         <!-- CHILD OF product_category_all -->
         <record id="traficante_product_category_aconte" model="product.category">

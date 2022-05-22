@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    # Sales goals report    -->
+    <report
+            id="stock_margin_report_xlsx"
+            model="product.template"
+            string="Stock Margin Report"
+            report_type="xlsx"
+            name="stock.margin.report"
+            file="stock_margin_report"
+    />
+
+</odoo>

@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="stock.stock_location_locations_partner" model="stock.location">
             <field name="name">Ubicaciones de contactos</field>
         </record>

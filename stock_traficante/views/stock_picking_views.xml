@@ -60,6 +60,10 @@
             <field name="name">view.picking.internal.search.traficante</field>
             <field name="model">stock.picking</field>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='picking_type_id']" position="after">
+                    <field name="scheduled_date" string="From" filter_domain="[('scheduled_date', '&gt;=', self)]"/>
+                    <field name="scheduled_date" string="To" filter_domain="[('scheduled_date', '&lt;=', self)]"/>
+                </xpath>
                 <xpath expr="//filter[@name='my_transfers']" position="after">
                     <filter
                             name="todays_route"

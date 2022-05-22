@@ -1,0 +1,25 @@
+<odoo>
+<record model="ir.cron" id="get_product_latest_cost">
+    <field name="name">Calculates latest cost on products</field>
+    <field name="model_id" ref="product.model_product_template"></field>
+    <field name="active" eval="False"></field>
+    <field name="state">code</field>
+    <field name="code">
+        # Available variables:
+#  - env: Odoo Environment on which the action is triggered
+#  - model: Odoo Model of the record on which the action is triggered; is a void recordset
+#  - record: record on which the action is triggered; may be void
+#  - records: recordset of all records on which the action is triggered in multi-mode; may be void
+#  - time, datetime, dateutil, timezone: useful Python libraries
+#  - log: log(message, level='info'): logging function to record debug information in ir.logging table
+#  - Warning: Warning Exception to use with raise
+# To return an action, assign: action = {...}
+
+products = env['product.template'].search([('standard_price', '!=', False)])
+
+for product in products:
+    product._get_margins_on_sp()
+        
+    </field>
+</record>
+</odoo>

@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20220126\n"
+"Project-Id-Version: Odoo Server 13.0-20211018\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-11 13:38+0000\n"
-"PO-Revision-Date: 2022-05-11 09:00-0500\n"
+"POT-Creation-Date: 2022-05-13 13:41+0000\n"
+"PO-Revision-Date: 2022-05-13 08:50-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -16,6 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.0.1\n"
+
+#. module: traficante_sales_goals_report
+#: code:addons/traficante_sales_goals_report/models/sales_goal.py:0
+#, python-format
+msgid "%s %s %s"
+msgstr ""
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_year__2012
@@ -151,7 +157,7 @@ msgstr "Abril"
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__date_filter
 msgid "At date"
-msgstr "A la fehca"
+msgstr "A la fecha"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__08
@@ -204,6 +210,11 @@ msgid "Children"
 msgstr "Dependientes"
 
 #. module: traficante_sales_goals_report
+#: model:ir.model,name:traficante_sales_goals_report.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__create_uid
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__create_uid
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__create_uid
@@ -245,6 +256,7 @@ msgstr "Definición"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__description
+#: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_origin_form_view
 msgid "Description"
 msgstr "Descripción"
 
@@ -262,7 +274,7 @@ msgstr "Nombre mostrado"
 #: code:addons/traficante_sales_goals_report/models/sales_goal.py:0
 #, python-format
 msgid "Duplicar metas"
-msgstr "Duplicar metas"
+msgstr ""
 
 #. module: traficante_sales_goals_report
 #: model:ir.actions.server,name:traficante_sales_goals_report.action_duplicate_wizard
@@ -347,6 +359,7 @@ msgid "Goals"
 msgstr "Metas"
 
 #. module: traficante_sales_goals_report
+#: model:ir.ui.menu,name:traficante_sales_goals_report.menu_sales_goals_config
 #: model:ir.ui.menu,name:traficante_sales_goals_report.menu_sales_goals_report
 msgid "Goals Report"
 msgstr "Reporte de metas"
@@ -377,6 +390,11 @@ msgstr "Enero"
 #: model:ir.model,name:traficante_sales_goals_report.model_account_move
 msgid "Journal Entries"
 msgstr "Asientos contables"
+
+#. module: traficante_sales_goals_report
+#: model:ir.model,name:traficante_sales_goals_report.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__period_month__07
@@ -442,6 +460,7 @@ msgstr "Mes"
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__name
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal_section_type__name
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_origin__name
+#: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_origin_form_view
 msgid "Name"
 msgstr "Nombre"
 
@@ -458,9 +477,13 @@ msgid "October"
 msgstr "Octubre"
 
 #. module: traficante_sales_goals_report
-#: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sale_order__sales_origin_id
-msgid "Origin"
-msgstr "Origen"
+#: model:ir.model.fields,help:traficante_sales_goals_report.field_account_move__sales_origin_id
+#: model:ir.model.fields,help:traficante_sales_goals_report.field_account_move_line__sales_origin_id
+#: model:ir.model.fields,help:traficante_sales_goals_report.field_res_partner__sales_origin_id
+#: model:ir.model.fields,help:traficante_sales_goals_report.field_res_users__sales_origin_id
+#: model:ir.model.fields,help:traficante_sales_goals_report.field_sale_order__sales_origin_id
+msgid "Optionally specify a sales type for reporting"
+msgstr "(Opcional) Especifique un tipo de venta para reportes"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__partner_id
@@ -517,8 +540,16 @@ msgstr "Pedido de venta"
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__sales_origin_id
 #: model:ir.model.fields.selection,name:traficante_sales_goals_report.selection__sales_goal__type__s_origin
+#: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_origin_form_view
 msgid "Sales Origin"
-msgstr "Origen de la venta"
+msgstr "Tipo de venta"
+
+#. module: traficante_sales_goals_report
+#: model:ir.actions.act_window,name:traficante_sales_goals_report.action_sales_origin_tree
+#: model:ir.ui.menu,name:traficante_sales_goals_report.menu_sales_origins
+#: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_origin_tree_view
+msgid "Sales Origins"
+msgstr "Tipos de venta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sales_goal__sales_user_id
@@ -534,17 +565,26 @@ msgstr "Meta"
 #. module: traficante_sales_goals_report
 #: model:ir.model,name:traficante_sales_goals_report.model_sales_origin
 msgid "Sales origin"
-msgstr "Origen de la venta"
+msgstr "Tipo de venta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__sales_origin_id
 msgid "Sales origin to meet conditions."
-msgstr "Origen de la venta"
+msgstr "Tipo de venta"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__sales_user_id
 msgid "Sales person to meet conditions"
 msgstr "Cliente"
+
+#. module: traficante_sales_goals_report
+#: model:ir.model.fields,field_description:traficante_sales_goals_report.field_account_move__sales_origin_id
+#: model:ir.model.fields,field_description:traficante_sales_goals_report.field_account_move_line__sales_origin_id
+#: model:ir.model.fields,field_description:traficante_sales_goals_report.field_res_partner__sales_origin_id
+#: model:ir.model.fields,field_description:traficante_sales_goals_report.field_res_users__sales_origin_id
+#: model:ir.model.fields,field_description:traficante_sales_goals_report.field_sale_order__sales_origin_id
+msgid "Sales type"
+msgstr "Tipo de venta"
 
 #. module: traficante_sales_goals_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_goals_report.sales_goal_section_type_form_view
@@ -602,11 +642,6 @@ msgstr ""
 "Establezca el agrupador. Las metas dependientes tomarán las líneas de esta."
 
 #. module: traficante_sales_goals_report
-#: model:ir.model.fields,help:traficante_sales_goals_report.field_sale_order__sales_origin_id
-msgid "Set sales origin for reporting"
-msgstr "Establezca el origen de ventas para el reporte."
-
-#. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_section_type__bg_color
 msgid "Set the color for background on report."
 msgstr "Establezca el color de fondo para la fila en el reporte."
@@ -647,7 +682,7 @@ msgstr ""
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_origin__name
 msgid "Set the name of the origin."
-msgstr "Establezca el nombre del origen"
+msgstr "Establezca el nombre del tipo"
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal__name
@@ -669,8 +704,8 @@ msgid ""
 "Set true if the calculated strucuture will be used to calculate children "
 "structure."
 msgstr ""
-"Marcar si el monto de este registro se usará para calcular la estructura "
-"de los dependientes."
+"Marcar si el monto de este registro se usará para calcular la estructura de "
+"los dependientes."
 
 #. module: traficante_sales_goals_report
 #: model:ir.model.fields,help:traficante_sales_goals_report.field_sales_goal_duplicate_wizard__duplicate_children
