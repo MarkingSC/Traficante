@@ -38,6 +38,8 @@ class SalesGoalReport(models.AbstractModel):
 
         user_lang = self.env.context['lang'] + '.utf8'
 
+        _logger.info('**** user_lang: ' + str(user_lang)) 
+
         locale.setlocale(locale.LC_TIME, user_lang)
 
         date_filter = data['form']['date_filter'] 
