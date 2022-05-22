@@ -36,11 +36,10 @@ class SalesGoalReport(models.AbstractModel):
     def generate_xlsx_report(self, workbook, data, goals):
         _logger.info('**** Inicio generate_xlsx_report ****') 
 
-        user_lang = self.env.context['lang'] + '.utf8'
+        user = self.env['res.users'].browse(self._context.get('uid'))
+        _logger.info('**** user.lang: ' + str(user.lang)) 
 
-        _logger.info('**** user_lang: ' + str(user_lang)) 
-
-        locale.setlocale(locale.LC_TIME, user_lang)
+        locale.setlocale(locale.LC_TIME, user.lang + '.utf8')
 
         date_filter = data['form']['date_filter'] 
         _logger.info('**** date_filter: ' + str(date_filter))  
