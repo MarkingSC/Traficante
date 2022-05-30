@@ -1,0 +1,186 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* traficante_stock_tracking_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20211018\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-26 14:17+0000\n"
+"PO-Revision-Date: 2022-05-26 09:24-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: traficante_stock_tracking_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_tracking_report.stock_tracking_report_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__create_date
+msgid "Created on"
+msgstr "Creado"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_report_stock_tracking_report__display_name
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: traficante_stock_tracking_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_tracking_report.stock_move_line_view_search_date_range
+msgid "From"
+msgstr "Desde"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__date_from
+msgid "From date"
+msgstr "Fecha desde"
+
+#. module: traficante_stock_tracking_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_tracking_report.stock_tracking_report_wizard
+msgid "Get report"
+msgstr "Obtener reporte"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_report_stock_tracking_report__id
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_iddle_time
+msgid "Iddle time"
+msgstr "Días de inventario"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_incoming_qtty
+msgid "Incoming"
+msgstr "Entradas"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_report_stock_tracking_report____last_update
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificación"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_incoming_date
+msgid "Lot incoming date"
+msgstr "Entrada del lote"
+
+#. module: traficante_stock_tracking_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_tracking_report.stock_move_line_view_search_date_range
+msgid "Lots"
+msgstr "Lotes"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_origin_doc
+msgid "Origin document"
+msgstr "Documento de origen"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_outgoing_qtty
+msgid "Outgoing"
+msgstr "Salidas"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_picking_type
+msgid "Picking type"
+msgstr "Tipo de movimiento"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model,name:traficante_stock_tracking_report.model_stock_move_line
+msgid "Product Moves (Stock Move Line)"
+msgstr "Movimientos de Producto (Stock Move Line)"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_product_cost
+msgid "Product cost"
+msgstr "Costo"
+
+#. module: traficante_stock_tracking_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_tracking_report.stock_tracking_report_wizard
+msgid "Report Options"
+msgstr "Opciones del reporte"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,help:traficante_stock_tracking_report.field_stock_tracking_report_wizard__date_from
+msgid "Set the date from you want to get the report."
+msgstr "Establezca la fecha desde la cual desea obtener el reporte."
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,help:traficante_stock_tracking_report.field_stock_tracking_report_wizard__date_to
+msgid "Set the date until you want to get the report."
+msgstr "Establezca la fecha hasta la cual desea obtener el reporte."
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_current_stock
+msgid "Stock"
+msgstr "Disponible"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.actions.act_window,name:traficante_stock_tracking_report.action_stock_tracking_report
+msgid "Stock Tracking"
+msgstr "Trazabilidad"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.actions.report,name:traficante_stock_tracking_report.stock_tracking_report_xlsx
+msgid "Stock Tracking Report"
+msgstr "Reporte de trazabilidad"
+
+#. module: traficante_stock_tracking_report
+#: model_terms:ir.ui.view,arch_db:traficante_stock_tracking_report.stock_move_line_view_search_date_range
+msgid "To"
+msgstr "Hasta"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_tracking_report_wizard__date_to
+msgid "To date"
+msgstr "Fecha hasta"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.ui.menu,name:traficante_stock_tracking_report.menu_stock_tracking_report
+msgid "Tracking Report"
+msgstr "Reporte de trazabilidad"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model,name:traficante_stock_tracking_report.model_stock_picking
+msgid "Transfer"
+msgstr "Albarán"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model.fields,field_description:traficante_stock_tracking_report.field_stock_move_line__lot_uid
+msgid "User"
+msgstr "Usuario"
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model,name:traficante_stock_tracking_report.model_report_stock_tracking_report
+msgid "report.stock.tracking.report"
+msgstr ""
+
+#. module: traficante_stock_tracking_report
+#: model:ir.model,name:traficante_stock_tracking_report.model_stock_tracking_report_wizard
+msgid "stock.tracking.report.wizard"
+msgstr ""

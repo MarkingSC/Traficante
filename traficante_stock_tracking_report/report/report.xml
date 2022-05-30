@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    # Sales goals report    -->
+    <report
+            id="stock_tracking_report_xlsx"
+            model="stock.move.line"
+            string="Stock Tracking Report"
+            report_type="xlsx"
+            name="stock.tracking.report"
+            file="stock_tracking_report"
+    />
+
+</odoo>
