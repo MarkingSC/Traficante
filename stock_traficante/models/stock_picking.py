@@ -105,12 +105,15 @@ class StockPicking(models.Model):
         _logger.info("**** self.env.context: " + str(self.env.context)) 
         _logger.info("**** vals: " + str(vals))  
 
+        data = dict()
+        data['active_ids'] = vals
+
         return {
             'name': _('Set delivery route date'),
             'res_model': 'stock.picking.route.register',
             'view_mode': 'form',
             'view_id': self.env.ref('stock_traficante.stock_picking_delivery_route_date_multi').id,
-            'context': self.env.context,
+            'context': data,
             'target': 'new',
             'type': 'ir.actions.act_window',
         }
@@ -137,16 +140,24 @@ class pickingRouteRegister(models.TransientModel):
 
         rec['scheduled_date'] = tz.fromutc(odoo.fields.Datetime.now()).date() + timedelta(days=1)
 
+        _logger.info("***** self._context: " + str(self._context)) 
+        _logger.info("***** self.env.context: " + str(self.env.context)) 
+
+        '''
         if self._context.get('params'):            
             _logger.info("***** self._context.get('params').get('id'): " + str (self._context.get('params').get('id')))  
             active_ids = self._context.get('params').get('id')
         else:
             _logger.info("***** self._context.get('active_ids'): " + str(self._context.get('active_ids')))  
             active_ids = self._context.get('active_ids')
-
+        '''
+        active_ids = self._context.get('active_ids')
+        
         if not active_ids:
             return rec
         moves = self.env['stock.picking'].browse(active_ids)
+
+        _logger.info("***** moves: " + str(moves))  
 
         # check if moves are in right state
         if any(move.state != 'assigned' for
