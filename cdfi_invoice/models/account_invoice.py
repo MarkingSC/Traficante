@@ -1025,6 +1025,7 @@ class MailTemplate(models.Model):
     
     def generate_email(self, res_ids, fields=None):
         results = super(MailTemplate, self).generate_email(res_ids, fields=fields)
+        _logger.info('***** results: ' + str(results))
         
         if isinstance(res_ids, (int)):
             res_ids = [res_ids]
@@ -1038,20 +1039,36 @@ class MailTemplate(models.Model):
         for template, template_res_ids in templates_to_res_ids.items():
             if template.report_template and template.report_template.report_name == 'account.report_invoice' \
                                 or template.report_template.report_name == 'account.report_invoice_with_payments':
+
+                _logger.info('***** Se genera la plantilla para el formato de factura *****')
                 for res_id in template_res_ids:
+                    _logger.info('***** res_id: ' + str(res_id))
+                    _logger.info('***** template: ' + str(template))
+
                     invoice = self.env[template.model].browse(res_id)
+                    _logger.info('***** invoice: ' + str(invoice))
+                    _logger.info('***** invoice.factura_cfdi: ' + str(invoice.factura_cfdi))
+
                     if not invoice.factura_cfdi:
                         continue
                     if invoice.estado_factura == 'factura_correcta' or invoice.estado_factura == 'solicitud_cancelar':
+                        _logger.info('***** Factura timbrada *****')
                         domain = [
                             ('res_id', '=', invoice.id),
                             ('res_model', '=', invoice._name),
                             ('name', '=', invoice.name.replace('/', '_') + '.xml')]
                         xml_file = self.env['ir.attachment'].search(domain, limit=1)
-                        attachments = results[res_id]['attachments'] or []
+
+                        _logger.info('***** results: ' + str(results))
+
+                        if res_id in results:
+                            attachments = results[res_id]['attachments'] or []
+                        else:
+                            attachments = results['attachments'] or []
                         if xml_file:
                            attachments.append(('CDFI_' + invoice.name.replace('/', '_') + '.xml', xml_file.datas))
                     else:
+                        _logger.info('***** Factura no timbrada *****')
                         domain = [
                             ('res_id', '=', invoice.id),
                             ('res_model', '=', invoice._name),
@@ -1060,7 +1077,11 @@ class MailTemplate(models.Model):
                         attachments = []
                         if xml_file:
                            attachments.append(('CDFI_CANCEL_' + invoice.name.replace('/', '_') + '.xml', xml_file.datas))
-                    results[res_id]['attachments'] = attachments
+
+                    if res_id in results:
+                        results[res_id]['attachments'] = attachments
+                    else:
+                        results['attachments'] = attachments
         return results
 
 

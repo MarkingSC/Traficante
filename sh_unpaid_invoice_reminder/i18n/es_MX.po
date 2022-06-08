@@ -1,0 +1,292 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_unpaid_invoice_reminder
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20211018\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-07 14:01+0000\n"
+"PO-Revision-Date: 2022-06-07 09:11-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:mail.template,subject:sh_unpaid_invoice_reminder.template_account_unpaid_invoice_reminder_email
+msgid "${object.company_id.name} Unpaid Invoice (Ref ${object.name or 'n/a'})"
+msgstr ""
+"${object.company_id.name} Factura sin pagar (Ref ${object.name or 'n/a'})"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:mail.template,body_html:sh_unpaid_invoice_reminder.template_account_unpaid_invoice_reminder_email
+msgid ""
+"<div>\n"
+"<p>Dear ${object.partner_id.name}\n"
+"% set access_action = object.with_context(force_website=True)."
+"get_access_action()\n"
+"% set is_online = access_action and access_action['type'] == 'ir.actions."
+"act_url'\n"
+"\n"
+"% if object.partner_id.parent_id:\n"
+"    (<i>${object.partner_id.parent_id.name}</i>)\n"
+"% endif\n"
+",</p>\n"
+"        <br/><br/>\n"
+"<p>Here is, in attachment, your \n"
+"% if object.name:\n"
+"invoice <strong>${object.name}</strong>\n"
+"% else:\n"
+"invoice\n"
+"% endif\n"
+"% if object.origin:\n"
+"(with reference: ${object.origin})\n"
+"% endif\n"
+"amounting in <strong>${object.amount_total} ${object.currency_id.name}</"
+"strong>\n"
+"from ${object.company_id.name}.\n"
+"</p>\n"
+"\n"
+"    <br/><br/>\n"
+"\n"
+"% if object.state=='posted':\n"
+"    <p>This invoice is already posted.</p>\n"
+"% else:\n"
+"    <p>Please remit payment at your earliest convenience.</p>\n"
+"% endif\n"
+"\n"
+"<p>Thank you,</p>\n"
+"<p style=\"color:#888888\">\n"
+"% if object.user_id and object.user_id.signature:\n"
+"    ${object.user_id.signature | safe}\n"
+"% endif\n"
+"</p>\n"
+"</div>"
+msgstr ""
+"<div>\n"
+"<p> Estimado(a) ${object.partner_id.name}\n"
+"% set access_action = object.with_context(force_website=True)."
+"get_access_action()\n"
+"% set is_online = access_action and access_action['type'] == 'ir.actions."
+"act_url'\n"
+"\n"
+"% if object.partner_id.parent_id:\n"
+"    (<i>${object.partner_id.parent_id.name}</i>)\n"
+"% endif\n"
+",</p>\n"
+"        <br/><br/>\n"
+"<p>Encontrará en los adjuntos su \n"
+"% if object.name:\n"
+"factura <strong>${object.name}</strong>\n"
+"% else:\n"
+"factura\n"
+"% endif\n"
+"% if object.origin:\n"
+"(referencia: ${object.origin})\n"
+"% endif\n"
+"por un total de <strong>${object.amount_total} ${object.currency_id.name}</"
+"strong>\n"
+"de ${object.company_id.name}.\n"
+"</p>\n"
+"\n"
+"    <br/><br/>\n"
+"\n"
+"% if object.state=='posted':\n"
+"    <p>Por favor efectúe su pago tan pronto como le sea posible.</p>\n"
+"% else:\n"
+"    <p>Por favor efectúe su pago tan pronto como le sea posible.</p>\n"
+"% endif\n"
+"\n"
+"<p>Gracias,</p>\n"
+"<p style=\"color:#888888\">\n"
+"% if object.user_id and object.user_id.signature:\n"
+"    ${object.user_id.signature | safe}\n"
+"% endif\n"
+"</p>\n"
+"</div>"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model,name:sh_unpaid_invoice_reminder.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model,name:sh_unpaid_invoice_reminder.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de Configuración"
+
+#. module: sh_unpaid_invoice_reminder
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.res_config_settings_view_form
+msgid "Configure Reminder"
+msgstr "Configurar recordatorio"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model,name:sh_unpaid_invoice_reminder.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__create_uid
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__create_date
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__display_name
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_res_partner__sh_no_mail
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_res_users__sh_no_mail
+msgid "Don't Send Unpaid Email Notification"
+msgstr "No enviar recordatorios de pago"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields.selection,name:sh_unpaid_invoice_reminder.selection__res_company__notify_on__due_date
+msgid "Due Date"
+msgstr "Fecha compromiso"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_res_company__unpaid_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_res_config_settings__unpaid_reminder
+msgid "Email Notification ?"
+msgstr "Enviar recordatorios de pago"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__id
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__invoice_id
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields.selection,name:sh_unpaid_invoice_reminder.selection__res_company__notify_on__inv_date
+msgid "Invoice Date"
+msgstr "Fecha de factura"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.actions.act_window,name:sh_unpaid_invoice_reminder.sh_unpaid_remainder_action
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.sh_unpaid_remainder_config_form_view
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.sh_unpaid_remainder_config_tree_view
+msgid "Invoice Due Reminder"
+msgstr "Recordatorio de pago de factura"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:mail.template,report_name:sh_unpaid_invoice_reminder.template_account_unpaid_invoice_reminder_email
+msgid ""
+"Invoice_${(object.name or '').replace('/','_')}_${object.state == 'draft' "
+"and 'draft' or ''}"
+msgstr ""
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model,name:sh_unpaid_invoice_reminder.model_account_move
+msgid "Journal Entries"
+msgstr "Asientos contables"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history____last_update
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config____last_update
+msgid "Last Modified on"
+msgstr "Última modificación"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__write_uid
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__write_date
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__write_date
+msgid "Last Updated on"
+msgstr "Última actualización"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__sh_mail_id
+msgid "Mail"
+msgstr "Correo"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_remainder_history__sh_mail_date
+msgid "Mail Date"
+msgstr "Fecha de correo"
+
+#. module: sh_unpaid_invoice_reminder
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.sh_res_company_account_unpaid_invoice_reminder_form_inherit
+msgid "Notification?"
+msgstr "Notificación"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model,name:sh_unpaid_invoice_reminder.model_sh_remainder_history
+msgid "Remainder History"
+msgstr "Historial de recordatorios"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__sh_remainder_days
+msgid "Reminder Days Before/After (Days)-(+ve/-ve)"
+msgstr "Días de recordatorio Antes/Después (Días)-(+ve/-ve)"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_account_move__sh_remainder_history_ids
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.view_move_form
+msgid "Reminder History"
+msgstr "Historial de recordatorios"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__name
+msgid "Reminder Name"
+msgstr "Nombre del recordatorio"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_res_company__notify_on
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_res_config_settings__notify_on
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.res_config_settings_view_form
+msgid "Send Email Notification on"
+msgstr "Enviar notificación por correo sobre"
+
+#. module: sh_unpaid_invoice_reminder
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.res_config_settings_view_form
+msgid "Send Email Notification on Invoice Date OR Due Date"
+msgstr ""
+"Enviar notificación por correo sobre la fecha de factura o la fecha "
+"compromiso"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model.fields,field_description:sh_unpaid_invoice_reminder.field_sh_unpaid_remainder_config__sh_template_id
+msgid "Template"
+msgstr "Plantilla de correo"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.actions.server,name:sh_unpaid_invoice_reminder.account_unpaid_invoice_reminder_ir_actions_server
+#: model:ir.cron,cron_name:sh_unpaid_invoice_reminder.account_unpaid_invoice_reminder
+#: model:ir.cron,name:sh_unpaid_invoice_reminder.account_unpaid_invoice_reminder
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.sh_res_company_account_unpaid_invoice_reminder_form_inherit
+msgid "Unpaid Invoice Reminder"
+msgstr "Recordatorio de facturas sin pagar"
+
+#. module: sh_unpaid_invoice_reminder
+#: model_terms:ir.ui.view,arch_db:sh_unpaid_invoice_reminder.res_config_settings_view_form
+msgid "Unpaid Invoice Reminder Configuration"
+msgstr "Configuración de recordatorio de facturas sin pagar"
+
+#. module: sh_unpaid_invoice_reminder
+#: model:ir.model,name:sh_unpaid_invoice_reminder.model_sh_unpaid_remainder_config
+msgid "Unpaid Remainder"
+msgstr "Unpaid Invoice Reminder"
