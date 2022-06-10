@@ -1,0 +1,451 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* om_product_low_stock_notify
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20220126\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-31 19:26+0000\n"
+"PO-Revision-Date: 2022-05-31 14:51-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: om_product_low_stock_notify
+#: model:mail.template,body_html:om_product_low_stock_notify.send_low_stock_notification_email
+msgid ""
+"\n"
+"                    <table border=\"0\" width=\"100%\" cellpadding="
+"\"0\" bgcolor=\"#ededed\" style=\"padding: 20px; background-color: "
+"#ededed; border-collapse:separate;\" summary=\"o_mail_notification\">\n"
+"                        <tbody>\n"
+"                          <tr>\n"
+"                            <td align=\"center\" style=\"min-width: "
+"590px;\">\n"
+"                              <table width=\"590\" border=\"0\" "
+"cellpadding=\"0\" bgcolor=\"#875A7B\" style=\"min-width: 590px; "
+"background-color:#3482a8; padding: 20px; border-collapse:separate;\">\n"
+"                                <tr>\n"
+"                                  <td valign=\"middle\">\n"
+"                                      <span style=\"font-size:20px; "
+"color:white; font-weight: bold;\">\n"
+"                                          Product Low Stock\n"
+"                                      </span>\n"
+"                                  </td>\n"
+"                                  <td valign=\"middle\" align=\"right"
+"\">\n"
+"                                  </td>\n"
+"                                </tr>\n"
+"                              </table>\n"
+"                            </td>\n"
+"                          </tr>\n"
+"\n"
+"                          <!-- CONTENT -->\n"
+"                          <tr>\n"
+"                            <td align=\"center\" style=\"min-width: "
+"590px;\">\n"
+"                              <table width=\"590\" border=\"0\" "
+"cellpadding=\"0\" bgcolor=\"#ffffff\" style=\"min-width: 590px; "
+"background-color: rgb(255, 255, 255); padding: 20px; border-collapse:"
+"separate;\">\n"
+"                                <tbody>\n"
+"                                  <td valign=\"top\" style=\"font-"
+"family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;\">\n"
+"                                    <p>Hello ,\n"
+"                                    <p>Please find attached report for "
+"the list of products whose quantity is lower then the minimum quantity."
+"</p>\n"
+"                                  </td>\n"
+"                                </tbody>\n"
+"                              </table>\n"
+"                            </td>\n"
+"                          </tr>\n"
+"                          <tr>\n"
+"                            <td align=\"center\" style=\"min-width: "
+"590px;\">\n"
+"                              <table width=\"590\" border=\"0\" "
+"cellpadding=\"0\" bgcolor=\"#875A7B\" style=\"min-width: 590px; "
+"background-color:#3482a8; padding: 20px; border-collapse:separate;\">\n"
+"                                <tr>\n"
+"                                  <td valign=\"middle\" align=\"left\" "
+"style=\"color: #fff; padding-top: 10px; padding-bottom: 10px; font-"
+"size: 12px;\">\n"
+"                                    ${object.company_id.name}<br/>\n"
+"                                    ${object.company_id.phone or ''}\n"
+"                                  </td>\n"
+"                                  <td valign=\"middle\" align=\"right\" "
+"style=\"color: #fff; padding-top: 10px; padding-bottom: 10px; font-"
+"size: 12px;\">\n"
+"                                    % if object.company_id.email:\n"
+"                                    <a href=\"mailto:${object."
+"company_id.email}\" style=\"text-decoration:none; color: white;\">"
+"${object.company_id.email}</a><br/>\n"
+"                                    % endif\n"
+"                                    % if object.company_id.website:\n"
+"                                        <a href=\"${object.company_id."
+"website}\" style=\"text-decoration:none; color: white;\">\n"
+"                                            ${object.company_id ."
+"website}\n"
+"                                        </a>\n"
+"                                    % endif\n"
+"                                  </td>\n"
+"                                </tr>\n"
+"                              </table>\n"
+"                            </td>\n"
+"                          </tr>\n"
+"                        </tbody>\n"
+"                    </table>\n"
+"                \n"
+"            "
+msgstr ""
+"\n"
+"                    <table border=“0” width=“100%” cellpadding=“0” "
+"bgcolor=“#ededed” style=“padding: 20px; background-color: #ededed; "
+"border-collapse:separate;” summary=“o_mail_notification”>\n"
+"                        <tbody>\n"
+"                          <tr>\n"
+"                            <td align=“center” style=“min-width: "
+"590px;”>\n"
+"                              <table width=“590” border=“0” "
+"cellpadding=“0” bgcolor=“#875A7B” style=“min-width: 590px; background-"
+"color:#3482a8; padding: 20px; border-collapse:separate;”>\n"
+"                                <tr>\n"
+"                                  <td valign=“middle”>\n"
+"                                      <span style=“font-size:20px; "
+"color:white; font-weight: bold;”>\n"
+"                                          Productos con baja "
+"disponibilidad\n"
+"                                      </span>\n"
+"                                  </td>\n"
+"                                  <td valign=“middle” align=“right”>\n"
+"                                  </td>\n"
+"                                </tr>\n"
+"                              </table>\n"
+"                            </td>\n"
+"                          </tr>\n"
+"\n"
+"                          <!— CONTENT —>\n"
+"                          <tr>\n"
+"                            <td align=“center” style=“min-width: "
+"590px;”>\n"
+"                              <table width=“590” border=“0” "
+"cellpadding=“0” bgcolor=“#ffffff” style=“min-width: 590px; background-"
+"color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;”>\n"
+"                                <tbody>\n"
+"                                  <td valign=“top” style=“font-family:"
+"Arial,Helvetica,sans-serif; color: #555; font-size: 14px;”>\n"
+"                                    <p>Hola ,\n"
+"                                    <p>Adjunto encontrará el reporte de "
+"productos cuya disponibilidad es menor al mínimo establecido.</p>\n"
+"                                  </td>\n"
+"                                </tbody>\n"
+"                              </table>\n"
+"                            </td>\n"
+"                          </tr>\n"
+"                          <tr>\n"
+"                            <td align=“center” style=“min-width: "
+"590px;”>\n"
+"                              <table width=“590” border=“0” "
+"cellpadding=“0” bgcolor=“#875A7B” style=“min-width: 590px; background-"
+"color:#3482a8; padding: 20px; border-collapse:separate;”>\n"
+"                                <tr>\n"
+"                                  <td valign=“middle” align=“left” "
+"style=“color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: "
+"12px;”>\n"
+"                                    ${object.company_id.name}<br/>\n"
+"                                    ${object.company_id.phone or ‘’}\n"
+"                                  </td>\n"
+"                                  <td valign=“middle” align=“right” "
+"style=“color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: "
+"12px;”>\n"
+"                                    % if object.company_id.email:\n"
+"                                    <a href=“mailto:${object.company_id."
+"email}” style=“text-decoration:none; color: white;”>${object.company_id."
+"email}</a><br/>\n"
+"                                    % endif\n"
+"                                    % if object.company_id.website:\n"
+"                                        <a href=“${object.company_id."
+"website}” style=“text-decoration:none; color: white;”>\n"
+"                                            ${object.company_id ."
+"website}\n"
+"                                        </a>\n"
+"                                    % endif\n"
+"                                  </td>\n"
+"                                </tr>\n"
+"                              </table>\n"
+"                            </td>\n"
+"                          </tr>\n"
+"                        </tbody>\n"
+"                    </table>\n"
+"                \n"
+"            "
+
+#. module: om_product_low_stock_notify
+#: model:mail.template,report_name:om_product_low_stock_notify.send_low_stock_notification_email
+msgid ""
+"${(object.company_id.name or '').replace('/','_')+ 'Product Low Stock'}"
+msgstr ""
+"${(object.company_id.name or ‘’).replace(‘/‘,’_’)+ ‘Productos con baja "
+"disponibilidad ’}"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid ""
+"<span title=\"Values set here are company-specific.\" role=\"img\" aria-"
+"label=\"Values set here are company-specific.\"/>"
+msgstr ""
+"<span title=“Los valores establecidos aquí son específicos para las "
+"compañías.” role=“img” aria-label=“Los valores establecidos aquí son "
+"específicos para las compañías./>"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.low_stock_notification_view
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model,name:om_product_low_stock_notify.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model,name:om_product_low_stock_notify.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de Configuración"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__create_date
+msgid "Created on"
+msgstr "Creado"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__display_name
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_report_om_product_low_stock_notify_low_stock_template__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid "Filter By Location"
+msgstr "Filtrar por ubicación"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid "Filter By Warehouse"
+msgstr "Filtrar por almacén"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__low_stock_notification__notify_on__forecast
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__res_company__notify_on__forecast
+msgid "Forecast"
+msgstr "Previsto"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.report_low_stock_template
+msgid "Forecast Quantity"
+msgstr "Cantidad prevista"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__low_stock_notification__min_qty_based_on__global
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__res_company__min_qty_based_on__global
+msgid "Global"
+msgstr "Global"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__id
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_report_om_product_low_stock_notify_low_stock_template__id
+msgid "ID"
+msgstr "ID"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__low_stock_notification__min_qty_based_on__individual
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__res_company__min_qty_based_on__individual
+msgid "Individual"
+msgstr "Individual"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification____last_update
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_report_om_product_low_stock_notify_low_stock_template____last_update
+msgid "Last Modified on"
+msgstr "Última modificación"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__write_uid
+msgid "Last Updated by"
+msgstr "Última modificación por"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__write_date
+msgid "Last Updated on"
+msgstr "Última actualización"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__location_ids
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_company__location_ids
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_config_settings__location_ids
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: om_product_low_stock_notify
+#: model:ir.actions.act_window,name:om_product_low_stock_notify.low_stock_notification_action
+msgid "Low Stock Nofitication"
+msgstr "Notificación de inventario bajo"
+
+#. module: om_product_low_stock_notify
+#: model:ir.actions.server,name:om_product_low_stock_notify.ir_cron_low_stock_notification_ir_actions_server
+#: model:ir.cron,cron_name:om_product_low_stock_notify.ir_cron_low_stock_notification
+#: model:ir.cron,name:om_product_low_stock_notify.ir_cron_low_stock_notification
+#: model:ir.model,name:om_product_low_stock_notify.model_low_stock_notification
+#: model:ir.ui.menu,name:om_product_low_stock_notify.menu_low_stock_notification
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.low_stock_notification_view
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid "Low Stock Notification"
+msgstr "Notificación de baja disponibilidad"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_company__is_law_stock_notification
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_config_settings__is_law_stock_notification
+msgid "Low Stock Notification?"
+msgstr "Notificación de baja disponibilidad"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_company__min_qty_based_on
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_config_settings__min_qty_based_on
+msgid "Min Quantity Based on"
+msgstr "Cantidad mínima basada en"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__min_qty
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_product_product__minimum_quantity
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_product_template__minimum_quantity
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.report_low_stock_template
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid "Minimum Quantity"
+msgstr "Cantidad mínima"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__min_qty_based_on
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid "Minimum Quantity Based On"
+msgstr "Cantidad mínima basada en"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__notify_on
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_company__notify_on
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_config_settings__notify_on
+msgid "Notification Based on"
+msgstr "Notificación basada en"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_company__notify_to
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_config_settings__notify_to
+msgid "Notify To"
+msgstr "Notificar a"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__low_stock_notification__notify_on__on_hand_qty
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__res_company__notify_on__on_hand_qty
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.report_low_stock_template
+msgid "On Hand Quantity"
+msgstr "Cantidad a mano"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.low_stock_notification_view
+msgid "PDF Report"
+msgstr "Reporte PDF"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.report_low_stock_template
+msgid "PRODUCT LOW STOCK"
+msgstr "PRODUCTOS CON BAJA DISPONIBILIDAD"
+
+#. module: om_product_low_stock_notify
+#: code:addons/om_product_low_stock_notify/wizard/low_stock_notification.py:0
+#, python-format
+msgid "Please Add Users in Send Notification"
+msgstr "Por favor agregue usuarios en el envío de notificaciones"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.report_low_stock_template
+msgid "Product"
+msgstr "Producto"
+
+#. module: om_product_low_stock_notify
+#: model:ir.actions.report,name:om_product_low_stock_notify.low_stock_nitification_report
+msgid "Product Low Stock"
+msgstr "Producto con baja disponibilidad"
+
+#. module: om_product_low_stock_notify
+#: model:mail.template,subject:om_product_low_stock_notify.send_low_stock_notification_email
+msgid "Product Low Stock Notification"
+msgstr "Notificación de baja disponibilidad"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid "Product Low Stock Notification Configration."
+msgstr "Configuración de notificaciones de baja disponibilidad"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model,name:om_product_low_stock_notify.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_company__min_qty
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_config_settings__min_qty
+msgid "Quantity Limit"
+msgstr "Límite de cantidad"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__low_stock_notification__min_qty_based_on__record_rule
+#: model:ir.model.fields.selection,name:om_product_low_stock_notify.selection__res_company__min_qty_based_on__record_rule
+msgid "Record Rules"
+msgstr "Reglas del registro"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.low_stock_notification_view
+msgid "Send"
+msgstr "Enviar"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__notify_to
+msgid "Send Nofitication"
+msgstr "Enviar notificación"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.res_config_low_stock_notification_form
+msgid "Send Notification Email"
+msgstr "Enviar notificación por correo"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_low_stock_notification__warehouse_ids
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_company__warehouse_ids
+#: model:ir.model.fields,field_description:om_product_low_stock_notify.field_res_config_settings__warehouse_ids
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: om_product_low_stock_notify
+#: model_terms:ir.ui.view,arch_db:om_product_low_stock_notify.low_stock_notification_view
+msgid "or"
+msgstr "O"
+
+#. module: om_product_low_stock_notify
+#: model:ir.model,name:om_product_low_stock_notify.model_report_om_product_low_stock_notify_low_stock_template
+msgid "report.om_product_low_stock_notify.low_stock_template"
+msgstr ""

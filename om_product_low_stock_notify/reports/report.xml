@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="paperformat_low_stock" model="report.paperformat">
+            <field name="name">Low Stock A4</field>
+            <field name="default" eval="True" />
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">15</field>
+            <field name="dpi">90</field>
+        </record>
+    
+        <report id="low_stock_nitification_report"
+                model="low.stock.notification"
+                report_type="qweb-pdf"
+                string="Product Low Stock"
+                name="om_product_low_stock_notify.low_stock_template"
+                file="om_product_low_stock_notify.low_stock_template"/>
+        
+        <record id="om_product_low_stock_notify.low_stock_nitification_report" model="ir.actions.report">
+            <field name="paperformat_id" ref="om_product_low_stock_notify.paperformat_low_stock" />
+        </record>
+        
+
+</odoo>

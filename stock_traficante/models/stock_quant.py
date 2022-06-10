@@ -7,7 +7,7 @@ datetime.today()
 
 _logger = logging.getLogger(__name__)
 
-class StockPicking(models.Model):
+class stockQuant(models.Model):
     _inherit = 'stock.quant'
 
     product_category = fields.Many2one(

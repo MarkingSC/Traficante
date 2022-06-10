@@ -17,14 +17,11 @@
                         </field>
                     </page>
                 </xpath>
-                <!--<xpath expr="//button[@name='button_validate'][1]" position='attributes'>
-                    <attribute name="modifiers">{'invisible':['|',['state','in',['waiting','confirmed']],['show_validate','=',false]]}</attribute>
-                </xpath>-->
                 <xpath expr="//button[@name='button_validate'][1]" position='attributes'>
                     <attribute name="modifiers">{'invisible':['|','|',['state','in',['waiting','confirmed']],['show_validate','=',false],['on_delivery_route', '=', false]]}</attribute>
                 </xpath>
                 <xpath expr="//button[@name='button_validate'][2]" position='after'>
-                    <button name="action_set_delivery_route_date_form" id="action_set_delivery_route_date_form" attrs="{'invisible': ['|', '|', ('state', 'in', ('waiting','confirmed')), ('show_validate', '=', False), ('on_delivery_route', '=', True)]}" string="Send to route" type="object" class="oe_highlight"/>
+                    <button name="action_set_delivery_route_date_form" id="action_set_delivery_route_date_form" attrs="{'invisible': ['|', '|', '|', ('picking_type_code', '!=', 'outgoing'), ('state', 'in', ('waiting','confirmed')), ('show_validate', '=', False), ('on_delivery_route', '=', True)]}" string="Send to route" type="object" class="oe_highlight"/>
                     <field name="on_delivery_route" invisible="1" modifiers="{'invisible':true,'readonly':true}"/>
                 </xpath>
             </field>
@@ -70,16 +67,14 @@
                             string="Ruta de hoy"
                             domain="[('scheduled_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))),
                             ('scheduled_date', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59))),
-                            ('on_delivery_route', '=', True), '|',
-                            ('state','=', 'assigned'), ('state', '=', 'confirmed')]">
+                            ('on_delivery_route', '=', True)]">
                     </filter>
                     <filter
                             name="next_route"
                             string="Ruta de mañana"
                             domain="[('scheduled_date', '&gt;=', (datetime.datetime.combine(context_today(), datetime.time(0,0,0))+relativedelta(days=1))),
                             ('scheduled_date', '&lt;=', (datetime.datetime.combine(context_today(), datetime.time(23,59,59))+relativedelta(days=1))),
-                            ('on_delivery_route', '=', True), '|',
-                            ('state','=', 'assigned'), ('state', '=', 'confirmed')]">
+                            ('on_delivery_route', '=', True)]">
                     </filter>
                 </xpath>
             </field>
@@ -128,8 +123,8 @@
             <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_mode">tree,calendar,form</field>
-            <field name="domain">[('on_delivery_route', '=', True), '|', ('state', '=', 'assigned'),('state', '=', 'confirmed')]</field>
-            <field name="context">{'default_state': 'confirmed', 'default_company_id': allowed_company_ids[0], 'search_default_next_route': 1}</field>
+            <field name="domain">[('on_delivery_route', '=', True)]</field>
+            <field name="context">{'default_company_id': allowed_company_ids[0], 'search_default_next_route': 1}</field>
             <field name="search_view_id" ref="stock.view_picking_internal_search"/>
             <field name="view_ids" eval="[(5,0,0),
                 (0,0, {'view_mode': 'tree', 'view_id': ref('stock_picking_on_route_list_view')}),

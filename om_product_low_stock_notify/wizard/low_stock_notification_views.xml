@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="low_stock_notification_view" model="ir.ui.view">
+        <field name="name">low.stock.notification.view</field>
+        <field name="model">low.stock.notification</field>
+        <field name="arch" type="xml">
+            <form string="Low Stock Notification">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="notify_on" widget="radio" options="{'horizontal': true}"/>
+                            <field name="min_qty_based_on" widget="radio" options="{'horizontal': true}"/>
+                            <field name="min_qty" attrs="{'invisible':[('min_qty_based_on','!=','global')],
+                                                          'required':[('min_qty_based_on','=','global')]}"/>
+                        </group>
+                        <group>
+                            <field name="warehouse_ids" widget="many2many_tags" 
+                                   domain="[('company_id','=',company_id)]" 
+                                   options="{'no_open':True,'no_create':1,'no_create_edit':1}" />
+                            <field name="location_ids" widget="many2many_tags" 
+                                   domain="[('usage','=','internal'),('company_id','=',company_id)]" 
+                                   options="{'no_open':True,'no_create':1,'no_create_edit':1}" />
+                            <field name="notify_to" widget="many2many_tags" 
+                                   options="{'no_open':True,'no_create':1,'no_create_edit':1}" />
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="PDF Report" name="print_pdf_report" type="object" class="oe_highlight"/> or
+                        <button string="Send" name="send_low_stock" type="object" class="oe_highlight"/> or
+                        <button string="Close" class="oe_link" special="cancel" />
+                    </footer>
+                
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="low_stock_notification_action" model="ir.actions.act_window">
+        <field name="name">Low Stock Nofitication</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">low.stock.notification</field>
+        <field name="view_id" ref="low_stock_notification_view"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+    <menuitem name="Low Stock Notification"
+            id="menu_low_stock_notification" 
+            parent="stock.menu_warehouse_report" 
+            sequence="1" 
+            action="low_stock_notification_action" />
+</odoo>

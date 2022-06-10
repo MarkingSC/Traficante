@@ -12,7 +12,7 @@ class stockMoveLine(models.Model):
     # Fecha de entrada del lote
     lot_incoming_date = fields.Date(string='Lot incoming date')
     # días de inventario o tiempo de inactividad (desde la entrada del lote)
-    lot_iddle_time = fields.Integer(string='Iddle time')
+    lot_iddle_time = fields.Integer(string='Iddle time', group_operator=False)
     # costo del producto movido
     lot_product_cost = fields.Float(string='Product cost')
     # stock restante

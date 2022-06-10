@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock', 'account_traficante', 'partner_traficante', 'purchase'],
+    'depends': ['base', 'om_product_low_stock_notify', 'account_traficante', 'cfdi_traficante', 'purchase'],
 
     # always loaded
     'data': [

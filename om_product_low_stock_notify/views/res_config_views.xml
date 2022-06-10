@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_low_stock_notification_form" model="ir.ui.view">
+        <field name="name">res.config.low.stock.notification.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="50"/>
+        <field name="inherit_id" ref="stock.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='stock']//h2" position="before">
+                <h2>Low Stock Notification</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="is_law_stock_notification"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="is_law_stock_notification"/>
+                            <span title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific."/>
+                            <div class="row">
+                                <div class="text-muted col-lg-8">
+                                    Product Low Stock Notification Configration.
+                                </div>
+                            </div>
+                            <div class="content-group" attrs="{'invisible':[('is_law_stock_notification','=',False)]}">
+                                <div class="mt16">
+                                    <label for="notify_on"/>
+                                    <field name="notify_on" style="width:80%%" 
+                                           attrs="{'required':[('is_law_stock_notification','!=',False)]}" 
+                                           widget="radio" options="{'horizontal': true}"/>
+                                </div>
+                                <div class="mt16">
+                                    <label for="min_qty_based_on" string='Minimum Quantity Based On'/>
+                                    <field name="min_qty_based_on" style="width:80%%" 
+                                           attrs="{'required':[('is_law_stock_notification','!=',False)]}"
+                                           widget="radio" options="{'horizontal': true}"/>
+                                </div>
+                                <div class="mt16">
+                                    <label for="min_qty" string='Minimum Quantity'/>
+                                    <field name="min_qty" style="width:80%%" 
+                                           attrs="{'required':[('is_law_stock_notification','!=',False)]}"/>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <div class="content-group" attrs="{'invisible':[('is_law_stock_notification','=',False)]}">
+                                <div class="mt16">
+                                    <label for="warehouse_ids" string='Filter By Warehouse'/>
+                                    <field name="warehouse_ids" style="width:80%%" 
+                                           widget="many2many_tags"/>
+                                </div>
+                                <div class="mt16">
+                                    <label for="location_ids" string='Filter By Location'/>
+                                    <field name="location_ids" style="width:80%%" 
+                                           widget="many2many_tags"/>
+                                </div>
+                                <div class="mt16">
+                                    <label for="notify_to" string='Send Notification Email'/>
+                                    <field name="notify_to" style="width:80%%" 
+                                           widget="many2many_tags" attrs="{'required':[('is_law_stock_notification','!=',False)]}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>
+

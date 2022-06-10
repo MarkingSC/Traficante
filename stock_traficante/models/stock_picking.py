@@ -69,16 +69,52 @@ class StockPicking(models.Model):
         _logger.info("**** INICIA self.picking_type_code: " + str(self.picking_type_code))
         _logger.info("**** INICIA self.origin: " + str(self.origin))
 
-        postedInvoices = self.invoice_ids.filtered(lambda r: r.state == 'posted')
+        postedInvoices = self.invoice_ids.filtered(lambda r: r.estado_factura == 'factura_correcta')
 
         if self.picking_type_code == 'outgoing' and self.origin:
             if len(postedInvoices)  == 0:
-                raise UserError("No es posible validar el movimiento. No existen facturas confirmadas para este pedido.")
+                raise UserError("No es posible validar el movimiento. No existen facturas timbradas para este pedido.")
 
             if self.on_delivery_route != True:
                 raise UserError("No es posible validar el movimiento. Esta entrega debe estar programada en ruta para continuar.")
 
-        return super(StockPicking, self).button_validate()
+        res = super(StockPicking, self).button_validate()
+
+        _logger.info('**** Cambia la cantidad a mano *****')
+
+        flag_min = False
+
+        for line in self.move_line_ids:
+            if not flag_min:
+                product = line.product_id
+
+                company_ids= self.env['res.company'].search([('is_law_stock_notification','=',True)])
+                for company in company_ids:
+                    vals={'notify_on':company.notify_on,
+                        'min_qty_based_on':company.min_qty_based_on,
+                        'min_qty':company.min_qty,
+                        'notify_to':[(6,0, company.notify_to.ids)],
+                        'warehouse_ids':[(6,0, company.warehouse_ids.ids)],
+                        'location_ids':[(6,0, company.location_ids.ids)],
+                        'company_id':company.id}
+                        
+                    wiz_id = self.env['low.stock.notification'].create(vals)
+
+                    product_min_qtty = wiz_id.get_minimum_qty(product)
+                    _logger.info('**** product_min_qtty: ' + str(product_min_qtty))
+
+                    if product.qty_available < product_min_qtty:
+                        flag_min = True
+        
+        if flag_min:
+            _logger.info('**** Sí hay productos en mínimo *****')
+            company.product_low_stock_notification()       
+        else:
+            _logger.info('**** NO hay productos en mínimo *****')
+
+        _logger.info('**** TERMINA button_validate *****')
+        
+        return res
 
     def action_set_delivery_route_date(self):
         _logger.info("**** INICIA action_set_delivery_route_date")  
@@ -105,12 +141,15 @@ class StockPicking(models.Model):
         _logger.info("**** self.env.context: " + str(self.env.context)) 
         _logger.info("**** vals: " + str(vals))  
 
+        data = dict()
+        data['active_ids'] = vals
+
         return {
             'name': _('Set delivery route date'),
             'res_model': 'stock.picking.route.register',
             'view_mode': 'form',
             'view_id': self.env.ref('stock_traficante.stock_picking_delivery_route_date_multi').id,
-            'context': self.env.context,
+            'context': data,
             'target': 'new',
             'type': 'ir.actions.act_window',
         }
