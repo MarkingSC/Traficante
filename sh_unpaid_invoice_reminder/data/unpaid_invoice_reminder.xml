@@ -1,0 +1,16 @@
+<?xml version ="1.0" encoding="utf-8" ?>
+
+<odoo noupdate="1">
+    <record id="account_unpaid_invoice_reminder" model="ir.cron">
+        <field name="name">Unpaid Invoice Reminder</field>
+        <field eval="False" name="active" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="model_id" ref="model_account_move" />
+        <field name="state">code</field>
+        <field name="code">model.unpaid_invoice_notify_fun()</field>
+        <field name="priority" eval="5" />
+    </record>
+</odoo>

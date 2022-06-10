@@ -176,16 +176,24 @@ class pickingRouteRegister(models.TransientModel):
 
         rec['scheduled_date'] = tz.fromutc(odoo.fields.Datetime.now()).date() + timedelta(days=1)
 
+        _logger.info("***** self._context: " + str(self._context)) 
+        _logger.info("***** self.env.context: " + str(self.env.context)) 
+
+        '''
         if self._context.get('params'):            
             _logger.info("***** self._context.get('params').get('id'): " + str (self._context.get('params').get('id')))  
             active_ids = self._context.get('params').get('id')
         else:
             _logger.info("***** self._context.get('active_ids'): " + str(self._context.get('active_ids')))  
             active_ids = self._context.get('active_ids')
-
+        '''
+        active_ids = self._context.get('active_ids')
+        
         if not active_ids:
             return rec
         moves = self.env['stock.picking'].browse(active_ids)
+
+        _logger.info("***** moves: " + str(moves))  
 
         # check if moves are in right state
         if any(move.state != 'assigned' for

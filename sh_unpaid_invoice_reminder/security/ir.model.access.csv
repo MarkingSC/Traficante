@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_unpaid_remainder,access_unpaid_remainder,model_sh_unpaid_remainder_config,base.group_user,1,1,1,1
+access_remainder_history,access_remainder_history,model_sh_remainder_history,base.group_user,1,1,1,1

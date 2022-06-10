@@ -1,0 +1,39 @@
+<?xml version ="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_unpaid_remainder_config_form_view" model="ir.ui.view">
+        <field name="name">sh.unpaid.remainder.config</field>
+        <field name="model">sh.unpaid.remainder.config</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Due Reminder">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="sh_template_id" domain="[('model', '=', 'account.move')]" />
+                        </group>
+                        <group>
+                            <field name="sh_remainder_days" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="sh_unpaid_remainder_config_tree_view" model="ir.ui.view">
+        <field name="name">sh.unpaid.remainder.config</field>
+        <field name="model">sh.unpaid.remainder.config</field>
+        <field name="arch" type="xml">
+            <tree string="Invoice Due Reminder">
+                <field name="name" />
+                <field name="sh_remainder_days" />
+                <field name="sh_template_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="sh_unpaid_remainder_action" model="ir.actions.act_window">
+        <field name="name">Invoice Due Reminder</field>
+        <field name="res_model">sh.unpaid.remainder.config</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
