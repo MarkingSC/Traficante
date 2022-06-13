@@ -1025,7 +1025,7 @@ class MailTemplate(models.Model):
     
     def generate_email(self, res_ids, fields=None):
         results = super(MailTemplate, self).generate_email(res_ids, fields=fields)
-        _logger.info('***** results: ' + str(results))
+        ##_logger.info('***** results: ' + str(results))
         
         if isinstance(res_ids, (int)):
             res_ids = [res_ids]
@@ -1059,7 +1059,7 @@ class MailTemplate(models.Model):
                             ('name', '=', invoice.name.replace('/', '_') + '.xml')]
                         xml_file = self.env['ir.attachment'].search(domain, limit=1)
 
-                        _logger.info('***** results: ' + str(results))
+                        ##_logger.info('***** results: ' + str(results))
 
                         if res_id in results:
                             attachments = results[res_id]['attachments'] or []
