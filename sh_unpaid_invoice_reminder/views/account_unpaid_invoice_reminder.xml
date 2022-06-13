@@ -12,6 +12,7 @@
                         <group>
                             <group>
                                 <field name="unpaid_reminder" string="Notification?" invisible="1" />
+                                <field name="reminder_cc" string="CC emails"/>
                             </group>
                         </group>
                     </div>

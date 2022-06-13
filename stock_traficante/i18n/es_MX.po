@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20211018\n"
+"Project-Id-Version: Odoo Server 13.0-20220126\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-22 19:37+0000\n"
-"PO-Revision-Date: 2022-05-22 14:39-0500\n"
+"POT-Creation-Date: 2022-06-13 01:12+0000\n"
+"PO-Revision-Date: 2022-06-12 20:14-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -24,7 +24,6 @@ msgstr ""
 
 #. module: stock_traficante
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_business_name
-#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_zip_code
 msgid "Business name"
 msgstr "Razón social"
 
@@ -244,6 +243,11 @@ msgstr "Hasta"
 #: model:ir.model,name:stock_traficante.model_stock_picking
 msgid "Transfer"
 msgstr "Albarán"
+
+#. module: stock_traficante
+#: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__partner_zip_code
+msgid "Zip Code"
+msgstr "CP"
 
 #. module: stock_traficante
 #: model:ir.model.fields,field_description:stock_traficante.field_stock_picking__invoice_ids

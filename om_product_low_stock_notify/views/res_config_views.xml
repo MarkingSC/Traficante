@@ -23,8 +23,8 @@
                             </div>
                             <div class="content-group" attrs="{'invisible':[('is_law_stock_notification','=',False)]}">
                                 <div class="mt16">
-                                    <label for="notify_on"/>
-                                    <field name="notify_on" style="width:80%%" 
+                                    <label for="low_stock_notify_on"/>
+                                    <field name="low_stock_notify_on" style="width:80%%" 
                                            attrs="{'required':[('is_law_stock_notification','!=',False)]}" 
                                            widget="radio" options="{'horizontal': true}"/>
                                 </div>

@@ -37,7 +37,7 @@ class StockPicking(models.Model):
     partner_zone_id = fields.Many2one('res.partner.zone', string="Customer zone", related='partner_id.zone_id', readonly=True)
     partner_address =fields.Char(string="Delivery address", compute=get_delivery_address)
     partner_business_name = fields.Char(string="Business name", store=True, related='partner_id.business_name')
-    partner_zip_code = fields.Char(string="Business name", store=True, related='partner_id.zip')
+    partner_zip_code = fields.Char(string="Zip Code", store=True, related='partner_id.zip')
 
     @api.depends('origin', 'invoice_ids')
     def get_invoices_amount(self):
@@ -90,7 +90,7 @@ class StockPicking(models.Model):
 
                 company_ids= self.env['res.company'].search([('is_law_stock_notification','=',True)])
                 for company in company_ids:
-                    vals={'notify_on':company.notify_on,
+                    vals={'low_stock_notify_on':company.low_stock_notify_on,
                         'min_qty_based_on':company.min_qty_based_on,
                         'min_qty':company.min_qty,
                         'notify_to':[(6,0, company.notify_to.ids)],

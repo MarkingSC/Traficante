@@ -5,6 +5,7 @@
             <field name="email_from">${(object.user_id.email and '%s &lt;%s&gt;' % (object.user_id.name, object.user_id.email) or '')|safe}</field>
             <field name="subject">${object.company_id.name} Unpaid Invoice (Ref ${object.name or 'n/a'})</field>
             <field name="partner_to">${object.partner_id.id}</field>
+            <field name="email_cc">${object.invoice_user_id.login},${object.company_id.reminder_cc}</field>
             <field name="model_id" ref="account.model_account_move"/>
             <field name="report_template" ref="account.account_invoices"/>
             <field name="report_name">Invoice_${(object.name or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>

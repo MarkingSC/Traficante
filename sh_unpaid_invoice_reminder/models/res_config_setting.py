@@ -11,6 +11,8 @@ class ResCompany(models.Model):
     notify_on = fields.Selection([('inv_date', 'Invoice Date'), ('due_date', 'Due Date')],
                                  default='due_date', string="Send Email Notification on")
 
+    reminder_cc = fields.Char("CC emails")
+
 
 class ResConfigSetting(models.TransientModel):
     _inherit = 'res.config.settings'

@@ -14,7 +14,7 @@ class LowStockNotification(models.TransientModel):
     _description = "Low Stock Notification"
     
     
-    notify_on = fields.Selection([('on_hand_qty','On Hand Quantity'),('forecast','Forecast')], 
+    low_stock_notify_on = fields.Selection([('on_hand_qty','On Hand Quantity'),('forecast','Forecast')], 
                                     string='Notification Based on', 
                                     default='on_hand_qty')
     
@@ -56,7 +56,7 @@ class LowStockNotification(models.TransientModel):
                 product = product.with_context(context)
             vals = product._product_available()
             on_hand_qty = 0.0
-            if self.notify_on == 'on_hand_qty':
+            if self.low_stock_notify_on == 'on_hand_qty':
                 on_hand_qty = vals.get(product.id).get('qty_available')
             else:
                 on_hand_qty = vals.get(product.id).get('virtual_available')

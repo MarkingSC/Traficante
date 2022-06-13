@@ -14,7 +14,7 @@ class ResCompany(models.Model):
     
     is_law_stock_notification = fields.Boolean('Low Stock Notification?')
     
-    notify_on = fields.Selection([('on_hand_qty','On Hand Quantity'),('forecast','Forecast')], 
+    low_stock_notify_on = fields.Selection([('on_hand_qty','On Hand Quantity'),('forecast','Forecast')], 
                                     string='Notification Based on', 
                                     default='on_hand_qty')
     
@@ -30,7 +30,7 @@ class ResCompany(models.Model):
     def product_low_stock_notification(self):
         company_ids= self.env['res.company'].search([('is_law_stock_notification','=',True)])
         for company in company_ids:
-            vals={'notify_on':company.notify_on,
+            vals={'low_stock_notify_on':company.low_stock_notify_on,
                   'min_qty_based_on':company.min_qty_based_on,
                   'min_qty':company.min_qty,
                   'notify_to':[(6,0, company.notify_to.ids)],
@@ -53,7 +53,7 @@ class ResConfigSettings(models.TransientModel):
     
     is_law_stock_notification = fields.Boolean(related='company_id.is_law_stock_notification', 
                                                string='Low Stock Notification?', readonly=False)
-    notify_on = fields.Selection(related='company_id.notify_on', string="Notification Based on", readonly=False)
+    low_stock_notify_on = fields.Selection(related='company_id.low_stock_notify_on', string="Notification Based on", readonly=False)
     min_qty_based_on = fields.Selection(related='company_id.min_qty_based_on', 
                                         string='Min Quantity Based on', readonly=False)
     min_qty = fields.Float(related='company_id.min_qty', string='Quantity Limit', readonly=False)

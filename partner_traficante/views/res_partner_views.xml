@@ -161,8 +161,8 @@
                 <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), '|', ('type', '=', 'invoice'), ('type', '=', 'delivery')]}</attribute>
             </xpath>
 
-            <xpath expr="..//field[@name='property_supplier_payment_term_id']/.." position="before">
-                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice" attrs="{'invisible' : [('customer_rank', '&lt;=', 0)]}">
+            <xpath expr="..//group[@name='purchase']" position="before">
+                <group string="Delivery time" groups="sales_team.group_sale_salesman,account.group_account_invoice">
                     <field string="From" name="start_delivery_time" widget="float_time" attrs="{'required' : [('customer_type', '=', 'A')]}"></field>
                     <field string="To" name="finish_delivery_time" widget="float_time" attrs="{'required' : [('customer_type', '=', 'A')]}"></field>
                 </group>
