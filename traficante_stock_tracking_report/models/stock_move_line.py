@@ -49,38 +49,39 @@ class stockPicking(models.Model):
 
     def _get_lines_lot_data(self):
         _logger.info('**** ENTRA A _get_lines_lot_data ***** ')
-        for lot_line in self.move_ids_without_package.move_line_ids.filtered(lambda x: x.lot_id != False):
-            # Obtener la fecha de entrada del lote
-            lot_incoming_line = self.env['stock.move.line'].search([
-                ('picking_id.picking_type_id.code', '=', 'incoming'), 
-                ('state', '=', 'done'), 
-                ('lot_id', '=', lot_line.lot_id.id)
-            ])
-            lot_line.lot_incoming_date = lot_incoming_line.date
+        for move in self:
+            for lot_line in move.move_ids_without_package.move_line_ids.filtered(lambda x: x.lot_id != False):
+                # Obtener la fecha de entrada del lote
+                lot_incoming_line = self.env['stock.move.line'].search([
+                    ('picking_id.picking_type_id.code', '=', 'incoming'), 
+                    ('state', '=', 'done'), 
+                    ('lot_id', '=', lot_line.lot_id.id)
+                ])
+                lot_line.lot_incoming_date = lot_incoming_line.date
 
-            # Obtener días de inventario
-            today = datetime.today()
-            lot_line.lot_iddle_time = (today-lot_incoming_line.date).days 
+                # Obtener días de inventario
+                today = datetime.today()
+                lot_line.lot_iddle_time = (today-lot_incoming_line.date).days 
 
-            # Obtener costo del producto
-            lot_line.lot_product_cost = lot_line.product_id.product_cost
+                # Obtener costo del producto
+                lot_line.lot_product_cost = lot_line.product_id.product_cost
 
-            # Obtener existencias 
-            lot_line.lot_current_stock = lot_line.product_id.qty_available
+                # Obtener existencias 
+                lot_line.lot_current_stock = lot_line.product_id.qty_available
 
-            # Obtener el tipo de movimiento 
-            lot_line.lot_picking_type = lot_line.picking_id.picking_type_id
+                # Obtener el tipo de movimiento 
+                lot_line.lot_picking_type = lot_line.picking_id.picking_type_id
 
-            # Obtener el origen del movimiento 
-            lot_line.lot_origin_doc = lot_line.picking_id.origin
+                # Obtener el origen del movimiento 
+                lot_line.lot_origin_doc = lot_line.picking_id.origin
 
-            # Obtener cantidad de entradas
-            if lot_line.lot_picking_type.code == 'incoming':
-                lot_line.lot_incoming_qtty = lot_line.qty_done
-            elif lot_line.lot_picking_type.code == 'outgoing':
-                lot_line.lot_outgoing_qtty = lot_line.qty_done        
+                # Obtener cantidad de entradas
+                if lot_line.lot_picking_type.code == 'incoming':
+                    lot_line.lot_incoming_qtty = lot_line.qty_done
+                elif lot_line.lot_picking_type.code == 'outgoing':
+                    lot_line.lot_outgoing_qtty = lot_line.qty_done        
 
-            # Obtener el usuario encargado
-            lot_line.lot_uid = self.env.user
+                # Obtener el usuario encargado
+                lot_line.lot_uid = self.env.user
 
         _logger.info('**** ENTRA A _get_lines_lot_data ***** ')
