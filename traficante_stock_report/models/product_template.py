@@ -6,8 +6,8 @@ _logger = logging.getLogger(__name__)
 class productTemplate(models.Model):
     _inherit = 'product.template'
 
-    latest_cost = fields.Float(string='Latest Cost', compute = "_get_product_cost")
-    avg_cost = fields.Float(string='Average Cost', compute = "_get_product_cost")
+    latest_cost = fields.Float(string='Latest Cost', compute = "_get_product_cost", compute_sudo=True)
+    avg_cost = fields.Float(string='Average Cost', compute = "_get_product_cost", compute_sudo=True)
     ieps_tax_pct = fields.Float(string='IVA Pct.', compute = "_get_taxes_amount")
     iva_tax_pct = fields.Float(string='IEPS Pct', compute = "_get_taxes_amount")
     iva_price = fields.Float(string='Price, IVA included', compute = "_get_taxes_amount")
@@ -16,8 +16,8 @@ class productTemplate(models.Model):
     # En el reporte en este orden va standard_price
     taxes_price = fields.Float(string='Price, taxes included', compute = "_get_taxes_amount")
     total_margin_amt = fields.Float(string='Margin amount', compute = "_get_margins", store = True)
-    cost_margin_pct = fields.Float(string='Margin over cost', compute = "_get_product_cost", store = True)
-    price_margin_pct = fields.Float(string='Margin on price', compute = "_get_product_cost", store = True)
+    cost_margin_pct = fields.Float(string='Margin over cost', compute = "_get_product_cost", store = True, compute_sudo=True)
+    price_margin_pct = fields.Float(string='Margin on price', compute = "_get_product_cost", store = True, compute_sudo=True)
 
     # Margen del precio sobre el costo del producto
     product_cost = fields.Float(string='Cost')
