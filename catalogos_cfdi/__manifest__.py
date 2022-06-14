@@ -13,7 +13,7 @@
     'author': 'IT Admin',
     'website': 'www.itadmin.com.mx',
     'depends': [
-        'base','sale',
+        'base','sale','account'
     ],
     'data': [
         'security/ir.model.access.csv',
