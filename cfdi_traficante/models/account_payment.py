@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import base64
 import json
-import requests
 from odoo import fields, models, api,_ 
 
 import pytz
@@ -15,6 +13,25 @@ _logger = logging.getLogger(__name__)
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
+
+    @api.onchange('partner_id')
+    def _get_default_forma_pago(self):
+        _logger.info('***** Entra a _get_default_forma_pago *****')
+        record = self
+
+        if record.partner_id:
+            try:
+                record.write({'forma_pago': record.partner_id.forma_pago})
+                return {record.id:record.partner_id.forma_pago}
+            except:
+                _logger.info('***** Tiene forma de pago 99, así que se queda vacío *****')
+                pass
+
+    def post(self):
+        res = super(AccountPayment, self).post()
+        for rec in self:
+            rec._get_default_forma_pago()
+        return res
 
     forma_pago = fields.Selection(selection=[('01', '01 - Efectivo'), 
                    ('02', '02 - Cheque nominativo'), 
@@ -37,7 +54,7 @@ class AccountPayment(models.Model):
                    ('29', '29 - Tarjeta de servicios'), 
                    ('30', '30 - Aplicación de anticipos'),
                    ('31', '31 - Intermediario pagos'), ],
-                                string=_('Forma de pago'), related='partner_id.forma_pago'
+                                string=_('Forma de pago'), default=_get_default_forma_pago
                             )
     methodo_pago = fields.Selection(
         selection=[('PUE', _('Pago en una sola exhibición')),
