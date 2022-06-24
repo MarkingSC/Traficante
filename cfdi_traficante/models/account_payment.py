@@ -159,7 +159,7 @@ class AccountPayment(models.Model):
            if taxes_retenciones:
               for line in taxes_retenciones.values():
                   retencionp.append({'ImpuestoP': line['ImpuestoP'],
-                                    'ImporteP': self.set_decimals(line['ImporteP'],no_decimales),
+                                    'ImporteP': self.set_decimals(line['ImporteP'],6),
                                     })
                   if line['ImpuestoP'] == '002':
                        totales.update({'TotalRetencionesIVA': self.set_decimals(line['ImporteP'],2),})
@@ -170,16 +170,17 @@ class AccountPayment(models.Model):
                   self.total_pago -= round(line['ImporteP'] * float(self.tipocambiop),2)
                   #self.total_pago -= round(line['BaseP'] * float(self.tipocambiop),2) + round(line['ImporteP'] * float(self.tipocambiop),2)
               impuestosp.update({'RetencionesP': retencionp})
-        totales.update({'MontoTotalPagos': self.set_decimals(self.total_pago, 2),})
+        totales.update({'MontoTotalPagos': self.set_decimals(self.amount, 2) if self.monedap == 'MXN' else self.set_decimals(self.amount * float(self.tipocambiop), 2),})
+        #totales.update({'MontoTotalPagos': self.set_decimals(self.total_pago, 2),})
 
         pagos = []
         pagos.append({
                       'FechaPago': date_from,
                       'FormaDePagoP': self.forma_pago,
                       'MonedaP': self.monedap,
-                      'TipoCambioP': self.tipocambiop if self.monedap != 'MXN' else '1',
-                      'Monto':  self.set_decimals(self.total_pago/float(self.tipocambiop), no_decimales),
-#                      'Monto':  self.set_decimals(self.total_pago, no_decimales) if self.monedap == 'MXN' else self.set_decimals(self.total_pago/float(self.tipocambiop), no_decimales),
+                      'TipoCambioP': self.tipocambiop, # if self.monedap != 'MXN' else '1',
+                      'Monto':  self.set_decimals(self.amount, no_decimales),
+                      #'Monto':  self.set_decimals(self.total_pago/float(self.tipocambiop), no_decimales),
                       'NumOperacion': self.numero_operacion,
 
                       'RfcEmisorCtaOrd': self.rfc_banco_emisor if self.forma_pago in ['02', '03', '04', '05', '28', '29'] else '',
