@@ -80,7 +80,7 @@ class AccountPayment(models.Model):
 
         self.monedap = self.currency_id.name
         if self.currency_id.name == 'MXN':
-            self.tipocambiop = '1.0'
+            self.tipocambiop = '1'
         else:
             self.tipocambiop = self.set_decimals(1 / self.currency_id.with_context(date=self.payment_date).rate, no_decimales_tc)
 
@@ -249,3 +249,4 @@ class AccountPayment(models.Model):
         else:
             raise Warning("No tiene ninguna factura ligada al documento de pago, debe al menos tener una factura ligada. \n Desde la factura crea el pago para que se asocie la factura al pago.")
         return request_params
+        
