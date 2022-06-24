@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- opcion principal -->
+    <menuitem
+            id="mb_authorizations.app_mb_authorizations"
+            name="Authorizations"
+            sequence="300"/>
+
+    <!-- dashboard principal -->
+
+    <menuitem id="app_mb_authorizations_main" name="Main" sequence="1" parent="app_mb_authorizations" action="action_authorization_task_kanban" />
+    
+    <!-- menus de configuracion -->
+    <menuitem id="app_mb_authorizations_settings" name="Configuration" sequence="2" parent="app_mb_authorizations"/>
+
+    <menuitem id="app_mb_authorizations_settings_policies" name="Policies" sequence="1" action="action_authorization_policy_tree" parent="app_mb_authorizations_settings"/>
+    <menuitem id="app_mb_authorizations_settings_tasks" name="Tasks" sequence="1" action="action_authorization_task_tree_edit" parent="app_mb_authorizations_settings"/>
+
+</odoo>

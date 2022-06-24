@@ -1,0 +1,40 @@
+Crear las instancias de docker:
+    Mac con M1:
+        Crear la instancia de odoo:
+            docker pull odoo:13 --platform linux/amd64
+        Crear la instancia de postgres:
+            docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -e POSTGRES_DB=postgres --name db postgres:10
+        Luego se lanzan ambas imagenes, pero la de odoo con el mapeo de custom addons y el link a  la base de datos
+            docker run -v /Users/markingsc/Documents/Proyectos/Traficante/F2/Desarrollo/Repo/Traficante-v2:/mnt/extra-addons -p 8069:8069 --name odoo --link db:db -t odoo:13 
+
+
+Para entar a la consola de la instancia de Odoo desde cmd con usuario odoo:
+docker exec -it odoo bash 
+
+Entrar a la consola de la instancia de Odoo desde cml como root:
+docker exec -tiu root odoo bash
+docker exec -tiu <usuario> <instancia> bash
+
+Desde git bash se usa antes winpty  
+winpty docker exec -tiu <usuario> <instancia> bash
+
+Para iniciar una instancia de docker
+docker start odoo
+
+Actualizar una aplicación:
+odoo -p 8070 --db_host=172.17.0.2 --db_user=odoo --db_password=odoo -d traficante-dev -u partner_traficante
+odoo -p (un puerto diferente al 8069) --db_host=<host de la base> --db_user=<usuario de la base> --db_password=<pass de la base> -d <base de odoo> -u <modulo>
+
+Instalar una aplicación:
+odoo -p 8070 --db_host=172.17.0.2 --db_user=odoo --db_password=odoo -d traficante-dev -u stock_account_traficante
+
+
+Para ver los logs:
+    docker logs -f -n 1000 odoo
+
+Para conectarse a la base de postgres:
+    docker exec -it db bash 
+    su postgres
+    psql -d traficante-dev-f2e1 -U odoo
+    \c traficante-dev-f2e1
+    (a partir de aqui ya se pueden ahcer consultas)

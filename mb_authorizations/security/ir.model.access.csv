@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_authorization_policy_user,model_authorization_policy.user,model_authorization_policy,base.group_user,1,0,0,0
+access_authorization_policy_user_admin,model_authorization_policy.user.admin,model_authorization_policy,mb_authorizations.group_authorization_management,1,1,1,1
+access_authorization_task_user,model_authorization_task.user,model_authorization_task,base.group_user,1,1,0,0
+access_authorization_task_useradmin,model_authorization_task.user.admin,model_authorization_task,mb_authorizations.group_authorization_management,1,1,1,1

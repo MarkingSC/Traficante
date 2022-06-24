@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="authorization_task_kanban_view" model="ir.ui.view">
+            <field name="name">authorization.task.kanban.view</field>
+            <field name="model">authorization.task</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" create="false">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <strong>
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <label for="applicant_uid"></label>
+                                        <field name="applicant_uid"/>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <label for="assigned_uid"></label>
+                                        <field name="assigned_uid"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="hide_button_authorize" invisible="1"/>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-4 mt-2">
+                                        <button class="btn btn-primary" name="action_authorize" type="object" attrs="{'invisible': ['|',('hide_button_authorize', '=', True),('state', '!=', 'pending')]}">
+                                            <span>Authorize</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-4 mt-2">
+                                        <button class="btn btn-primary" name="action_reject" type="object" attrs="{'invisible': ['|',('hide_button_authorize', '=', True),('state', '!=', 'pending')]}">
+                                            <span>Reject</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-4 mt-2">
+                                        <field name="priority" widget="priority"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="authorization_task_tree_view" model="ir.ui.view">
+            <field name="name">authorization.task.tree.view</field>
+            <field name="model">authorization.task</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="tasks" default_order='priority' create="false">
+                    <field name='name' optional="show" string="Name"/>
+                    <field name='priority' widget="priority" optional="show" string="Priority"/>
+                    <field name="applicant_uid" optional="show" string="Applicant"/>
+                    <field name="assigned_uid" optional="show" string="Assigned"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="authorization_task_tree_view_edit" model="ir.ui.view">
+            <field name="name">authorization.task.tree.view.edit</field>
+            <field name="model">authorization.task</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="tasks" default_order='priority'>
+                    <field name='name' optional="show" string="Name"/>
+                    <field name='priority' widget="priority" optional="show" string="Priority"/>
+                    <field name="applicant_uid" optional="show" string="Applicant"/>
+                    <field name="assigned_uid" optional="show" string="Assigned"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_authorization_task_form" model="ir.ui.view">
+            <field name="name">authorization.task.form</field>
+            <field name="model">authorization.task</field>
+            <field name="arch" type="xml">
+                <form string="Authorization task">
+                    <header>
+                        <field name="hide_button_authorize" invisible="1"/>
+                        <button name="action_send_email" class="oe_highlight" string="Ask for authorization" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_authorize" class="oe_highlight" string="Authorize" type="object" attrs="{'invisible': ['|',('hide_button_authorize', '=', True),('state', '!=', 'pending')]}"/>
+                        <button name="action_reject" class="oe_highlight" string="Reject" type="object" attrs="{'invisible': ['|',('hide_button_authorize', '=', True),('state', '!=', 'pending')]}"/>
+                        <field name="state" widget="statusbar" options="{'clickable': '0', 'fold_field': 'fold'}"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Rejected" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'rejected')]}"/>
+                        <widget name="web_ribbon" title="Authorized" attrs="{'invisible': [('state', '!=', 'authorized')]}" />
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="priority" widget="priority"/>
+                            <field name="reason" string="Reason" required="1"/>
+                            <field name="applicant_uid"/>
+                            <field name="assigned_uid"/>
+                        </group>
+                        <notebook>
+                            <page name="technical" string="Technical" groups="base.group_no_one">
+                                <group>
+                                    <field name="model_id" string="Model"/>
+                                    <field name="res_id" string="Record"/>
+                                    <field name="policy_id" string="Policy"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_authorization_task_kanban" model="ir.actions.act_window">
+            <field name="name">Authorization tasks dashboard</field>
+            <field name="res_model">authorization.task</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_pending': 1, 'group_by': 'state'}</field>
+            <field name="view_id" ref="authorization_task_kanban_view"/>
+        </record>
+
+        <record id="action_authorization_task_tree_edit" model="ir.actions.act_window">
+            <field name="name">Authorization tasks</field>
+            <field name="res_model">authorization.task</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="authorization_task_tree_view_edit"/>
+        </record>
+
+        <record id="view_authorization_task_filter" model="ir.ui.view">
+            <field name="name">view.authorization.task.filter</field>
+            <field name="model">authorization.task</field>
+            <field name="arch" type="xml">
+                <search string="Search tasks">
+                    <field name="name" string="Name" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="applicant_uid" string="Applicant" filter_domain="[('applicant_uid.name', 'ilike', self)]"/>
+                    <field name="assigned_uid" string="Authorizer" filter_domain="[('assigned_uid.name', 'ilike', self)]"/>
+                    <field name="model_id" string="Object" filter_domain="[('model_id.name', 'ilike', self)]"/>
+                    <separator />
+                    <filter string="Assigned to me" name="assigned_to_me" domain="[('assigned_uid', '=', uid)]" help="Tasks that are assigned to me"/>
+                    <filter string="My requests" name="requested_by_me" domain="[('applicant_uid', '=', uid)]" help="Tasks that I requested"/>
+                    <separator />
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                    <filter string="Authorized" name="authorized" domain="[('state', '=', 'authorized')]"/>
+                    <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" name="state" context="{'group_by':'state'}"/>
+                        <filter string="Assigned" name="assigned_uid" context="{'group_by':'assigned_uid'}"/>
+                        <filter string="Applicant" name="applicant_uid" context="{'group_by':'applicant_uid'}"/>
+                        <filter string="Model" name="model" context="{'group_by':'model_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_authorization_task_modal_form" model="ir.actions.act_window">
+            <field name="name">Ask for authorization</field>
+            <field name="res_model">authorization.task</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_authorization_task_form"/>
+            <field name="context">{}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>
+
+
