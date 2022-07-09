@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0-20220609\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-24 13:51+0000\n"
-"PO-Revision-Date: 2022-06-24 08:53-0500\n"
+"POT-Creation-Date: 2022-07-07 01:22+0000\n"
+"PO-Revision-Date: 2022-07-06 20:27-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -102,6 +102,18 @@ msgid "Action Needed"
 msgstr "Acciones necesarias"
 
 #. module: mb_authorizations
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view_edit
+msgid "Action date"
+msgstr "Fecha de acción"
+
+#. module: mb_authorizations
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view_edit
+msgid "Action repsonsible"
+msgstr "Responsable"
+
+#. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__activity_ids
 msgid "Activities"
 msgstr "Actividades"
@@ -115,6 +127,11 @@ msgstr "Decoración de Actividad de Excepción"
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__activity_state
 msgid "Activity State"
 msgstr "Estado de la actividad"
+
+#. module: mb_authorizations
+#: model:ir.model.fields,field_description:mb_authorizations.field_authorization_policy__additional_viewer_uids
+msgid "Additional viewers"
+msgstr "Visores adicionales"
 
 #. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_policy__after_condition
@@ -137,7 +154,14 @@ msgstr "Usuario solicitante"
 #. module: mb_authorizations
 #: model:ir.actions.act_window,name:mb_authorizations.action_authorization_task_modal_form
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_form
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_wizard_form
 msgid "Ask for authorization"
+msgstr "Solicitar autorización"
+
+#. module: mb_authorizations
+#: code:addons/mb_authorizations/models/authorization_policy.py:0
+#, python-format
+msgid "Ask for changes"
 msgstr "Solicitar autorización"
 
 #. module: mb_authorizations
@@ -145,7 +169,7 @@ msgstr "Solicitar autorización"
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view_edit
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_filter
 msgid "Assigned"
-msgstr "Asignado"
+msgstr "Por autorizar"
 
 #. module: mb_authorizations
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_filter
@@ -155,12 +179,17 @@ msgstr "Asignadas a mí"
 #. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__assigned_uid
 msgid "Assigned user"
-msgstr "Usuario asignado"
+msgstr "Por autorizar"
 
 #. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__message_attachment_count
 msgid "Attachment Count"
 msgstr "Conteo de archivos adjuntos"
+
+#. module: mb_authorizations
+#: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__authorization_date
+msgid "Authorization Date"
+msgstr "Fecha de acción"
 
 #. module: mb_authorizations
 #: model:ir.actions.act_window,name:mb_authorizations.action_authorization_policy_tree
@@ -175,6 +204,7 @@ msgstr "Política de autorización"
 
 #. module: mb_authorizations
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_form
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_wizard_form
 msgid "Authorization task"
 msgstr "Solicitud de autorización"
 
@@ -221,6 +251,7 @@ msgid "Authorized"
 msgstr "Autorizada"
 
 #. module: mb_authorizations
+#: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__authorizer_uid
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_filter
 msgid "Authorizer"
 msgstr "Autorizador"
@@ -285,7 +316,7 @@ msgstr "Nombre mostrado"
 #: model:ir.model.fields.selection,name:mb_authorizations.selection__authorization_task__state__draft
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_filter
 msgid "Draft"
-msgstr ""
+msgstr "Borrador"
 
 #. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__message_follower_ids
@@ -311,6 +342,11 @@ msgstr "Agrupar por"
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__hide_button_authorize
 msgid "Hide Button Authorize"
 msgstr "Ocultar botón de autorización"
+
+#. module: mb_authorizations
+#: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__hide_task
+msgid "Hide Task"
+msgstr "Ocultar tarea"
 
 #. module: mb_authorizations
 #: model:ir.model.fields.selection,name:mb_authorizations.selection__authorization_policy__default_priority__2
@@ -523,6 +559,7 @@ msgstr "Prioridad"
 #. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__reason
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_form
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_wizard_form
 msgid "Reason"
 msgstr "Razón"
 
@@ -550,6 +587,13 @@ msgid "Rejected"
 msgstr "Rechazada"
 
 #. module: mb_authorizations
+#: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__request_date
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view_edit
+msgid "Request Date"
+msgstr "Fecha de solicitud"
+
+#. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario responsable"
@@ -568,14 +612,28 @@ msgstr "Mostrar formulario"
 #: code:addons/mb_authorizations/models/base_model.py:0
 #, python-format
 msgid ""
-"Some changes require an authorization to continue. Please follow %s to fill "
-"the form."
+"Some changes need to be authorized, but there is an existing authorization "
+"proceess for this record. Please check authorizations to send."
 msgstr ""
-"Algunos cambios requieren una autorización para continuar. Ingrese a %s "
-"para completar el formulario."
+"Algunos cambios necesitan ser autorizados, pero ya existe un proceso de "
+"autorización para este registro. Por favor verifique las autorizaciones por "
+"enviar."
+
+#. module: mb_authorizations
+#: code:addons/mb_authorizations/models/base_model.py:0
+#, python-format
+msgid ""
+"Some changes require an authorization to continue. Please clic Actions/Ask "
+"for changes to specify a reason and continue."
+msgstr ""
+"Algunos cambios requieren de autorización para continuar. Haga clic en "
+"Acción / Solicitar autorización para especificar una razón del cambio y "
+"continuar."
 
 #. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__state
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.authorization_task_tree_view_edit
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_filter
 msgid "State"
 msgstr "Estatus"
@@ -617,6 +675,12 @@ msgstr "Asignadas a mí"
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_form
 msgid "Technical"
 msgstr "Técnico"
+
+#. module: mb_authorizations
+#: code:addons/mb_authorizations/models/base_model.py:0
+#, python-format
+msgid "There is no authorization pending."
+msgstr "No hay autorizaciones por enviar"
 
 #. module: mb_authorizations
 #: model:ir.model.fields,help:mb_authorizations.field_authorization_task__activity_exception_decoration

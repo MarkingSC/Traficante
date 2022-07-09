@@ -5,6 +5,10 @@
             <field name="name">account.payment.search.traficante</field>
             <field name="model">account.payment</field>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="payment_date" string="From" filter_domain="[('payment_date', '&gt;=', self)]"/>
+                    <field name="payment_date" string="To" filter_domain="[('payment_date', '&lt;=', self)]"/>
+                </xpath>
                 <xpath expr="//filter[@name='transfers_filter']" position="after">
                     <filter
                         string="En efectivo de clientes esta semana"

@@ -35,6 +35,23 @@ Para ver los logs:
 Para conectarse a la base de postgres:
     docker exec -it db bash 
     su postgres
-    psql -d traficante-dev-f2e1 -U odoo
+        
     \c traficante-dev-f2e1
     (a partir de aqui ya se pueden ahcer consultas)
+
+
+Para obtener un backup de la base desde cli:
+    Acceder al servidor con el usuario postgres
+    Entrar a la carpeta /tmp
+    pg_dump -E UTF-8 -p 5432 -F p -b -f backup.sql traficante-prod-f2e1
+    gzip backup.sql
+
+Luego se puede descargar con 
+    scp -i odoo-prod.pem ubuntu@44.225.202.30:/tmp/backup.sql.gz /Users/markingsc/Documents
+
+
+Ver el espacio que ocupan los archivos en el directorio actual:
+du - sh *
+
+Ver el espacio que ocupan los archivos en root:
+df -H

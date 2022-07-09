@@ -65,6 +65,10 @@
                     <field name='priority' widget="priority" optional="show" string="Priority"/>
                     <field name="applicant_uid" optional="show" string="Applicant"/>
                     <field name="assigned_uid" optional="show" string="Assigned"/>
+                    <field name="request_date" optional="show" string="Request Date"/>
+                    <field name="state" optional="show" string="State"/>
+                    <field name="authorization_date" optional="show" string="Action date"/>
+                    <field name="authorizer_uid" optional="show" string="Action repsonsible"/>
                 </tree>
             </field>
         </record>
@@ -79,6 +83,10 @@
                     <field name='priority' widget="priority" optional="show" string="Priority"/>
                     <field name="applicant_uid" optional="show" string="Applicant"/>
                     <field name="assigned_uid" optional="show" string="Assigned"/>
+                    <field name="request_date" optional="show" string="Request Date"/>
+                    <field name="state" optional="show" string="State"/>
+                    <field name="authorization_date" optional="show" string="Action date"/>
+                    <field name="authorizer_uid" optional="show" string="Action repsonsible"/>
                 </tree>
             </field>
         </record>
@@ -119,6 +127,38 @@
                                 </group>
                             </page>
                         </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_authorization_task_wizard_form" model="ir.ui.view">
+            <field name="name">authorization.task.wizard.form</field>
+            <field name="model">authorization.task</field>
+            <field name="arch" type="xml">
+                <form string="Authorization task">
+                    <header>
+                        <field name="hide_button_authorize" invisible="1"/>
+                        <field name="state" invisible="1"/>
+                        <button name="action_send_email" class="oe_highlight" string="Ask for authorization" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="priority" widget="priority"/>
+                            <field name="reason" string="Reason" required="1"/>
+                            <field name="applicant_uid" readonly="1"/>
+                            <field name="assigned_uid" readonly="1"/>
+                        </group>
                     </sheet>
                 </form>
             </field>

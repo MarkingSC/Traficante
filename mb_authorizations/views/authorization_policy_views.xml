@@ -37,6 +37,7 @@
                             <field name="default_priority" widget="priority" string="Default priority"/>
                             <field name="authorizer_uid" string="Default authorizer"/>
                             <field name="notified_uids" string="Notified authorizers"/>
+                            <field name="additional_viewer_uids" string="Notified authorizers"/>
                         </group>
                     </sheet>
                 </form>

@@ -1,3 +1,5 @@
+from asyncio import Task
+from datetime import datetime
 from email.policy import default
 import logging
 from odoo.http import request
@@ -14,20 +16,19 @@ class AuthorizationTask(models.Model):
 
     @api.depends('policy_id','res_id','model_id')
     def _get_default_name(self):
-        _logger.info('***** Entra a _get_default_name *****')
-        record = self
+        for record in self:
+            _logger.info('***** Entra a _get_default_name *****')
+            _logger.info('***** record.res_id: ' + str(record.res_id))
+            _logger.info('***** record.policy_id: ' + str(record.policy_id))
+            _logger.info('***** record.model_id: ' + str(record.model_id))
 
-        _logger.info('***** record.res_id: ' + str(record.res_id))
-        _logger.info('***** record.policy_id: ' + str(record.policy_id))
-        _logger.info('***** record.model_id: ' + str(record.model_id))
-
-        if record.res_id and record.policy_id and record.model_id:
-            _logger.info('***** record.model_id: ' + str(record.model_id.model))
-            rel_record = self.env[record.model_id.model].search([('id', '=', record.res_id)], limit = 1)
-            _logger.info('***** rel_record: ' + str(rel_record) + str(rel_record.name))
-            new_name = record.policy_id.default_description + ' ' + rel_record.name
-            record.write({'name': new_name})
-            return {record.id:new_name}
+            if record.res_id and record.policy_id and record.model_id:
+                _logger.info('***** record.model_id: ' + str(record.model_id.model))
+                rel_record = self.env[record.model_id.model].search([('id', '=', record.res_id)], limit = 1)
+                _logger.info('***** rel_record: ' + str(rel_record) + str(rel_record.name))
+                new_name = record.policy_id.default_description + ' ' + rel_record.name
+                record.write({'name': new_name})
+                #return {record.id:new_name}
 
     @api.depends('policy_id')
     def _get_default_priority(self):
@@ -88,15 +89,6 @@ class AuthorizationTask(models.Model):
 
             return action
 
-            context ={
-                    'model_id': self.authorization_policy_id.model_id,
-                    'res_id': self.ids,
-                    'policy_id': self.authorization_policy_id.id,
-                    'assigned_uid': self.authorization_policy_id.authorizer_uid,
-                }
-            #return self.env.ref('mb_authorizations.action_authorization_task_modal_form').read()[0]  
-            #.with_context(context)
-
     def _get_task_url(self):
         _logger.info('***** Entra a _get_task_url *****')
         _logger.info('***** SELF: ' + str(self))
@@ -135,7 +127,12 @@ class AuthorizationTask(models.Model):
     new_vals = fields.Text(string='New values after authorize.')
 
     hide_button_authorize = fields.Boolean(compute="_hide_button_authorize", store=False)
+    hide_task = fields.Boolean(compute="_hide_task", store=True)
     show_form = fields.Boolean()
+
+    request_date = fields.Date()
+    authorization_date = fields.Date()
+    authorizer_uid = fields.Many2one('res.users', string='Authorizer')
 
     @api.model
     def create(self, vals):
@@ -149,10 +146,27 @@ class AuthorizationTask(models.Model):
         return res
         
     def _hide_button_authorize(self):
-        if self.env.uid == self.policy_id.authorizer_uid.id or self.env.uid in self.policy_id.notified_uids.ids or self.env.user.has_group('base.group_no_one'):
-            self.hide_button_authorize = False
-        else:
-            self.hide_button_authorize = True
+        _logger.info('***** Entra a _hide_button_authorize *****')
+        for task in self:
+            if self.env.uid == task.policy_id.authorizer_uid.id or self.env.uid in task.policy_id.notified_uids.ids:
+                result = False
+            else:
+                result = True
+            _logger.info('***** result: ' + str(result))
+            task.sudo().hide_button_authorize = result
+            task.sudo()._hide_task()
+
+    def _hide_task(self):
+        _logger.info('***** Entra a _hide_task *****')
+        for task in self:
+            _logger.info('***** task: ' + str(task))
+            record = self.env[task.model_id.model].search([('id', '=', task.res_id)])
+            if (task.model_id.model == 'res.partner' and (record.user_id == self.env.user or not record.user_id)) or task.model_id.model != 'res.partner':
+                result = False
+            else:
+                result = True
+            _logger.info('***** result: ' + str(result))
+            task.sudo().hide_task = result
 
     def action_send_email(self):
         _logger.info('***** Entra a action_send_email *****')
@@ -163,17 +177,8 @@ class AuthorizationTask(models.Model):
             # sending mail in sudo was meant for it being sent from superuser
             self = self.with_user(SUPERUSER_ID)
         template_id = self.env['ir.model.data'].xmlid_to_res_id('mb_authorizations.authorization_assigned_notification_template', raise_if_not_found=False)
-        _logger.info('***** Template del correo: ' + str(template_id))
         if template_id:
-            _logger.info('***** PRIMER IF *****')
-            _logger.info('***** SELF: ' + str(self))
             for task in self:
-                _logger.info('***** object.applicant_uid.login: ' + str(task.applicant_uid.login))
-                _logger.info('***** object.assigned_uid.login: ' + str(task.assigned_uid.login))
-                _logger.info('***** object.notified_emails: ' + str(task.notified_emails))
-                _logger.info('***** object.applicant_uid.name: ' + str(task.applicant_uid.name))
-                _logger.info('***** object.reason: ' + str(task.reason))
-
                 if not task.reason:
                     raise UserError(_('Please specify a reason to authorize.'))
 
@@ -182,18 +187,25 @@ class AuthorizationTask(models.Model):
 
                 task.with_context(force_send=True).message_post_with_template(template_id, composition_mode='comment', email_layout_xmlid="mail.mail_notification_light", message_type='notification')
     
-                task.write({'state': 'pending'})
+                task.write({'state': 'pending', 'request_date': datetime.today()})
+
+                # Desasocia la autorozación del registro al que pertenece para que en dado caso se pueda crear otra
+                related_record = self.env[task.model_id.model].search([('id', '=', task.res_id)])
+                related_record.x_current_authorization_id = False
 
     def action_authorize(self):
         _logger.info('***** Entra a action_authorize *****')
         for task in self:
-            task.write({'state': 'authorized'})
             _logger.info('***** Se autorizó, así que se actualizarán los datos: ' + str(task.new_vals))
             record = self.env[task.model_id.model].search([('id', '=', task.res_id)])
             record.write(eval(task.new_vals))
+            task.write({'state': 'authorized','authorization_date': datetime.today(), 'authorizer_uid': self.env.uid})
 
+            task.message_post(body=_('Authorized by ') + str(task.authorizer_uid.name) + '.')
 
     def action_reject(self):
         _logger.info('***** Entra a action_reject *****')
         for task in self:
-            task.write({'state': 'rejected'})
+            task.write({'state': 'rejected', 'authorization_date': datetime.today(), 'authorizer_uid': self.env.uid})
+
+            task.message_post(body=_('Rejected by ') + str(task.authorizer_uid.name) + '.')

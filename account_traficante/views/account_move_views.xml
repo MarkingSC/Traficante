@@ -30,8 +30,9 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_account_invoice_filter"></field>
             <field name="arch" type="xml">
-                <xpath expr="//filter[@name='unpaid']" position="attributes">
-                    <attribute name="string">Unpaid</attribute>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="invoice_date" string="From" filter_domain="[('invoice_date', '&gt;=', self)]"/>
+                    <field name="invoice_date" string="To" filter_domain="[('invoice_date', '&lt;=', self)]"/>
                 </xpath>
             </field>
         </record>
