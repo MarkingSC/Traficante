@@ -15,7 +15,7 @@
                         Hello,
                         <br/>
                         <br/>
-                        The user ${object.applicant_uid.name} have tried to ${object.name}. But it needs your authorization to continue with the process.
+                        The user ${object.applicant_uid.name} have tried to ${object.name}. But it needs authorization to continue with the process.
                     </p>
                     <p>
                         Te reason is:
@@ -33,6 +33,72 @@
                     <br/>
                     % if object.applicant_uid and object.applicant_uid.signature:
                         ${object.applicant_uid.signature | safe}
+                    % endif
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+
+        <record id="authorization_approved_notification_template" model="mail.template">
+            <field name="name">Authorization approved notification</field>
+            <field name="model_id" ref="mb_authorizations.model_authorization_task"/>
+            <field name="subject">Authorization approved: ${object.name}</field>
+            <field name="email_from">${object.authorizer_uid.login}</field>
+            <field name="email_to">${object.applicant_uid.login}</field>
+            <field name="email_cc">${object.notified_emails}</field>
+            <field name="lang">${object.authorizer_uid.lang}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                        Hello, ${object.applicant_uid.name}
+                        <br/>
+                        <br/>
+                        ${object.authorizer_uid.name} has authorized your request: ${object.name}.
+                    </p>
+                    <div style="text-align: center; margin: 16px 0px 16px 0px;">
+                        <a href="${object.task_url}" style="background-color:#875A7B;padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            You can review it here
+                        </a>
+                    </div>
+                    <br/>
+                    Greetings.
+                    <br/>
+                    % if object.authorizer_uid and object.authorizer_uid.signature:
+                        ${object.authorizer_uid.signature | safe}
+                    % endif
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+
+        <record id="authorization_rejected_notification_template" model="mail.template">
+            <field name="name">Authorization rejected notification</field>
+            <field name="model_id" ref="mb_authorizations.model_authorization_task"/>
+            <field name="subject">Authorization rejected: ${object.name}</field>
+            <field name="email_from">${object.authorizer_uid.login}</field>
+            <field name="email_to">${object.applicant_uid.login}</field>
+            <field name="email_cc">${object.notified_emails}</field>
+            <field name="lang">${object.authorizer_uid.lang}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                        Hello, ${object.applicant_uid.name}
+                        <br/>
+                        <br/>
+                        ${object.authorizer_uid.name} has rejected your request: ${object.name}.
+                    </p>
+                    <div style="text-align: center; margin: 16px 0px 16px 0px;">
+                        <a href="${object.task_url}" style="background-color:#875A7B;padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            You can review it here
+                        </a>
+                    </div>
+                    <br/>
+                    Greetings.
+                    <br/>
+                    % if object.authorizer_uid and object.authorizer_uid.signature:
+                        ${object.authorizer_uid.signature | safe}
                     % endif
                 </div>
             </field>

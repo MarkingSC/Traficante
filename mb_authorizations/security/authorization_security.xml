@@ -13,14 +13,14 @@
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
             <field name="domain_force">
             [
-                '|'
+                '|',
                     '|',
                         '|',
                             '|',
                                 ('policy_id.notified_uids', 'in', user.id),
                                 ('assigned_uid', '=', user.id),
-                        ('applicant_uid','=',user.id),
-                        ('applicant_uid','=',False),
+                            ('applicant_uid', '=', user.id),
+                        ('applicant_uid', '=', False),
                     ('hide_task', '=', False)
                     ]</field>
         </record>

@@ -25,6 +25,8 @@ class AuthorizationTask(models.Model):
             if record.res_id and record.policy_id and record.model_id:
                 _logger.info('***** record.model_id: ' + str(record.model_id.model))
                 rel_record = self.env[record.model_id.model].search([('id', '=', record.res_id)], limit = 1)
+                if not rel_record:
+                    rel_record = self.env[record.model_id.model].search([('id', '=', record.res_id), ('active', '=', False)], limit = 1)
                 _logger.info('***** rel_record: ' + str(rel_record) + str(rel_record.name))
                 new_name = record.policy_id.default_description + ' ' + rel_record.name
                 record.write({'name': new_name})
@@ -42,20 +44,38 @@ class AuthorizationTask(models.Model):
             return {record.id:response}
 
     @api.depends('policy_id')
-    def _get_notified_emails(self):
+    def _get_notified_emails(self, type=''):
         _logger.info('***** Entra a _get_notified_emails *****')
         record = self
         if record.policy_id:
             _logger.info('***** record.policy_id: ' + str(record.policy_id))
-            emails_list = ','.join(record.policy_id.notified_uids.mapped('login'))
-            partners_list = record.policy_id.notified_uids.mapped('partner_id')
-            #_logger.info('***** partners_list: ' + str(partners_list.ids))
-            #partners = self.env['res.partner'].search([('id', 'in', partners_list.ids)])
+
+            # Si el llamado es de una acción entonces en lugar de notificar al autorizador se notifica al solicitante
+            authorizer_or_applicant = ''
+            if type == 'action':
+                authorizer_or_applicant = record.policy_id.applicant_uid.mapped('login')
+            else:
+                authorizer_or_applicant = record.policy_id.authorizers_uids.mapped('login')
+            # Se obtienen los correos de los notificados
+            notified = record.policy_id.notified_uids.mapped('login')
+            # Se obtienen los correos separados por coma
+            emails_list = ','.join(authorizer_or_applicant + notified)
+
+            # Se obtienen los registros de partner de los notificados
+            notified_partners = record.policy_id.notified_uids.mapped('partner_id')
+            # Se obtienen los registros de partner de los autorizadores
+            authorizers_partners = ''
+            partners_list = ''
+            if type != 'action':
+                authorizers_partners = record.policy_id.authorizers_uids.mapped('partner_id')
+                partners_list = authorizers_partners + notified_partners
+            else:
+                partners_list = notified_partners
+
             _logger.info('***** emails_list: ' + str(emails_list))
             record.write({
                 'notified_emails': emails_list,
                 'notified_partner_ids': partners_list})
-            #return {record.id: emails_list}
 
     @api.depends('show_form')
     def _get_authorization_form(self):
@@ -148,7 +168,7 @@ class AuthorizationTask(models.Model):
     def _hide_button_authorize(self):
         _logger.info('***** Entra a _hide_button_authorize *****')
         for task in self:
-            if self.env.uid == task.policy_id.authorizer_uid.id or self.env.uid in task.policy_id.notified_uids.ids:
+            if self.env.uid == task.policy_id.authorizer_uid.id or self.env.uid in task.policy_id.authorizers_uids.ids:
                 result = False
             else:
                 result = True
@@ -184,8 +204,9 @@ class AuthorizationTask(models.Model):
 
                 # Para obtener la url de la tarea
                 task._get_task_url()
+                task._get_notified_emails()
 
-                task.with_context(force_send=True).message_post_with_template(template_id, composition_mode='comment', email_layout_xmlid="mail.mail_notification_light", message_type='notification')
+                task.sudo().with_context(force_send=True).message_post_with_template(template_id, composition_mode='comment', email_layout_xmlid="mail.mail_notification_light", message_type='notification')
     
                 task.write({'state': 'pending', 'request_date': datetime.today()})
 
@@ -198,14 +219,24 @@ class AuthorizationTask(models.Model):
         for task in self:
             _logger.info('***** Se autorizó, así que se actualizarán los datos: ' + str(task.new_vals))
             record = self.env[task.model_id.model].search([('id', '=', task.res_id)])
+            if not record:
+                record = self.env[task.model_id.model].search([('id', '=', task.res_id), ('active', '=', False)])
             record.write(eval(task.new_vals))
             task.write({'state': 'authorized','authorization_date': datetime.today(), 'authorizer_uid': self.env.uid})
 
-            task.message_post(body=_('Authorized by ') + str(task.authorizer_uid.name) + '.')
+            task._get_notified_emails(type='action')
+
+            template_id = self.env['ir.model.data'].xmlid_to_res_id('mb_authorizations.authorization_approved_notification_template', raise_if_not_found=False)
+            task._get_task_url()
+            task.sudo().with_context(force_send=True).message_post_with_template(template_id, composition_mode='comment', email_layout_xmlid="mail.mail_notification_light", message_type='notification')
 
     def action_reject(self):
         _logger.info('***** Entra a action_reject *****')
         for task in self:
             task.write({'state': 'rejected', 'authorization_date': datetime.today(), 'authorizer_uid': self.env.uid})
 
-            task.message_post(body=_('Rejected by ') + str(task.authorizer_uid.name) + '.')
+            task._get_notified_emails(type='action')
+
+            template_id = self.env['ir.model.data'].xmlid_to_res_id('mb_authorizations.authorization_rejected_notification_template', raise_if_not_found=False)
+            task._get_task_url()
+            task.sudo().with_context(force_send=True).message_post_with_template(template_id, composition_mode='comment', email_layout_xmlid="mail.mail_notification_light", message_type='notification')

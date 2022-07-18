@@ -20,8 +20,9 @@ class AuthorizationPolicy(models.Model):
         ], string='Priority', index=True, default="0")
 
     authorizer_uid = fields.Many2one('res.users', string='Authorizator user', required=True)
-    notified_uids = fields.Many2many('res.users', string='Recipients', required=True)
-    additional_viewer_uids = fields.Many2many('res.users', string='Additional viewers', required=True, relation='authorization_policy_viewers_rel')
+    authorizers_uids = fields.Many2many('res.users', string='Additional authorizers', relation='authorization_policy_authorizers_rel')
+    notified_uids = fields.Many2many('res.users', string='Notified users')
+    additional_viewer_uids = fields.Many2many('res.users', string='Additional viewers', relation='authorization_policy_viewers_rel')
 
 
     @api.constrains('model_id')
@@ -43,7 +44,7 @@ class AuthorizationPolicy(models.Model):
 
                     _logger.info('***** CREÓ EL CAMPO *****')
 
-                prev_action = self.env['ir.actions.server'].search([('model_name', '=', 'authorization.task'), ('model_id', '=', policy.model_id.id)], limit = 1)
+                prev_action = self.env['ir.actions.server'].search([('code', '=', 'action = records._action_show_auth_form()'), ('model_id', '=', policy.model_id.id)], limit = 1)
                 
                 _logger.info('***** prev_action:' + str(prev_action))
 
@@ -63,4 +64,6 @@ class AuthorizationPolicy(models.Model):
                     })
                     
                     _logger.info('***** CREÓ LA ACCION *****')
+
+                    
 

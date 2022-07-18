@@ -36,8 +36,9 @@
                             <field name="default_description" string="Default description"/>
                             <field name="default_priority" widget="priority" string="Default priority"/>
                             <field name="authorizer_uid" string="Default authorizer"/>
-                            <field name="notified_uids" string="Notified authorizers"/>
-                            <field name="additional_viewer_uids" string="Notified authorizers"/>
+                            <field name="authorizers_uids" string="Additional authorizers" widget="many2many_tags"/>
+                            <field name="notified_uids" string="Other notified" widget="many2many_tags"/>
+                            <field name="additional_viewer_uids" string="Additional viewers" widget="many2many_tags"/>
                         </group>
                     </sheet>
                 </form>
@@ -53,5 +54,3 @@
         </record>
     </data>
 </odoo>
-
-

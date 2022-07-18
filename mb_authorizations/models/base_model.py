@@ -47,9 +47,17 @@ class BaseModelExtend(models.AbstractModel):
         # Si el modelo del registro modificado tiene una política entonces lo somete, si no no
         if self._name in all_policies_models:
 
+            _logger.info('***** self: ' + str(self))
+            _logger.info('***** self.name: ' + str(self.name))
+            active_ids = self._context.get('active_ids') or self._context.get('active_id')
+            _logger.info('***** active_ids: ' + str(active_ids))
+
+
             for policy in all_policies:
+                _logger.info('***** iterando política: ' + str(policy.name))
                 matches_condition_1 = False
                 matches_condition_1 = self.filtered(lambda record: eval(policy.before_condition))
+                _logger.info('***** hace match con la condición antes?: ' + str(matches_condition_1))
                 if matches_condition_1:
                     matching_policies_1.append(policy)
 
@@ -57,14 +65,18 @@ class BaseModelExtend(models.AbstractModel):
 
             before_values = self._get_before_values(vals)
 
-            _logger.info('***** self.customer_type: ' + str(self.customer_type))
+            _logger.info('***** self.active: ' + str(self.active))
+            _logger.info('***** vals: ' + str(vals))
             res = super(BaseModelExtend, self).write(vals)
-            _logger.info('***** self.customer_type: ' + str(self.customer_type))
+            _logger.info('***** self.active: ' + str(self.active))
+            _logger.info('***** res: ' + str(res))
 
             #evaluar condicion despues
             for policy in all_policies:
+                _logger.info('***** iterando política: ' + str(policy.name))
                 matches_condition_2 = False
                 matches_condition_2 = self.filtered(lambda record: eval(policy.after_condition))
+                _logger.info('***** hace match con la condición despues?: ' + str(matches_condition_2))
                 if matches_condition_2:
                     matching_policies_2.append(policy)
 
@@ -86,7 +98,7 @@ class BaseModelExtend(models.AbstractModel):
                     _logger.info('***** policy.authorizer_uid.id: ' + str(policy.authorizer_uid.id))
 
                     # Aqui tiene que generar la creación de una tarea y regresar el registro a los valores anteriores.
-                    if self.env.user.id != policy.authorizer_uid.id and self.env.user.id not in policy.notified_uids.mapped('id'):
+                    if self.env.user.id != policy.authorizer_uid.id and self.env.user.id not in policy.authorizers_uids.mapped('id'):
                         _logger.info('***** no fue un cambio realizado por un autorizador, entonces crea una tarea **** ')
 
                         # obtiene una acutorización ya existente
