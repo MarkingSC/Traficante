@@ -53,7 +53,7 @@ class AuthorizationTask(models.Model):
             # Si el llamado es de una acción entonces en lugar de notificar al autorizador se notifica al solicitante
             authorizer_or_applicant = ''
             if type == 'action':
-                authorizer_or_applicant = record.policy_id.applicant_uid.mapped('login')
+                authorizer_or_applicant = record.applicant_uid.mapped('login')
             else:
                 authorizer_or_applicant = record.policy_id.authorizers_uids.mapped('login')
             # Se obtienen los correos de los notificados
