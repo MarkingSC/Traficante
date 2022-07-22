@@ -95,13 +95,13 @@
             <field name="name">authorization.task.form</field>
             <field name="model">authorization.task</field>
             <field name="arch" type="xml">
-                <form string="Authorization task">
+                <form string="Authorization task" duplicate="0">
                     <header>
                         <field name="hide_button_authorize" invisible="1"/>
                         <button name="action_send_email" class="oe_highlight" string="Ask for authorization" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                         <button name="action_authorize" class="oe_highlight" string="Authorize" type="object" attrs="{'invisible': ['|',('hide_button_authorize', '=', True),('state', '!=', 'pending')]}"/>
                         <button name="action_reject" class="oe_highlight" string="Reject" type="object" attrs="{'invisible': ['|',('hide_button_authorize', '=', True),('state', '!=', 'pending')]}"/>
-                        <field name="state" widget="statusbar" options="{'clickable': '0', 'fold_field': 'fold'}"/>
+                        <field name="state" widget="statusbar" options="{'clickable': False, 'fold_field': 'fold'}"/>
                     </header>
                     <sheet>
                         <widget name="web_ribbon" title="Rejected" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'rejected')]}"/>
@@ -221,5 +221,3 @@
 
     </data>
 </odoo>
-
-
