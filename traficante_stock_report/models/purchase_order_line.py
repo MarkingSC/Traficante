@@ -46,3 +46,17 @@ class PurchaseOrderLine(models.Model):
 
         _logger.info('**** fin write en PurchaseOrderLine*****')
         return res
+
+    def get_cost_from_product(self):
+        _logger.info('**** Entra a get_cost_from_product de purchase_order_line *****')
+
+        for record in self:
+
+            _logger.info('**** self.product_id: ' + str(record.product_id))
+            _logger.info('**** self.product_id.product_cost: ' + str(record.product_id.product_cost))
+
+            record.product_cost = record.product_id.product_cost
+            record.list_price = record.product_id.list_price
+            record.standard_price = record.product_id.standard_price
+
+        _logger.info('**** Termina get_cost_from_product de purchase_order_line *****')

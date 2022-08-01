@@ -98,7 +98,11 @@ class productTemplate(models.Model):
             latest_purchase_line = self.env['purchase.order.line'].search([('product_id', '=', product.id)], limit = 1, order='date_planned desc')
             _logger.info('**** latest_purchase_line: ' + str(latest_purchase_line.order_id.name))
             if latest_purchase_line:
-                product.latest_cost = latest_purchase_line.product_cost
+                if latest_purchase_line.product_cost:
+                    product.latest_cost = latest_purchase_line.product_cost
+                else
+                    latest_purchase_line.get_cost_from_product()
+                    product.latest_cost = latest_purchase_line.product_cost
             else:
                 product.latest_cost = 0
 
