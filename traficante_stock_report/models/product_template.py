@@ -100,7 +100,7 @@ class productTemplate(models.Model):
             if latest_purchase_line:
                 if latest_purchase_line.product_cost:
                     product.latest_cost = latest_purchase_line.product_cost
-                else
+                else:
                     latest_purchase_line.get_cost_from_product()
                     product.latest_cost = latest_purchase_line.product_cost
             else:
