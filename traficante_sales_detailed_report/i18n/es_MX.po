@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20211018\n"
+"Project-Id-Version: Odoo Server 13.0-20220620\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-02 18:29+0000\n"
-"PO-Revision-Date: 2022-05-02 13:40-0500\n"
+"POT-Creation-Date: 2022-08-01 13:19+0000\n"
+"PO-Revision-Date: 2022-08-01 08:22-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__business_name
@@ -61,12 +61,12 @@ msgstr "Cancelar"
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__solicitud_cancelar
 msgid "Cancelación en proceso"
-msgstr "Cancelación en proceso"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__solicitud_rechazada
 msgid "Cancelación rechazada"
-msgstr "Cancelación rechazada"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_state__cancel
@@ -76,12 +76,16 @@ msgstr "Cancelada"
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields,help:traficante_sales_detailed_report.field_account_tax_group__ieps_section
 msgid "Check if this group should be shown as IEPS on sales reports"
-msgstr "Marcar si los impuestos de este grupo deben mostrarse como IEPS en los reportes de ventas"
+msgstr ""
+"Marcar si los impuestos de este grupo deben mostrarse como IEPS en los "
+"reportes de ventas"
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields,help:traficante_sales_detailed_report.field_account_tax_group__iva_section
 msgid "Check if this group should be shown as IVA on sales reports"
-msgstr "Marcar si este grupo de impuestos debe mostrarse como IVA en los reportes de ventas"
+msgstr ""
+"Marcar si este grupo de impuestos debe mostrarse como IVA en los reportes "
+"de ventas"
 
 #. module: traficante_sales_detailed_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
@@ -132,7 +136,7 @@ msgstr "Descripción"
 #. module: traficante_sales_detailed_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
 msgid "Desde"
-msgstr "Desde"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.actions.act_window,name:traficante_sales_detailed_report.action_sales_detailed_report_tree
@@ -164,22 +168,22 @@ msgstr "Borrador"
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__move_id_estado_factura
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__move_id_estado_factura
 msgid "Estado de factura"
-msgstr "Estado de factura"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__factura_cancelada
 msgid "Factura cancelada"
-msgstr "Factura cancelada"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__factura_correcta
 msgid "Factura correcta"
-msgstr "Factura correcta"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields.selection,name:traficante_sales_detailed_report.selection__sales_detailed_report_wizard__move_id_estado_factura__factura_no_generada
 msgid "Factura no generada"
-msgstr "Factura no generada"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__date_start
@@ -196,38 +200,45 @@ msgstr "Descargar reporte"
 #: model:ir.cron,cron_name:traficante_sales_detailed_report.planned_get_taxes_action
 #: model:ir.cron,name:traficante_sales_detailed_report.planned_get_taxes_action
 msgid "Get taxes description and amount for invoice lines"
-msgstr "Obtener descripción y monto de los impuestos para las líneas de factura."
+msgstr ""
+"Obtener descripción y monto de los impuestos para las líneas de factura."
 
 #. module: traficante_sales_detailed_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_account_move_line_filter_date_range
 msgid "Hasta"
-msgstr "Hasta"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_report_sales_detailed_report__id
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_sales_detailed_report_wizard__id
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move__ieps_taxes
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__ieps_taxes
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_invoice_tree_taxes_detailed
 msgid "IEPS"
-msgstr "IEPS"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_invoice_tree_taxes_detailed
 msgid "IEPS Amt."
 msgstr "Mto. IEPS"
 
 #. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move__ieps_percent
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__ieps_percent
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_invoice_tree_taxes_detailed
 msgid "IEPS Pct."
 msgstr "Porc. IEPS"
 
 #. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move__ieps_amount
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__ieps_amount
 msgid "IEPS amount"
 msgstr "Monto de IEPS"
@@ -238,12 +249,20 @@ msgid "IEPS seciton on reports."
 msgstr "Sección de IEPS en reportes"
 
 #. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move__iva_taxes
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__iva_taxes
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_invoice_tree_taxes_detailed
 msgid "IVA"
-msgstr "IVA"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
+#: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.view_invoice_tree_taxes_detailed
+msgid "IVA Amt."
+msgstr "Mto. IVA"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move__iva_amount
 #: model:ir.model.fields,field_description:traficante_sales_detailed_report.field_account_move_line__iva_amount
 msgid "IVA amount"
 msgstr "Monto de IVA"
@@ -262,6 +281,11 @@ msgstr "Factura"
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
 msgid "Invoice status"
 msgstr "Estatus de la factura"
+
+#. module: traficante_sales_detailed_report
+#: model:ir.model,name:traficante_sales_detailed_report.model_account_move
+msgid "Journal Entries"
+msgstr "Asientos contables"
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model,name:traficante_sales_detailed_report.model_account_move_line
@@ -364,7 +388,7 @@ msgstr "Estatus"
 #. module: traficante_sales_detailed_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
 msgid "Subtotal"
-msgstr "Subtotal"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model,name:traficante_sales_detailed_report.model_account_tax_group
@@ -379,14 +403,14 @@ msgstr "Hasta"
 #. module: traficante_sales_detailed_report
 #: model_terms:ir.ui.view,arch_db:traficante_sales_detailed_report.sales_detailed_report_tree_view
 msgid "Total"
-msgstr "Total"
+msgstr ""
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model,name:traficante_sales_detailed_report.model_report_sales_detailed_report
 msgid "report.sales.detailed.report"
-msgstr "report.sales.detailed.report"
+msgstr "Reporte detallado de ventas"
 
 #. module: traficante_sales_detailed_report
 #: model:ir.model,name:traficante_sales_detailed_report.model_sales_detailed_report_wizard
 msgid "sales.detailed.report.wizard"
-msgstr "sales.detailed.report.wizard"
+msgstr "Reporte detallado de ventas"

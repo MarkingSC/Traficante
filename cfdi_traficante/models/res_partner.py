@@ -42,10 +42,43 @@ class ResPartner(models.Model):
         string=_('Forma de pago'),
     )
 
-    # 31 Eenero 2022, se comenta porque no aplica en el nvo módulo de timbrado
-    #@api.onchange('vat')
-    #def setRfcCfdi(self):
-    #    self.rfc = self.vat
+    def _get_current_forma_pago(self):
+        res = []
+        for record in self:
+            res.append((record.id, record.forma_pago))
+        return res
+
+    forma_pago_pue = fields.Selection(
+        selection=[('01', '01 - Efectivo'), 
+                   ('02', '02 - Cheque nominativo'), 
+                   ('03', '03 - Transferencia electrónica de fondos'),
+                   ('04', '04 - Tarjeta de Crédito'), 
+                   ('28', '28 - Tarjeta de débito')],
+        string=_('Forma de pago'), 
+        default = _get_current_forma_pago
+    )
+
+    forma_pago_ppd = fields.Selection(
+        selection=[('99', '99 - Por definir')],
+        string=_('Forma de pago'), 
+        default = _get_current_forma_pago
+    )
+
+    @api.onchange('methodo_pago')
+    def reset_forma_pago(self):
+        for record in self:
+            record.forma_pago_pue = False
+            record.forma_pago_ppd = False
+
+    @api.onchange('forma_pago_pue', 'forma_pago_ppd')
+    def set_forma_pago(self):
+        for record in self:
+            if record.forma_pago_pue == False and record.forma_pago_ppd == False:
+                record.forma_pago = False
+            elif record.forma_pago_pue != False:
+                record.forma_pago = record.forma_pago_pue
+            elif record.forma_pago_ppd != False:
+                record.forma_pago = record.forma_pago_ppd
 
         
     @api.model

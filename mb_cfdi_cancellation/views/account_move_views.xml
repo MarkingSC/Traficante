@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="reason_cancelation_sat_form">
+        <field name="name">reason.cancelation.form.reason</field>
+        <field name="model">reason.cancelation</field>
+        <field name="inherit_id" ref="cdfi_invoice.reason_cancelation_sat_form" />
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[last()]" position="after">
+                <group>
+                    <field name="internal_cancel_reason"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_invoice_inherit_form_canc_reason">
+        <field name="name">account.move.inherit.form.canc.reason</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="cdfi_invoice.view_invoice_inherit_form" />
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='estado_factura']" position="after">
+                <field name="internal_cancel_reason" attrs="{'readonly': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_invoice_inherit_tree_canc_reason">
+        <field name="name">account.move.inherit.tree.canc.reason</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="cdfi_invoice.view_invoice_inherit_tree" />
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='estado_factura']" position="after">
+                <field name="internal_cancel_reason" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

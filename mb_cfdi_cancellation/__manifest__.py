@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Traficante's sales detailed report",
+    'name': "CFDI Cancellation implementations",
 
     'summary': """
-        Creates objects and reports for detailed report for sales""",
+       Add a note in a CFDI cancellation""",
 
     'description': """
-        - Adds sales_detailed_report model
-        - Adds detailed report tree view
+        - Implements forms to specify a reason in a CFDI cancellation.
+        - Only compatible with cdfi_ivoice module from ItAdmin
     """,
 
     'author': "Marco Martinez",
@@ -16,20 +16,15 @@
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'sales',
+    'category': 'Account',
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'base_accounting_kit', 'report_xlsx'],
+    'depends': ['cdfi_invoice'],
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
-        'views/move_line_views.xml',
         'views/account_move_views.xml',
-        'wizard/report_view.xml',
-        'report/report.xml',
-        'data/ir_cron_data.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

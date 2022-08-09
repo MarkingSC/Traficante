@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- INHERIT view_partner_form -->
+        <record id="account_payment_form_cfdi_traficante" model="ir.ui.view">
+            <field name="name">account.payment.form.cfdi.traficante</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='forma_pago']" position="after">
+                    <field name="forma_pago_2" attrs="{'readonly': [('estado_pago','!=','pago_no_enviado')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='forma_pago']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

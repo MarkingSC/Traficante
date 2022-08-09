@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_invoice_tree_taxes_detailed">
+        <field name="name">account.invoice.tree.taxes.detailed</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree" />
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_tax']" position="after">
+                <field name="ieps_taxes" widget="many2many_tags" optional="show" string="IEPS"/>
+                <field name="ieps_percent" widget="percentage" optional="show" string="IEPS Pct."/>
+                <field name="ieps_amount" widget='monetary' optional="show" string="IEPS Amt."/>
+                <field name="iva_taxes" widget='many2many_tags' optional="show" string="IVA"/>
+                <field name="iva_amount" widget='monetary' optional="show" string="IVA Amt."/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_partner_display_name']" position="replace">
+                <field name="partner_commercial_name" optional="show"/>
+                <field name="partner_business_name" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_partner_display_name']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

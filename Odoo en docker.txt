@@ -35,7 +35,7 @@ Para ver los logs:
 Para conectarse a la base de postgres:
     docker exec -it db bash 
     su postgres
-        
+    psql -U odoo -W odoo -d postgres
     \c traficante-dev-f2e1
     (a partir de aqui ya se pueden ahcer consultas)
 
@@ -55,3 +55,10 @@ du - sh *
 
 Ver el espacio que ocupan los archivos en root:
 df -H
+
+Instalar un locale o idioma
+Estando en root:
+    apt-get install -y locales locales-all
+    dpkg-reconfigure locales
+        Introducir el ID del idioma a Instalar
+        
