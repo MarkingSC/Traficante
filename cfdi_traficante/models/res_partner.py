@@ -73,6 +73,8 @@ class ResPartner(models.Model):
     @api.onchange('forma_pago_pue', 'forma_pago_ppd')
     def set_forma_pago(self):
         for record in self:
+            _logger.info("**** Entra a set_forma_pago con record: " + str(record))
+            _logger.info("**** record.forma_pago antes: " + str(record.forma_pago))
             if record.forma_pago_pue == False and record.forma_pago_ppd == False:
                 record.forma_pago = False
             elif record.forma_pago_pue != False:
@@ -80,6 +82,7 @@ class ResPartner(models.Model):
             elif record.forma_pago_ppd != False:
                 record.forma_pago = record.forma_pago_ppd
 
+            _logger.info("**** record.forma_pago despues: " + str(record.forma_pago))
         
     @api.model
     def create(self, vals):
