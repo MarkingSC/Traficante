@@ -14,6 +14,7 @@
                     <field name="methodo_pago" attrs="{'required' : [('customer_type', '=', 'A'), ('parent_id', '=', False)]}"/>
                     <field name="forma_pago_pue" attrs="{'required' : [('customer_type', '=', 'A'), ('methodo_pago', '=', 'PUE'), ('parent_id', '=', False)], 'invisible' : [('methodo_pago', '!=', 'PUE')]}"/>
                     <field name="forma_pago_ppd" attrs="{'required' : [('customer_type', '=', 'A'), ('methodo_pago', '=', 'PPD'), ('parent_id', '=', False)], 'invisible' : [('methodo_pago', '!=', 'PPD')]}"/>
+                    <field name="forma_pago" attrs="{'invisible' : True}"/>
                 </xpath>
                 <xpath expr="//div[@class='alert alert-warning oe_edit_only'][1]" position="replace">
                     <div class="alert alert-warning oe_edit_only" role="alert" attrs="{'invisible': [('same_vat_partner_id', '=', False)]}">
