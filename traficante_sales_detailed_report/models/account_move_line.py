@@ -42,7 +42,20 @@ class AccountMoveLine(models.Model):
         'account_tax_id',
         'IVA', compute = "_get_taxes_amount", store=True)
     iva_amount = fields.Float(string='IVA amount', compute = "_get_taxes_amount", store=True)
+
+    discount_pct = fields.Float(string='Discount Pct.', compute = "_get_discount_pct", store=False)
     
+
+    @api.depends('discount')
+    def _get_discount_pct(self):
+        _logger.info('**** entra a _get_discount_pct ***** ')
+        for record in self:
+            if record.discount:
+                record.discount_pct = record.discount/100
+            else:
+                record.discount_pct = 0
+        _logger.info('**** termina _get_discount_pct ***** ')
+
     @api.depends('product_id')
     def _get_product_code(self):
         _logger.info('**** entra a _get_product_code ***** ')

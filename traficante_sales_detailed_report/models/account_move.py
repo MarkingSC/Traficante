@@ -18,6 +18,8 @@ class AccountMove(models.Model):
         string = 'IVA', compute = "_get_taxes_amount", store=True)
     iva_amount = fields.Float(string='IVA amount', compute = "_get_taxes_amount", store=True)
 
+    customer_vat = fields.Char(string='Customer vat', related='partner_id.vat')
+
     @api.depends('line_ids')
     def _get_taxes_amount(self):
         for record in self:

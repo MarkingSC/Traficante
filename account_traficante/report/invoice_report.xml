@@ -111,6 +111,10 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Is there a discount on at least one line? -->
+            <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])" />
+                    
             <div class="page mt-3">
                 <div class="row">
                     <table class="table table table-sm o_main_table" font-size="13px;" style="font-size: 13px !important;">
@@ -161,8 +165,9 @@
                                     </td>
 
                                     <td style="border: solid #ddd 1px; font-size: 12px;" t-if="display_discount" class="text-right">
-                                        <span t-esc="l.price_unit * ((l.discount or 0.0) / 100.0) *l.quantity" t-options='{"widget": "monetary", "display_currency": l.move_id.currency_id}'/>
+                                        <span t-esc="l.discount"/>&amp;
                                     </td>
+                                    
                                     <td style="border: solid #ddd 1px; font-size: 8px; padding-top:0px;" class="bordesless">
                                         <table width="100%">
                                             <tr t-foreach="l.tax_ids" t-as="tax">
@@ -251,6 +256,12 @@
                     </div>
                     <div class="col-3">
                         <table class="table table-sm;page-break-inside: avoid;">
+                            <tr t-if="display_discount" class="border-black" style="">
+                                <td>Discount</td>
+                                <td class="text-right">
+                                    <span t-field="o.discount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
                             <tr class="border-black o_subtotal" style="">
                                 <td><strong>Subtotal</strong></td>
                                 <td class="text-right">

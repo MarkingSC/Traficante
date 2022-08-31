@@ -211,5 +211,5 @@ class productTemplate(models.Model):
         self._get_product_cost()
         self._get_taxes_amount()
         self._get_margins()
-        _logger.info('**** inicio _get_margins_on_sp *****')
+        _logger.info('**** fin _get_margins_on_sp *****')
 

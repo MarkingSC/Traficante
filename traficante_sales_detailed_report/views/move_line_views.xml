@@ -17,6 +17,7 @@
                 <field name="quantity" optional="show" string="Quantity"/>
                 <field name="price_unit" widget='monetary' optional="show" string="Price unit"/>
                 <field name="price_subtotal" widget='monetary' optional="show" string="Subtotal"/>
+                <field name="discount_pct" widget='percentage' optional="show" string="Discount Pct."/>
                 <field name="ieps_taxes" widget="many2many_tags" optional="show" string="IEPS"/>
                 <field name="ieps_percent" widget="percentage" optional="show" string="IEPS Pct."/>
                 <field name="ieps_amount" widget='monetary' optional="show" string="IEPS Amt."/>
@@ -76,5 +77,3 @@
     </record>
 
 </odoo>
-
-

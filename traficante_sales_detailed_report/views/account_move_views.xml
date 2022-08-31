@@ -7,7 +7,11 @@
         <field name="inherit_id" ref="account.view_invoice_tree" />
         <field name="type">tree</field>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_date']" position="before">
+                <field name="customer_vat" optional="show" string="Customer VAT"/>
+            </xpath>
             <xpath expr="//field[@name='amount_tax']" position="after">
+                <field name="discount" widget='monetary' optional="show" string="Discount"/>
                 <field name="ieps_taxes" widget="many2many_tags" optional="show" string="IEPS"/>
                 <field name="ieps_percent" widget="percentage" optional="show" string="IEPS Pct."/>
                 <field name="ieps_amount" widget='monetary' optional="show" string="IEPS Amt."/>
