@@ -165,7 +165,7 @@
                                     </td>
 
                                     <td style="border: solid #ddd 1px; font-size: 12px;" t-if="display_discount" class="text-right">
-                                        <span t-esc="l.discount"/>&amp;
+                                        <span t-esc="l.discount"/>&percnt;;
                                     </td>
                                     
                                     <td style="border: solid #ddd 1px; font-size: 8px; padding-top:0px;" class="bordesless">
