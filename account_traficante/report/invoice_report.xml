@@ -94,12 +94,12 @@
                         <div class="col-4">
                             <strong>Dirección de entrega:</strong>
                             <br/>
-                            <span t-field="o.partner_id.delivery_address.name"/>
+                            <span t-field="o.partner_shipping_id.name"/>
                             <br/>
-                            <span t-field="o.partner_id.delivery_address.street"/>
-                            <span t-field="o.partner_id.delivery_address.street2"/>
-                            <span t-field="o.partner_id.delivery_address.zip"/>
-                            <span t-field="o.partner_id.delivery_address.city"/>
+                            <span t-field="o.partner_shipping_id.street"/>
+                            <span t-field="o.partner_shipping_id.street2"/>
+                            <span t-field="o.partner_shipping_id.zip"/>
+                            <span t-field="o.partner_shipping_id.city"/>
                             <br/>
                         </div>
                         <div class="col-4">
