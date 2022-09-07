@@ -38,11 +38,11 @@ class stockPicking(models.Model):
 
         res = super(stockPicking, self).write(vals)
 
-        _logger.info('**** self.state: ' + str(self.state))
-        
-        if 'date_done' in vals and self.state == 'done':
-            _logger.info('**** Entra a obtener los datos de la líena de lote *****')
-            self._get_lines_lot_data()            
+        for record in self:
+            _logger.info('**** self.state: ' + str(record.state))
+            if 'date_done' in vals and record.state == 'done':
+                _logger.info('**** Entra a obtener los datos de la línea de lote *****')
+                record._get_lines_lot_data()     
             
         _logger.info('**** TERMINA write de  stockPicking *****')
         return res
