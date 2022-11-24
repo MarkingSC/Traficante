@@ -59,7 +59,17 @@ class stockPicking(models.Model):
                         ('state', '=', 'done'), 
                         ('lot_id', '=', lot_line.lot_id.id)
                     ])
+
+                    if not lot_incoming_line:
+                        lot_incoming_line = self.env['stock.move.line'].search([
+                        ('picking_id.picking_type_id.code', '=', 'internal'), 
+                        ('state', '=', 'done'), 
+                        ('lot_id', '=', lot_line.lot_id.id)
+                    ], order="date asc", limit = 1)
+
                     lot_line.lot_incoming_date = lot_incoming_line.date
+                    _logger.info('**** lot_incoming_line: ' + str(lot_incoming_line))
+                    _logger.info('**** lot_line: ' + str(lot_line))
 
                     # Obtener días de inventario
                     today = datetime.today()

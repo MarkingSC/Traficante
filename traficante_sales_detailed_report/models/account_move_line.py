@@ -43,6 +43,7 @@ class AccountMoveLine(models.Model):
         'IVA', compute = "_get_taxes_amount", store=True)
     iva_amount = fields.Float(string='IVA amount', compute = "_get_taxes_amount", store=True)
 
+    # Este campo es solo para tener el dato del descuento en decimales.
     discount_pct = fields.Float(string='Discount Pct.', compute = "_get_discount_pct", store=False)
     
 

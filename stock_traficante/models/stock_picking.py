@@ -71,7 +71,7 @@ class StockPicking(models.Model):
 
         postedInvoices = self.invoice_ids.filtered(lambda r: r.estado_factura == 'factura_correcta')
 
-        if self.picking_type_code == 'outgoing' and self.origin:
+        if self.picking_type_code == 'outgoing' and self.env['sale.order'].search([('name' , '=', self.origin)]):
             if len(postedInvoices)  == 0:
                 raise UserError("No es posible validar el movimiento. No existen facturas timbradas para este pedido.")
 

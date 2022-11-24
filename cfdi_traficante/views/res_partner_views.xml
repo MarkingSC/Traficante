@@ -10,6 +10,9 @@
                 <xpath expr="//field[@name='uso_cfdi']" position="attributes">
                     <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), ('parent_id', '=', False)]}</attribute>
                 </xpath>
+                <xpath expr="//field[@name='regimen_fiscal']" position="attributes">
+                    <attribute name="attrs">{'required' : [('customer_type', '=', 'A'), ('parent_id', '=', False)]}</attribute>
+                </xpath>
                 <xpath expr="//field[@name='uso_cfdi']" position="after">
                     <field name="methodo_pago" attrs="{'required' : [('customer_type', '=', 'A'), ('parent_id', '=', False)]}"/>
                     <field name="forma_pago_pue" attrs="{'required' : [('customer_type', '=', 'A'), ('methodo_pago', '=', 'PUE'), ('parent_id', '=', False)], 'invisible' : [('methodo_pago', '!=', 'PUE')]}"/>

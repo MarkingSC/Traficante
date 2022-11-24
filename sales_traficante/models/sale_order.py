@@ -71,7 +71,7 @@ class SaleOrder(models.Model):
     def _validateInvoicePartnerData(self, partners):
         _logger.info("**** INICIA _validateInvoicePartnerData")
         # Campos requeridos en el cliente para continuar con el pedido
-        reqFields = ['vat', 'forma_pago', 'methodo_pago', 'uso_cfdi', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email']
+        reqFields = ['vat', 'forma_pago', 'methodo_pago', 'uso_cfdi', 'street2', 'city', 'state_id', 'zip', 'country_id', 'mobile', 'email', 'regimen_fiscal']
 
         validFieldsFlag = True
 

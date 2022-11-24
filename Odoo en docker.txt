@@ -22,8 +22,14 @@ Para iniciar una instancia de docker
 docker start odoo
 
 Actualizar una aplicación:
-odoo -p 8070 --db_host=172.17.0.2 --db_user=odoo --db_password=odoo -d traficante-dev -u partner_traficante
-odoo -p (un puerto diferente al 8069) --db_host=<host de la base> --db_user=<usuario de la base> --db_password=<pass de la base> -d <base de odoo> -u <modulo>
+    en docker
+        odoo -p 8070 --db_host=172.17.0.2 --db_user=odoo --db_password=odoo -d traficante-dev -u partner_traficante
+        odoo -p (un puerto diferente al 8069) --db_host=<host de la base> --db_user=<usuario de la base> --db_password=<pass de la base> -d <base de odoo> -u <modulo>
+
+    En el server
+        ./odoo-bin -c /etc/odoo13.conf -p 8070 -d traficante-prod-f2e1 -u cfdi_traficante
+
+
 
 Instalar una aplicación:
 odoo -p 8070 --db_host=172.17.0.2 --db_user=odoo --db_password=odoo -d traficante-dev -u stock_account_traficante
@@ -37,7 +43,7 @@ Para conectarse a la base de postgres:
     su postgres
     psql -U odoo -W odoo -d postgres
     \c traficante-dev-f2e1
-    (a partir de aqui ya se pueden ahcer consultas)
+    (a partir de aqui ya se pueden hacer consultas)
 
 
 Para obtener un backup de la base desde cli:
@@ -62,3 +68,23 @@ Estando en root:
     dpkg-reconfigure locales
         Introducir el ID del idioma a Instalar
         
+Eliminar los logs de journal
+sudo su -
+journalctl --rotate
+journalctl --vacuum-size=5M
+
+Establecer limite para los logs del journal
+nano /etc/systemd/journald.conf
+SystemMaxUse=10M
+
+Eliminar los logs de syslog
+sudo su -
+> /var/log/syslog
+
+echo "" > /var/log/kern.log
+echo "" > /var/log/syslog
+service syslog restart
+journalctl --vacuum-size=50M
+
+Establecer limite para los logs de syslog
+nano /etc/logrotate.d/rsyslog

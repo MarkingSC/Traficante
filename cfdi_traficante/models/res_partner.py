@@ -53,7 +53,8 @@ class ResPartner(models.Model):
                    ('02', '02 - Cheque nominativo'), 
                    ('03', '03 - Transferencia electrónica de fondos'),
                    ('04', '04 - Tarjeta de Crédito'), 
-                   ('28', '28 - Tarjeta de débito')],
+                   ('28', '28 - Tarjeta de débito'), 
+                   ('17', '17 - Compensación')],
         string=_('Forma de pago'), 
         default = _get_current_forma_pago
     )
@@ -76,11 +77,11 @@ class ResPartner(models.Model):
             _logger.info("**** Entra a set_forma_pago con record: " + str(record))
             _logger.info("**** record.forma_pago antes: " + str(record.forma_pago))
             if record.forma_pago_pue == False and record.forma_pago_ppd == False:
-                record.forma_pago = False
+                record.write({"forma_pago": False})
             elif record.forma_pago_pue != False:
-                record.forma_pago = record.forma_pago_pue
+                record.write({"forma_pago": record.forma_pago_pue})
             elif record.forma_pago_ppd != False:
-                record.forma_pago = record.forma_pago_ppd
+                record.write({"forma_pago": record.forma_pago_ppd})
 
             _logger.info("**** record.forma_pago despues: " + str(record.forma_pago))
         
