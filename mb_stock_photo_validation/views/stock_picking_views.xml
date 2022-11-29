@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_photo_validation_wizard" model="ir.ui.view">
+        <field name="name">stock.picking.photo.validation.wizard</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <form string="Evidence uploading">
+                <group name="picture_upload">
+                    <field name="photo_validation_1" widget="image" class="col-auto" required="1"/>
+                    <field name="photo_validation_2" widget="image" class="col-auto"/>
+                </group>
+                <footer>
+                    <button string="Validate" name="button_validate" type="object" class="oe_highlight"></button>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"></button>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_picking_form_photo_validation">
+        <field name="name">stock.picking.form.photo.validation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_validate'][2]" position='after'>
+                <button name="button_validate_with_pics" attrs="{'invisible': ['|', ('state', 'in', ('waiting', 'confirmed')), ('show_validate', '=', False)]}" string="Validate" type="object" groups="stock.group_stock_user" class="o_btn_validate oe_highlight"/>
+            </xpath>
+            <xpath expr="//button[@name='button_validate'][2]" position='attributes'>
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_validate'][1]" position='attributes'>
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='extra']/group[1]/group[1]" position='after'>
+                <group string="Devilery evidence" name="delivery_evidence" attrs="{'invisible': [('state', '!=', 'done')]}">
+                    <field name="photo_validation_1" widget="image" readonly="1"/>
+                    <field name="photo_validation_2" widget="image" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

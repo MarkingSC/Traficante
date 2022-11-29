@@ -15,18 +15,19 @@
                 <field name="product_code" optional="show" string="Code"/>
                 <field name="product_name" optional="show" string="Description"/>
                 <field name="quantity" optional="show" string="Quantity"/>
-                <field name="price_unit" widget='monetary' optional="show" string="Price unit"/>
-                <field name="price_subtotal" widget='monetary' optional="show" string="Subtotal"/>
+                <field name="price_unit" widget='monetary' options="{'currency_field': 'currency_id'}" optional="show" string="Price unit"/>
+                <field name="price_subtotal" widget='monetary' options="{'currency_field': 'currency_id'}" optional="show" string="Subtotal"/>
+                <field name="discount_amt" widget='monetary' options="{'currency_field': 'currency_id'}" optional="show" string="Discount Amt."/>
                 <field name="discount_pct" widget='percentage' optional="show" string="Discount Pct."/>
                 <field name="ieps_taxes" widget="many2many_tags" optional="show" string="IEPS"/>
                 <field name="ieps_percent" widget="percentage" optional="show" string="IEPS Pct."/>
-                <field name="ieps_amount" widget='monetary' optional="show" string="IEPS Amt."/>
-                <field name="iva_amount" widget='monetary' optional="show" string="IVA"/>
-                <field name="price_total" widget='monetary' optional="show" string="Total"/>
+                <field name="ieps_amount" widget='monetary' options="{'currency_field': 'currency_id'}" optional="show" string="IEPS Amt."/>
+                <field name="iva_amount" widget='monetary' options="{'currency_field': 'currency_id'}" optional="show" string="IVA"/>
+                <field name="price_total" widget='monetary' options="{'currency_field': 'currency_id'}" optional="show" string="Total"/>
                 <field name="business_name" optional="show" string="Business Name"/>
                 <field name="commercial_name" optional="show" string="Commercial Name"/>
                 <field name="salesperson" optional="show" string="Salesperson"/>
-                <field name="product_cost" widget='monetary' optional="hide" string="Cost"/>
+                <field name="product_cost" widget='monetary' options="{'currency_field': 'currency_id'}" optional="hide" string="Cost"/>
                 <field name="move_id_state" optional="show" string="Move status"/>
                 <field name="move_id_estado_factura" optional="show" string="Invoice status"/>
             </tree>

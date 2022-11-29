@@ -1,3 +1,4 @@
+from datetime import date
 import logging
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
@@ -87,6 +88,13 @@ class productTemplate(models.Model):
             _logger.info('**** taxes: ' + str(taxes))
             self.list_price = self.standard_price + taxes
 
+        if 'active' in vals:
+            self.env['product.active.history'].create({
+                "product_id": self.id,
+                "active_state": self.active,
+                "user_id": self.env.uid
+            })
+
         _logger.info('**** fin write *****')
         return res
 
@@ -163,7 +171,6 @@ class productTemplate(models.Model):
             for tax in iva_taxes:
                 computed_iva = tax.compute_all(product.standard_price, product.company_id.currency_id, quantity, product, False, False, handle_price_include=False)
                 
-                _logger.info('**** computed_iva: ' + str(computed_iva))
                 for calc_tax in computed_iva['taxes']:
                     iva_price += calc_tax['amount']
 

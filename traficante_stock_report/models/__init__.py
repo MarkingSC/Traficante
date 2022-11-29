@@ -1,1 +1,1 @@
-from . import product_template, purchase_order_line
+from . import product_template, purchase_order_line, product_active_history

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+    <record model="ir.ui.view" id="view_invoice_multi_discount">
+        <field name="name">account.invoice.tree.multi.discount</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="traficante_sales_detailed_report.view_invoice_tree_taxes_detailed" />
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='discount']" position="before">
+                <field name="customer_vat" optional="show" string="Customer VAT"/>
+            </xpath>
+        </field>
+    </record>
+    -->
+
+    <record id="view_move_form_mb_multi_discount" model="ir.ui.view">
+        <field name="name">view.move.form.mb.multi.discount</field>
+        <field name="model">account.move</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_origin']" position="after">
+                <field name="discount" invisible="1" string="Discount"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

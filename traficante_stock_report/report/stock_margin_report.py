@@ -86,7 +86,7 @@ class stockMarginReport(models.AbstractModel):
             # busca los productos que se van a mostrar en el reporte
             
             _logger.info('**** busca los productos porque no estan especificados ')
-            products = self.env['product.template'].search([('standard_price', '!=', False)], order='name')
+            products = self.env['product.template'].search([('standard_price', '!=', False),'|',('active', '=', False),('active', '=', True)], order='name')
             
         else:
             report_on_date = datetime.today()
@@ -97,124 +97,120 @@ class stockMarginReport(models.AbstractModel):
         row = 5
         for product in products:
 
-            quantity = 1
+            latest_active_state = self.env['product.active.history'].search([('product_id', '=', product.id),('date', '<=', report_on_date)], order='date desc', limit=1)
 
-            _logger.info('**** product.id: ' + str(product.id))
-            _logger.info('**** product.name: ' + str(product.name))
-            _logger.info('**** product.default_code: ' + str(product.default_code))
-            _logger.info('**** report_on_date: ' + str(report_on_date))
+            if latest_active_state:
+                _logger.info('**** latest_active_state: ' + str(latest_active_state))  
 
-            latest_purchase_line = self.env['purchase.order.line'].search([('product_id', '=', product.id), ('date_planned', '<=', report_on_date)], limit = 1, order='date_planned desc')
-            _logger.info('**** latest_purchase_line: ' + str(latest_purchase_line.order_id.name))
+            # Si no hay un histórico y el producto está activo o si el histórico marca el producto como activo en esa fecha, lo considera en el reporte.
+            if (not latest_active_state and product.active) or (latest_active_state and latest_active_state.active_state):
+                    
+                quantity = 1
 
-            _logger.info('**** latest_purchase_line.date_planned: ' + str(latest_purchase_line.date_planned))
-            _logger.info('**** latest_purchase_line.product_cost: ' + str(latest_purchase_line.product_cost))
-            _logger.info('**** latest_purchase_line.list_price: ' + str(latest_purchase_line.list_price))
-            _logger.info('**** latest_purchase_line.standard_price: ' + str(latest_purchase_line.standard_price))
+                latest_purchase_line = self.env['purchase.order.line'].search([('product_id', '=', product.id), ('date_planned', '<=', report_on_date)], limit = 1, order='date_planned desc')
 
-            latest_product_cost = latest_purchase_line.product_cost
-            latest_list_price = latest_purchase_line.list_price
-            latest_standard_price = latest_purchase_line.standard_price
+                latest_product_cost = latest_purchase_line.product_cost
+                latest_list_price = latest_purchase_line.list_price
+                latest_standard_price = latest_purchase_line.standard_price
 
-            # costo promedio
-            latest_avg_cost = 0
-
-            purchase_lines = self.env['purchase.order.line'].search([('product_id', '=', product.id)])
-            sum_cost = 0
-
-            for line in purchase_lines:
-                sum_cost += line.price_unit
-
-            if len(purchase_lines) > 0:
-                latest_avg_cost = sum_cost/len(purchase_lines)
-            else:
+                # costo promedio
                 latest_avg_cost = 0
 
-            #impuestos
+                purchase_lines = self.env['purchase.order.line'].search([('product_id', '=', product.id)])
+                sum_cost = 0
 
-            # Porcentaje de IEPS y ieps_cost
-            ieps_taxes = latest_purchase_line.taxes_id.filtered(lambda tax: tax.tax_group_id.ieps_section == True)       
+                for line in purchase_lines:
+                    sum_cost += line.price_unit
 
-            total_ieps = 0     
+                if len(purchase_lines) > 0:
+                    latest_avg_cost = sum_cost/len(purchase_lines)
+                else:
+                    latest_avg_cost = 0
 
-            for tax in ieps_taxes:
-                    compute_all_res = tax.compute_all(latest_product_cost, product.company_id.currency_id, quantity, product, False, False, handle_price_include=True)
+                #impuestos
 
-                    for calc_tax in compute_all_res['taxes']:
-                        total_ieps += calc_tax['amount']
+                # Porcentaje de IEPS y ieps_cost
+                ieps_taxes = latest_purchase_line.taxes_id.filtered(lambda tax: tax.tax_group_id.ieps_section == True)       
 
-            ieps_amount = total_ieps
+                total_ieps = 0     
 
-            latest_ieps_tax_pct = 0
-            latest_ieps_cost = 0
+                for tax in ieps_taxes:
+                        compute_all_res = tax.compute_all(latest_product_cost, product.company_id.currency_id, quantity, product, False, False, handle_price_include=True)
 
-            if latest_product_cost:
-                latest_ieps_tax_pct = ieps_amount / latest_product_cost
-                latest_ieps_cost = latest_product_cost + ieps_amount
+                        for calc_tax in compute_all_res['taxes']:
+                            total_ieps += calc_tax['amount']
 
-            # Porcentaje de IVA e iva_price
-            iva_taxes = product.taxes_id.filtered(lambda tax: tax.tax_group_id.iva_section == True)      
-            iva_price = 0      
+                ieps_amount = total_ieps
 
-            if len(iva_taxes) > 1:
-                raise ValidationError(_('Product %s has more than one IVA tax.')%(product.name))
-            
-            for tax in iva_taxes:
-                computed_iva = tax.compute_all(latest_standard_price, product.company_id.currency_id, quantity, product, False, False, handle_price_include=False)
+                latest_ieps_tax_pct = 0
+                latest_ieps_cost = 0
+
+                if latest_product_cost:
+                    latest_ieps_tax_pct = ieps_amount / latest_product_cost
+                    latest_ieps_cost = latest_product_cost + ieps_amount
+
+                # Porcentaje de IVA e iva_price
+                iva_taxes = product.taxes_id.filtered(lambda tax: tax.tax_group_id.iva_section == True)      
+                iva_price = 0      
+
+                if len(iva_taxes) > 1:
+                    raise ValidationError(_('Product %s has more than one IVA tax.')%(product.name))
                 
-                _logger.info('**** computed_iva: ' + str(computed_iva))
-                for calc_tax in computed_iva['taxes']:
-                    iva_price += calc_tax['amount']
+                for tax in iva_taxes:
+                    computed_iva = tax.compute_all(latest_standard_price, product.company_id.currency_id, quantity, product, False, False, handle_price_include=False)
+                    
+                    for calc_tax in computed_iva['taxes']:
+                        iva_price += calc_tax['amount']
 
-            latest_iva_tax_pct = 0
-            latest_iva_price = 0
+                latest_iva_tax_pct = 0
+                latest_iva_price = 0
 
-            if latest_standard_price:
-                latest_iva_tax_pct = iva_price / latest_standard_price
-                latest_iva_price = latest_standard_price + iva_price 
+                if latest_standard_price:
+                    latest_iva_tax_pct = iva_price / latest_standard_price
+                    latest_iva_price = latest_standard_price + iva_price 
 
-            # Costo con impuestos = Costo con IEPS más IVA
-            latest_taxes_cost = latest_ieps_cost * (1+latest_iva_tax_pct)
+                # Costo con impuestos = Costo con IEPS más IVA
+                latest_taxes_cost = latest_ieps_cost * (1+latest_iva_tax_pct)
 
-            # Precio con impuestos = Standard price + IEPS + IVA
-            latest_taxes_price = (latest_standard_price * (1+latest_ieps_tax_pct)) * (1+latest_iva_tax_pct)
-            
+                # Precio con impuestos = Standard price + IEPS + IVA
+                latest_taxes_price = (latest_standard_price * (1+latest_ieps_tax_pct)) * (1+latest_iva_tax_pct)
+                
 
-            #márgenes
+                #márgenes
 
-            latest_total_margin_amt = 0
-            latest_cost_margin_pct = 0
-            latest_price_margin_pct = 0
-            # margen bruto
-            latest_total_margin_amt = latest_taxes_price - latest_taxes_cost
+                latest_total_margin_amt = 0
+                latest_cost_margin_pct = 0
+                latest_price_margin_pct = 0
+                # margen bruto
+                latest_total_margin_amt = latest_taxes_price - latest_taxes_cost
 
-            # margen sobre el costo
-            if latest_taxes_cost:
-                latest_cost_margin_pct = latest_total_margin_amt / latest_taxes_cost
+                # margen sobre el costo
+                if latest_taxes_cost:
+                    latest_cost_margin_pct = latest_total_margin_amt / latest_taxes_cost
 
-            # margen sobre el precio
-            if latest_taxes_price:
-                latest_price_margin_pct = latest_total_margin_amt / latest_taxes_price 
-            
+                # margen sobre el precio
+                if latest_taxes_price:
+                    latest_price_margin_pct = latest_total_margin_amt / latest_taxes_price 
+                
 
-            sheet.write(row, 0, str(product.default_code))
-            sheet.write(row, 1, str(product.name))
-            sheet.write(row, 2, str(product.categ_id.name))
-            sheet.write(row, 3, str(product.uom_id.name))
-            sheet.write(row, 4, str('Activo' if product.active else 'Inactivo'))
-            sheet.write(row, 5, str(round(latest_product_cost, 2)), money_format)
-            sheet.write(row, 6, str(round(latest_avg_cost, 2)), money_format)
-            sheet.write(row, 7, str(round(latest_standard_price, 2)), money_format)
-            sheet.write(row, 8, str(round((latest_ieps_tax_pct * 100), 2)), percent_format)
-            sheet.write(row, 9, str(round((latest_iva_tax_pct * 100), 2)), percent_format)
-            sheet.write(row, 10, str(round(latest_iva_price, 2)), money_format)
-            sheet.write(row, 11, str(round(latest_ieps_cost, 2)), money_format)
-            sheet.write(row, 12, str(round(latest_taxes_cost, 2)), row_format_green)
-            sheet.write(row, 13, str(round(latest_taxes_price, 2)), row_format_green)
-            sheet.write(row, 14, str(round(latest_total_margin_amt, 2)), money_format)
-            sheet.write(row, 15, str(round((latest_cost_margin_pct * 100), 2)), percent_format)
-            sheet.write(row, 16, str(round((latest_price_margin_pct * 100), 2)), percent_format)
-            row += 1
+                sheet.write(row, 0, str(product.default_code))
+                sheet.write(row, 1, str(product.name))
+                sheet.write(row, 2, str(product.categ_id.name))
+                sheet.write(row, 3, str(product.uom_id.name))
+                sheet.write(row, 4, str('Activo' if product.active else 'Inactivo'))
+                sheet.write(row, 5, str(round(latest_product_cost, 2)), money_format)
+                sheet.write(row, 6, str(round(latest_avg_cost, 2)), money_format)
+                sheet.write(row, 7, str(round(latest_standard_price, 2)), money_format)
+                sheet.write(row, 8, str(round((latest_ieps_tax_pct * 100), 2)), percent_format)
+                sheet.write(row, 9, str(round((latest_iva_tax_pct * 100), 2)), percent_format)
+                sheet.write(row, 10, str(round(latest_iva_price, 2)), money_format)
+                sheet.write(row, 11, str(round(latest_ieps_cost, 2)), money_format)
+                sheet.write(row, 12, str(round(latest_taxes_cost, 2)), row_format_green)
+                sheet.write(row, 13, str(round(latest_taxes_price, 2)), row_format_green)
+                sheet.write(row, 14, str(round(latest_total_margin_amt, 2)), money_format)
+                sheet.write(row, 15, str(round((latest_cost_margin_pct * 100), 2)), percent_format)
+                sheet.write(row, 16, str(round((latest_price_margin_pct * 100), 2)), percent_format)
+                row += 1
 
 
         _logger.info('**** Fin generate_xlsx_report ****')   

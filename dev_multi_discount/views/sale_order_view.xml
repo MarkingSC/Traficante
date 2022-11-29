@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle
+ -->
+<odoo>
+        <record id="view_sale_order_multi_discount_form" model="ir.ui.view">
+            <field name="name">view.sale.order.multi.discount.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='order_lines']//field[@name='order_line']//form//field[@name='price_unit']" position="after">
+                     <field name="multi_discount"/>
+                     <field name="discount_amt" invisible="1"/>
+                </xpath>
+                
+                <xpath expr="//page[@name='order_lines']//field[@name='order_line']//tree//field[@name='discount']" position="before">
+                     <field name="multi_discount"/>
+                     <field name="discount_amt" invisible="1"/>
+                </xpath>
+                
+            </field>
+        </record>
+        
+        
+</odoo>

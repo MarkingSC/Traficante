@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mb_sales_detailed_report_multi_discount" model="ir.ui.view">
+        <field name="name">sales.detailed.report.tree.view</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="traficante_sales_detailed_report.sales_detailed_report_tree_view" />
+        <field name="priority">8</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='discount_pct']" position="before">
+                <field name="multi_discount" optional="show" string="Multi-discount"/>
+            </xpath>
+        </field>
+    </record>
+    
+
+</odoo>
