@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="ir_attachment_cfdi_tree_view" model="ir.ui.view">
+            <field name="name">ir.attachment.cfdi.tree.view</field>
+            <field name="model">ir.attachment</field>
+            <field name="type">tree</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Files" create="false" edit="false" export_xlsx="false">
+                    <field name='name' optional="show" string="File"/>
+                    <field name="invoice_id" optional="show" string="Document"/>
+                    <field name="partner_id" optional="show" string="Customer"/>
+                    <field name="partner_vat" optional="show" string="VAT"/>
+                    <field name="invoice_date" optional="show" string="Invoice date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="ir_attachment_cfdi_filter" model="ir.ui.view">
+            <field name="name">ir.attachment.cfdi.filter</field>
+            <field name="model">ir.attachment</field>
+            <field name="arch" type="xml">
+                <search string="Search documents">
+                    <field name="name" string="Name" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="invoice_id" string="Document" filter_domain="[('invoice_id', 'ilike', self)]"/>
+                    <field name="partner_id" string="Customer" filter_domain="[('partner_id', 'ilike', self)]"/>
+                    <field name="partner_vat" string="VAT" filter_domain="[('partner_id.vat', 'ilike', self)]"/>
+                    <field name="invoice_date" string="From" filter_domain="[('invoice_id.date', '&gt;=', self)]"/>
+                    <field name="invoice_date" string="To" filter_domain="[('invoice_id.date', '&lt;=', self)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="invoice_id" name="Document" context="{'group_by':'invoice_id'}"/>
+                        <filter string="partner_id" name="Customer" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_ir_attachment_cfdi_tree_view" model="ir.actions.act_window">
+            <field name="name">Download invoicing documents</field>
+            <field name="res_model">ir.attachment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('res_model', '=', 'account.move'),'|',('name', 'ilike', 'Factura'),('name', 'ilike', 'CDFI')]</field>
+            <field name="view_id" ref="ir_attachment_cfdi_tree_view"/>
+            <field name="search_view_id" ref="ir_attachment_cfdi_filter"/>
+        </record>
+
+        <menuitem id="ir_attachment_cfdi_tree_menu" name="Documents" sequence="1" parent="account.account_reports_management_menu" action="action_ir_attachment_cfdi_tree_view" />
+        
+    </data>
+</odoo>

@@ -50,5 +50,17 @@
                 'res_partner_search_mode': 'supplier',
             }</field>
         </record>
+
+        <!-- Marco 23/01/2023 -->
+        <record model="ir.ui.view" id="view_account_payment_x_invoice_tree">
+            <field name="name">account.payment.invoice.tree.view</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount" position="before">
+                <field name="invoice_date" optional="show" string="Invoice date"/>
+                </field>
+            </field>
+        </record>
     </data>
 </odoo>

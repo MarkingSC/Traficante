@@ -39,6 +39,9 @@
         <field name="name">account.invoice.select.cancelled</field>
         <field name="model">account.move</field>
         <field name="arch" type="xml">
+            <xpath expr="//filter[@name='in_payment']" position="before">
+                <filter name="unpaid_inv" string="Unpaid" domain="[('state', '=', 'posted'), ('invoice_payment_state', '=', 'not_paid')]"/>
+            </xpath>
             <xpath expr="//filter[@name='late']" position="after">
                 <filter string="Canceladas" name="cancelled_invoices" domain="[('state', '=', 'cancel')]"/>
             </xpath>

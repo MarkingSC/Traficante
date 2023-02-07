@@ -154,6 +154,36 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
         }
 
+    # Marco 23/01/2023
+    valuation_cost = fields.Float(string="Product cost", compute="_get_sum_valuation", store=False)
+    valuation_no_tax = fields.Float(string="Before taxes", compute="_get_sum_valuation", store=False)
+    valuation_tax = fields.Float(string="After taxes", compute="_get_sum_valuation", store=False)
+
+    @api.depends('move_line_ids', 'group_id')
+    def _get_sum_valuation(self):
+        for picking in self:
+            sum_cost = 0
+            sum_no_tax = 0
+            sum_tax = 0
+            
+            for line in picking.move_line_ids:
+                sum_cost_line = 0
+                sum_no_tax_line = 0
+                sum_tax_line = 0
+
+                sum_cost_line = line.product_id.product_cost * line.qty_done
+                sum_no_tax_line = line.product_id.standard_price * line.qty_done
+                sum_tax_line = line.product_id.lst_price * line.qty_done
+
+                sum_cost += sum_cost_line
+                sum_no_tax += sum_no_tax_line
+                sum_tax += sum_tax_line         
+                
+            picking.valuation_cost = sum_cost
+            picking.valuation_no_tax = sum_no_tax
+            picking.valuation_tax = sum_tax
+
+
 class pickingRouteRegister(models.TransientModel):
     _name = 'stock.picking.route.register'
     _description = 'Set route date'

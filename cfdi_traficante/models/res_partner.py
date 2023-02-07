@@ -78,13 +78,33 @@ class ResPartner(models.Model):
             _logger.info("**** record.forma_pago antes: " + str(record.forma_pago))
             if record.forma_pago_pue == False and record.forma_pago_ppd == False:
                 record.write({"forma_pago": False})
+                record.forma_pago = False
             elif record.forma_pago_pue != False:
                 record.write({"forma_pago": record.forma_pago_pue})
+                record.forma_pago = record.forma_pago_pue
             elif record.forma_pago_ppd != False:
                 record.write({"forma_pago": record.forma_pago_ppd})
+                record.forma_pago = record.forma_pago_ppd
 
             _logger.info("**** record.forma_pago despues: " + str(record.forma_pago))
-        
+    
+    def write(self, vals):
+
+        res = super(ResPartner, self).write(vals)
+
+        if 'forma_pago_pue' in vals or 'forma_pago_ppd' in vals:
+            if self.forma_pago_pue == False and self.forma_pago_ppd == False:
+                self.write({"forma_pago": False})
+            elif self.forma_pago_pue != False:
+                self.write({"forma_pago": self.forma_pago_pue})
+            elif self.forma_pago_ppd != False:
+                self.write({"forma_pago": self.forma_pago_ppd})
+
+            _logger.info("**** record.forma_pago despues: " + str(self.forma_pago))
+    
+        return res
+
+
     @api.model
     def create(self, vals):
         _logger.info("**** Entra a create con vals: " + str(vals))

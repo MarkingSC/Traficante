@@ -1,0 +1,109 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mb_massive_cfdi_download
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20220620\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-21 03:37+0000\n"
+"PO-Revision-Date: 2023-01-20 21:39-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.1.1\n"
+
+#. module: mb_massive_cfdi_download
+#: model:ir.model,name:mb_massive_cfdi_download.model_ir_attachment
+msgid "Attachment"
+msgstr "Adjunto"
+
+#. module: mb_massive_cfdi_download
+#: model:ir.model.fields,field_description:mb_massive_cfdi_download.field_ir_attachment__partner_id
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_tree_view
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_tree_view
+msgid "Document"
+msgstr "Documento"
+
+#. module: mb_massive_cfdi_download
+#: model:ir.ui.menu,name:mb_massive_cfdi_download.ir_attachment_cfdi_tree_menu
+msgid "Dowloads"
+msgstr "Descargas"
+
+#. module: mb_massive_cfdi_download
+#: model:ir.actions.act_window,name:mb_massive_cfdi_download.action_ir_attachment_cfdi_tree_view
+msgid "Download invoicing documents"
+msgstr "Descargar documentos de factura"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_tree_view
+msgid "File"
+msgstr "Archivo"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_tree_view
+msgid "Files"
+msgstr "Archivos"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+msgid "From"
+msgstr "Desde"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: mb_massive_cfdi_download
+#: model:ir.model.fields,field_description:mb_massive_cfdi_download.field_ir_attachment__invoice_id
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: mb_massive_cfdi_download
+#: model:ir.model.fields,field_description:mb_massive_cfdi_download.field_ir_attachment__invoice_date
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_tree_view
+msgid "Invoice date"
+msgstr "Fecha de factura"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+msgid "Name"
+msgstr "Nombre"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+msgid "Search documents"
+msgstr "Buscar documentos"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+msgid "To"
+msgstr "Hasta"
+
+#. module: mb_massive_cfdi_download
+#: model:ir.model.fields,field_description:mb_massive_cfdi_download.field_ir_attachment__partner_vat
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_tree_view
+msgid "VAT"
+msgstr "RFC"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+msgid "invoice_id"
+msgstr "Factura"
+
+#. module: mb_massive_cfdi_download
+#: model_terms:ir.ui.view,arch_db:mb_massive_cfdi_download.ir_attachment_cfdi_filter
+msgid "partner_id"
+msgstr "Cliente"
