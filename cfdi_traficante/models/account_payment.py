@@ -57,10 +57,14 @@ class AccountPayment(models.Model):
     # Para enviar de forma automática el complemento de pago una vez timbrado   
     def complete_payment(self):
         _logger.info('**** entra a complete_payment: ')
+        _logger.info('**** el usario es  empleado interno: ' + str(self.env.user.has_group('base.group_user')))
+        _logger.info('**** el usario es admin: ' + str(self.env.is_admin()))
+        _logger.info('**** el usario es el sistema: ' + str(self.env.is_system() ))
         result = super(AccountPayment, self).complete_payment()
+        #result = super(AccountPayment, self).complete_payment()
         _logger.info('**** Se generó el complemento de pago y se enviará por correo. ')
         self.send_payment()
-        _logger.info('**** Complemento de pago enviado. ')
+        #_logger.info('**** Complemento de pago enviado. ')
         return result
 
     # 23 de Febrero 2022 - Marco Martinez - cambiar el nombre del cliente por la razón social (business_name)

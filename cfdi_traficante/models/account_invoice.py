@@ -5,6 +5,7 @@ from odoo import fields, models, api,_
 import pytz
 import datetime
 from odoo.exceptions import UserError, Warning
+from odoo.tools import date_utils, float_is_zero
 import json
 
 import logging
@@ -58,11 +59,15 @@ class AccountMove(models.Model):
                    ('D02', _('Gastos médicos por incapacidad o discapacidad')),
                    ('D03', _('Gastos funerales')),
                    ('D04', _('Donativos')),
+                   ('D05', _('Intereses reales efectivamente pagados por créditos hipotecarios (casa habitación).')),
+                   ('D06', _('Aportaciones voluntarias al SAR.')),
                    ('D07', _('Primas por seguros de gastos médicos')),
                    ('D08', _('Gastos de transportación escolar obligatoria')),
+                   ('D09', _('Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones')),
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
-                   ('P01', _('Por definir')),],
-        string=_('Uso CFDI (cliente)'), related = 'partner_id.uso_cfdi', required = True
+                   ('S01', _('Sin efectos fiscales')),
+                   ('P01', _('Por definir (obsoleto)')),],
+        string=_('Uso CFDI (cliente)'), required = True
     )
 
     motivo_cancelacion = fields.Selection(
@@ -130,6 +135,7 @@ class AccountMove(models.Model):
         no_decimales = self.currency_id.no_decimales
         no_decimales_prod = self.currency_id.decimal_places
         no_decimales_tc = self.currency_id.no_decimales_tc
+        factura_extranjera = True if self.currency_id.name != 'MXN' else False
 
         #corregir hora
         timezone = self._context.get('tz')
@@ -150,7 +156,8 @@ class AccountMove(models.Model):
         if self.currency_id.name == 'MXN':
            tipocambio = 1
         else:
-           tipocambio = self.set_decimals(1 / self.currency_id.with_context(date=self.invoice_date).rate, no_decimales_tc)
+           #tipocambio = self.set_decimals(1 / self.currency_id.with_context(date=self.invoice_date).rate, no_decimales_tc)
+           tipocambio = self.set_decimals(self.currency_rate, no_decimales_tc)
 
         self.check_cfdi_values()
 
@@ -355,7 +362,7 @@ class AccountMove(models.Model):
                                       'importe': self.set_decimals(total_wo_discount, no_decimales_prod),
                                       'descripcion': self.clean_text(description),
                                       'ClaveProdServ': line.product_id.clave_producto,
-                                      'ObjetoImp': line.product_id.objetoimp,
+                                      'ObjetoImp': '01' if factura_extranjera else line.product_id.objetoimp,
                                       'ClaveUnidad': line.product_id.cat_unidad_medida.clave})
             else:
                 invoice_lines.append({'cantidad': self.set_decimals(line.quantity,6),
@@ -368,7 +375,7 @@ class AccountMove(models.Model):
                                       'ClaveUnidad': line.product_id.cat_unidad_medida.clave,
                                       'Impuestos': tax_items and tax_items or '',
                                       'Descuento': self.set_decimals(discount_prod, no_decimales_prod),
-                                      'ObjetoImp': line.product_id.objetoimp,
+                                      'ObjetoImp': '01' if factura_extranjera else line.product_id.objetoimp,
                                       'InformacionAduanera': pedimentos and pedimentos or '',
                                       'predial': line.predial and line.predial or '',})
 
@@ -440,3 +447,50 @@ class AccountMove(models.Model):
         request_params.update({'conceptos': invoice_lines})
 
         return request_params
+
+
+    def _get_reconciled_info_JSON_values(self):
+        self.ensure_one()
+        foreign_currency = self.currency_id if self.currency_id != self.company_id.currency_id else False
+
+        reconciled_vals = []
+        pay_term_line_ids = self.line_ids.filtered(lambda line: line.account_id.user_type_id.type in ('receivable', 'payable'))
+        partials = pay_term_line_ids.mapped('matched_debit_ids') + pay_term_line_ids.mapped('matched_credit_ids')
+        for partial in partials:
+            counterpart_lines = partial.debit_move_id + partial.credit_move_id
+            # In case we are in an onchange, line_ids is a NewId, not an integer. By using line_ids.ids we get the correct integer value.
+            counterpart_line = counterpart_lines.filtered(lambda line: line.id not in self.line_ids.ids)
+
+            if foreign_currency and partial.currency_id == foreign_currency:
+                amount = partial.amount_currency
+                #amount_mxn = partial.amount * self.currency_id.with_context(date=self.invoice_date).rate
+                amount_mxn = partial.amount * self.currency_rate
+                #_logger.info('entra a amount_mxn %s', amount_mxn)
+            else:
+                #_logger.info('no entra a foraneo')
+                amount = partial.company_currency_id._convert(partial.amount, self.currency_id, self.company_id, self.date)
+                amount_mxn = partial.company_currency_id._convert(partial.amount, self.currency_id, self.company_id, self.date)
+
+            if float_is_zero(amount, precision_rounding=self.currency_id.rounding):
+                continue
+
+            ref = counterpart_line.move_id.name
+            if counterpart_line.move_id.ref:
+                ref += ' (' + counterpart_line.move_id.ref + ')'
+
+            reconciled_vals.append({
+                'name': counterpart_line.name,
+                'journal_name': counterpart_line.journal_id.name,
+                'amount': amount,
+                'amount_mxn': amount_mxn,
+                'currency': self.currency_id.symbol,
+                'digits': [69, self.currency_id.decimal_places],
+                'position': self.currency_id.position,
+                'date': counterpart_line.date,
+                'payment_id': counterpart_line.id,
+                'account_payment_id': counterpart_line.payment_id.id,
+                'payment_method_name': counterpart_line.payment_id.payment_method_id.name if counterpart_line.journal_id.type == 'bank' else None,
+                'move_id': counterpart_line.move_id.id,
+                'ref': ref,
+            })
+        return reconciled_vals

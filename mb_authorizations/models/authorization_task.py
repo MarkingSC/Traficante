@@ -17,25 +17,25 @@ class AuthorizationTask(models.Model):
     @api.depends('policy_id','res_id','model_id')
     def _get_default_name(self):
         for record in self:
-            _logger.info('***** Entra a _get_default_name *****')
-            _logger.info('***** record.res_id: ' + str(record.res_id))
-            _logger.info('***** record.policy_id: ' + str(record.policy_id))
-            _logger.info('***** record.model_id: ' + str(record.model_id))
+            #_logger.info('***** Entra a _get_default_name *****')
+            #_logger.info('***** record.res_id: ' + str(record.res_id))
+            #_logger.info('***** record.policy_id: ' + str(record.policy_id))
+            #_logger.info('***** record.model_id: ' + str(record.model_id))
 
             if record.res_id and record.policy_id and record.model_id:
-                _logger.info('***** record.model_id: ' + str(record.model_id.model))
+                #_logger.info('***** record.model_id: ' + str(record.model_id.model))
                 rel_record = self.env[record.model_id.model].search([('id', '=', record.res_id)], limit = 1)
                 if not rel_record:
                     rel_record = self.env[record.model_id.model].search([('id', '=', record.res_id), ('active', '=', False)], limit = 1)
-                _logger.info('***** rel_record: ' + str(rel_record) + str(rel_record.name))
+                #_logger.info('***** rel_record: ' + str(rel_record) + str(rel_record.name))
                 new_name = record.policy_id.default_description + ' ' + rel_record.name
                 record.write({'name': new_name})
                 #return {record.id:new_name}
 
     @api.depends('policy_id')
     def _get_default_priority(self):
-        _logger.info('***** Entra a _get_default_priority *****')
-        _logger.info('***** SELF: ' + str(self))
+        #_logger.info('***** Entra a _get_default_priority *****')
+        #_logger.info('***** SELF: ' + str(self))
         record = self
 
         if record.policy_id:
@@ -45,10 +45,10 @@ class AuthorizationTask(models.Model):
 
     @api.depends('policy_id')
     def _get_notified_emails(self, type=''):
-        _logger.info('***** Entra a _get_notified_emails *****')
+        #_logger.info('***** Entra a _get_notified_emails *****')
         record = self
         if record.policy_id:
-            _logger.info('***** record.policy_id: ' + str(record.policy_id))
+            #_logger.info('***** record.policy_id: ' + str(record.policy_id))
 
             # Si el llamado es de una acción entonces en lugar de notificar al autorizador se notifica al solicitante
             authorizer_or_applicant = ''
@@ -72,21 +72,21 @@ class AuthorizationTask(models.Model):
             else:
                 partners_list = notified_partners
 
-            _logger.info('***** emails_list: ' + str(emails_list))
+            #_logger.info('***** emails_list: ' + str(emails_list))
             record.write({
                 'notified_emails': emails_list,
                 'notified_partner_ids': partners_list})
 
     @api.depends('show_form')
     def _get_authorization_form(self):
-        _logger.info('***** Entra a _get_authorization_form: ' + str(self.new_vals))
+        #_logger.info('***** Entra a _get_authorization_form: ' + str(self.new_vals))
         if self.show_form:
-            _logger.info('***** Entra a _get_authorization_form con la política: ' + str(self.policy_id.name))
-            _logger.info('***** model_id: ' + str(self.policy_id.model_id))
-            _logger.info('***** res_id: ' + str(self.ids))
-            _logger.info('***** policy_id: ' + str(self.policy_id.id))
-            _logger.info('***** assigned_uid: ' + str(self.policy_id.authorizer_uid))
-            _logger.info('***** new_vals: ' + str(self.new_vals))
+            #_logger.info('***** Entra a _get_authorization_form con la política: ' + str(self.policy_id.name))
+            #_logger.info('***** model_id: ' + str(self.policy_id.model_id))
+            #_logger.info('***** res_id: ' + str(self.ids))
+            #_logger.info('***** policy_id: ' + str(self.policy_id.id))
+            #_logger.info('***** assigned_uid: ' + str(self.policy_id.authorizer_uid))
+            #_logger.info('***** new_vals: ' + str(self.new_vals))
 
             form = self.env.ref('mb_authorizations.view_authorization_task_form', False)
             action = {
@@ -110,11 +110,11 @@ class AuthorizationTask(models.Model):
             return action
 
     def _get_task_url(self):
-        _logger.info('***** Entra a _get_task_url *****')
-        _logger.info('***** SELF: ' + str(self))
+        #_logger.info('***** Entra a _get_task_url *****')
+        #_logger.info('***** SELF: ' + str(self))
         base_url = request.env['ir.config_parameter'].get_param('web.base.url')
         base_url += '/web#id=%d&view_type=form&model=%s' % (self.id, self._name)
-        _logger.info('***** base_url: ' + str(base_url))
+        #_logger.info('***** base_url: ' + str(base_url))
         self.write({'task_url': base_url})
     
     name = fields.Char(compute='_get_default_name', store=True)
@@ -156,7 +156,7 @@ class AuthorizationTask(models.Model):
 
     @api.model
     def create(self, vals):
-        _logger.info('***** Entra a create de authorization.task *****')
+        #_logger.info('***** Entra a create de authorization.task *****')
 
         res = super(AuthorizationTask, self).create(vals)
         res._get_default_priority()
@@ -166,18 +166,18 @@ class AuthorizationTask(models.Model):
         return res
         
     def _hide_button_authorize(self):
-        _logger.info('***** Entra a _hide_button_authorize *****')
+        #_logger.info('***** Entra a _hide_button_authorize *****')
         for task in self:
             if self.env.uid == task.policy_id.authorizer_uid.id or self.env.uid in task.policy_id.authorizers_uids.ids:
                 result = False
             else:
                 result = True
-            _logger.info('***** result: ' + str(result))
+            #_logger.info('***** result: ' + str(result))
             task.sudo().hide_button_authorize = result
             task.sudo()._hide_task()
 
     def _hide_task(self):
-        _logger.info('***** Entra a _hide_task *****')
+        #_logger.info('***** Entra a _hide_task *****')
         for task in self:
             _logger.info('***** task: ' + str(task))
             record = self.env[task.model_id.model].search([('id', '=', task.res_id)])
@@ -185,13 +185,13 @@ class AuthorizationTask(models.Model):
                 result = False
             else:
                 result = True
-            _logger.info('***** result: ' + str(result))
+            #_logger.info('***** result: ' + str(result))
             task.sudo().hide_task = result
 
     def action_send_email(self):
-        _logger.info('***** Entra a action_send_email *****')
+        #_logger.info('***** Entra a action_send_email *****')
 
-        _logger.info('***** SELF: ' + str(self))
+        #_logger.info('***** SELF: ' + str(self))
 
         if self.env.su:
             # sending mail in sudo was meant for it being sent from superuser
@@ -215,9 +215,9 @@ class AuthorizationTask(models.Model):
                 related_record.x_current_authorization_id = False
 
     def action_authorize(self):
-        _logger.info('***** Entra a action_authorize *****')
+        #_logger.info('***** Entra a action_authorize *****')
         for task in self:
-            _logger.info('***** Se autorizó, así que se actualizarán los datos: ' + str(task.new_vals))
+            #_logger.info('***** Se autorizó, así que se actualizarán los datos: ' + str(task.new_vals))
             record = self.env[task.model_id.model].search([('id', '=', task.res_id)])
             if not record:
                 record = self.env[task.model_id.model].search([('id', '=', task.res_id), ('active', '=', False)])
@@ -231,7 +231,7 @@ class AuthorizationTask(models.Model):
             task.sudo().with_context(force_send=True).message_post_with_template(template_id, composition_mode='comment', email_layout_xmlid="mail.mail_notification_light", message_type='notification')
 
     def action_reject(self):
-        _logger.info('***** Entra a action_reject *****')
+        #_logger.info('***** Entra a action_reject *****')
         for task in self:
             task.write({'state': 'rejected', 'authorization_date': datetime.today(), 'authorizer_uid': self.env.uid})
 

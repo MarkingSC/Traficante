@@ -6,11 +6,11 @@
 
 import logging
 from datetime import datetime, time
-
 from dateutil.relativedelta import relativedelta
-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+import json
+import requests
 
 _logger = logging.getLogger(__name__)
 
@@ -31,19 +31,20 @@ class ResCurrencyRateProvider(models.Model):
         string="Currency Name", related="company_id.currency_id.name"
     )
     active = fields.Boolean(default=True)
-    service = fields.Selection(string="Source Service", selection=[], required=True)
+
+    service = fields.Selection(string="Source Service", selection=[("BMX", "Banxico")], required=True)
+    serie = fields.Char(string="Series for currency on BMX", required=True)
+    bmx_token = fields.Char(string="BMX token for requests", required=True)
     available_currency_ids = fields.Many2many(
         string="Available Currencies",
         comodel_name="res.currency",
         compute="_compute_available_currency_ids",
     )
-    currency_ids = fields.Many2many(
-        string="Currencies",
+    currency_id = fields.Many2one(
+        string="Currency",
         comodel_name="res.currency",
-        column1="provider_id",
-        column2="currency_id",
         required=True,
-        help="Currencies to be updated by this provider",
+        help="Currency to be updated by this provider",
     )
     name = fields.Char(string="Name", compute="_compute_name", store=True)
     interval_type = fields.Selection(
@@ -63,6 +64,7 @@ class ResCurrencyRateProvider(models.Model):
         string="Next scheduled update", default=fields.Date.today, required=True
     )
 
+    '''
     _sql_constraints = [
         (
             "service_company_id_uniq",
@@ -75,6 +77,16 @@ class ResCurrencyRateProvider(models.Model):
             "Scheduled update interval must be greater than zero!",
         ),
     ]
+    '''
+
+    _sql_constraints = [
+        (
+            "valid_interval_number",
+            "CHECK(interval_number > 0)",
+            "Scheduled update interval must be greater than zero!",
+        ),
+    ]
+    
 
     @api.depends("service")
     def _compute_name(self):
@@ -121,14 +133,10 @@ class ResCurrencyRateProvider(models.Model):
         is_scheduled = self.env.context.get("scheduled")
         for provider in self:
             try:
-                data = provider._obtain_rates(
-                    provider.company_id.currency_id.name,
-                    provider.currency_ids.mapped("name"),
-                    date_from,
-                    date_to,
-                )
-                if data:
-                    data = data.items()
+                data = provider._obtain_rates()
+
+                ##if data:
+                ##   data = data.items()
             except BaseException as e:
                 _logger.warning(
                     'Currency Rate Provider "%s" failed to obtain data since'
@@ -149,43 +157,30 @@ class ResCurrencyRateProvider(models.Model):
                 if is_scheduled:
                     provider._schedule_next_run()
                 continue
-            if newest_only:
-                data = [max(data, key=lambda x: fields.Date.from_string(x[0]))]
 
-            for content_date, rates in data:
-                timestamp = fields.Date.from_string(content_date)
-                for currency_name, rate in rates.items():
-                    if currency_name == provider.company_id.currency_id.name:
-                        continue
+            rate = provider._process_rate(provider.currency_id, data)
+            timestamp = fields.Date.today()
+            record = CurrencyRate.search(
+                [
+                    ("company_id", "=", provider.company_id.id),
+                    ("currency_id", "=", provider.currency_id.id),
+                    ("name", "=", timestamp),
+                ],
+                limit=1,
+            )
 
-                    currency = Currency.search([("name", "=", currency_name)], limit=1)
-                    if not currency:
-                        raise UserError(
-                            _("Unknown currency from %(provider)s: %(rate)s")
-                            % {"provider": provider.name, "rate": rate}
-                        )
-                    rate = provider._process_rate(currency, rate)
-
-                    record = CurrencyRate.search(
-                        [
-                            ("company_id", "=", provider.company_id.id),
-                            ("currency_id", "=", currency.id),
-                            ("name", "=", timestamp),
-                        ],
-                        limit=1,
-                    )
-                    if record:
-                        record.write({"rate": rate, "provider_id": provider.id})
-                    else:
-                        record = CurrencyRate.create(
-                            {
-                                "company_id": provider.company_id.id,
-                                "currency_id": currency.id,
-                                "name": timestamp,
-                                "rate": rate,
-                                "provider_id": provider.id,
-                            }
-                        )
+            if record:
+                record.write({"rate": rate, "provider_id": provider.id})
+            else:
+                record = CurrencyRate.create(
+                    {
+                        "company_id": provider.company_id.id,
+                        "currency_id": provider.currency_id.id,
+                        "name": timestamp,
+                        "rate": rate,
+                        "provider_id": provider.id,
+                    }
+                )
 
             if is_scheduled:
                 provider._schedule_next_run()
@@ -282,7 +277,20 @@ class ResCurrencyRateProvider(models.Model):
         self.ensure_one()
         return []
 
-    def _obtain_rates(self, base_currency, currencies, date_from, date_to):
-        # pragma: no cover
+    def _obtain_rates(self):
+        _logger.info("Entra a _obtain_rates.")
         self.ensure_one()
-        return {}
+        _logger.info("*** PUNTO DE CONTROL")
+        if self.service != "BMX":
+            raise UserError(_('The configured module only allows rate obtention for Banxico.'))
+
+        url = "https://www.banxico.org.mx/SieAPIRest/service/v1/series/" + str(self.serie) + "/datos/oportuno" 
+        headers = {"Content-Type": "application/json", "Accept": "application/json", "Bmx-Token": self.bmx_token}
+        response = requests.get(url, data= None, headers=headers)
+
+        _logger.info("*** response.json(): " + str(response.json()))
+        monto = response.json()['bmx']['series'][0]['datos'][0]['dato']
+        monto = 1/float(monto)
+        _logger.info("*** monto: " + str(monto))
+        return monto
+        

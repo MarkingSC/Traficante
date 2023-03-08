@@ -27,7 +27,7 @@ class AuthorizationPolicy(models.Model):
 
     @api.constrains('model_id')
     def _update_model_and_views(self):
-        _logger.info('***** Inicia _update_model_and_views *****')
+        #_logger.info('***** Inicia _update_model_and_views *****')
         for policy in self:
             if policy.model_id:
                 if 'x_current_authorization_id' not in self.env[policy.model_id.model]._fields:
@@ -42,11 +42,11 @@ class AuthorizationPolicy(models.Model):
                         'relation': 'authorization.task'
                     })
 
-                    _logger.info('***** CREÓ EL CAMPO *****')
+                    #_logger.info('***** CREÓ EL CAMPO *****')
 
                 prev_action = self.env['ir.actions.server'].search([('code', '=', 'action = records._action_show_auth_form()'), ('model_id', '=', policy.model_id.id)], limit = 1)
                 
-                _logger.info('***** prev_action:' + str(prev_action))
+                #_logger.info('***** prev_action:' + str(prev_action))
 
                 if not prev_action:
                     # Crea una acción de ventana asociada al modelo
@@ -63,7 +63,7 @@ class AuthorizationPolicy(models.Model):
                         'code': 'action = records._action_show_auth_form()',
                     })
                     
-                    _logger.info('***** CREÓ LA ACCION *****')
+                    #_logger.info('***** CREÓ LA ACCION *****')
 
                     
 

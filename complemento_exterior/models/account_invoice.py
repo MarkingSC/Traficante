@@ -4,6 +4,7 @@ import base64
 import json
 import requests
 import datetime
+from dateutil.relativedelta import relativedelta
 from lxml import etree
 
 from odoo import fields, models, api,_ 
@@ -105,9 +106,13 @@ class AccountMove(models.Model):
         res = super(AccountMove,self).to_json()
         mxn = self.env["res.currency"].search([('name', '=', 'MXN')], limit=1)
         usd = self.env["res.currency"].search([('name', '=', 'USD')], limit=1)
-        curr_rate = round(usd.with_context(date=self.invoice_date).rate,6) / round(self.currency_id.with_context(date=self.invoice_date).rate,6)
+        usd_rate = usd.rate_ids.search([('name', '=',  (self.invoice_date - relativedelta(days=1)))], limit=1).rate
+        curr_rate = round(usd.with_context(date=self.invoice_date  - relativedelta(days=1)).rate,6) / round(self.currency_id.with_context(date=self.invoice_date).rate,6)
 
         if self.cce_habilitar_cee or self.cce_habilitar_exterior:
+                
+                _logger.info('RATE DE USD: %s, DECIMALES MXN: %s', str(usd_rate), self.currency_id.no_decimales_tc)
+
                 res.update({
                      'comercioexterior11': {
                             'TipoOperacion': self.cce_tipooperacion,
@@ -116,7 +121,7 @@ class AccountMove(models.Model):
                             'NumeroExportador': self.cce_numeroexportadorconfiable,
                             'Incoterm': self.cce_incoterm,
                             'Subdivision': self.cce_subdivision,
-                            'TipoCambioUSD': self.set_decimals(1 / (round(usd.with_context(date=self.invoice_date).rate,6)) + 0.000001, self.currency_id.no_decimales_tc),
+                            'TipoCambioUSD': self.set_decimals((round(1/usd_rate, 6)) + 0.000001, self.currency_id.no_decimales_tc),
                             'MotivoTraslado': self.cce_motivo_traslado,
                             'TotalUSD': self.amount_total, 
                             'Emisor': {

@@ -45,6 +45,10 @@ Para conectarse a la base de postgres:
     \c traficante-dev-f2e1
     (a partir de aqui ya se pueden hacer consultas)
 
+    Para obtener las constraints de una tabla
+    \d+ {SCHEMA_NAME.TABLE_NAME}
+
+
 
 Para obtener un backup de la base desde cli:
     Acceder al servidor con el usuario postgres

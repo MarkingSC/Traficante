@@ -166,12 +166,16 @@ class CfdiTraslado(models.Model):
                    ('D02', _('Gastos médicos por incapacidad o discapacidad')),
                    ('D03', _('Gastos funerales')),
                    ('D04', _('Donativos')),
+                   ('D05', _('Intereses reales efectivamente pagados por créditos hipotecarios (casa habitación).')),
+                   ('D06', _('Aportaciones voluntarias al SAR.')),
                    ('D07', _('Primas por seguros de gastos médicos')),
                    ('D08', _('Gastos de transportación escolar obligatoria')),
+                   ('D09', _('Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones')),
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
-                   ('P01', _('Por definir')),],
+                   ('S01', _('Sin efectos fiscales')),
+                   ('P01', _('Por definir (obsoleto)')),],
         string=_('Uso CFDI (cliente)'),
-        default = 'P01',
+        default = 'S01',
     )
 
     tipo_comprobante = fields.Selection(
@@ -190,7 +194,7 @@ class CfdiTraslado(models.Model):
         default='factura_no_generada',
         readonly=True
     )
-    fecha_factura = fields.Datetime(string=_('Fecha Factura'), readonly=True)
+    fecha_factura = fields.Datetime(string=_('Fecha Factura'))
     tipo_relacion = fields.Selection(
         selection=[('01', 'Nota de crédito de los documentos relacionados'),
                    ('02', 'Nota de débito de los documentos relacionados'),
@@ -201,33 +205,8 @@ class CfdiTraslado(models.Model):
                    ('07', 'CFDI por aplicación de anticipo')],
         string=_('Tipo relación')
     )
-    regimen_fiscal = fields.Selection(
-        selection=[('601', _('General de Ley Personas Morales')),
-                   ('603', _('Personas Morales con Fines no Lucrativos')),
-                   ('605', _('Sueldos y Salarios e Ingresos Asimilados a Salarios')),
-                   ('606', _('Arrendamiento')),
-                   ('608', _('Demás ingresos')),
-                   ('609', _('Consolidación')),
-                   ('610', _('Residentes en el Extranjero sin Establecimiento Permanente en México')),
-                   ('611', _('Ingresos por Dividendos (socios y accionistas)')),
-                   ('612', _('Personas Físicas con Actividades Empresariales y Profesionales')),
-                   ('614', _('Ingresos por intereses')),
-                   ('616', _('Sin obligaciones fiscales')),
-                   ('620', _('Sociedades Cooperativas de Producción que optan por diferir sus ingresos')),
-                   ('621', _('Incorporación Fiscal')),
-                   ('622', _('Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras')),
-                   ('623', _('Opcional para Grupos de Sociedades')),
-                   ('624', _('Coordinados')),
-                   ('628', _('Hidrocarburos')),
-                   ('607', _('Régimen de Enajenación o Adquisición de Bienes')),
-                   ('629', _('De los Regímenes Fiscales Preferentes y de las Empresas Multinacionales')),
-                   ('630', _('Enajenación de acciones en bolsa de valores')),
-                   ('615', _('Régimen de los ingresos por obtención de premios')),
-                   ('625', _('Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas')),],
-        string=_('Régimen Fiscal'), 
-    )
+
     uuid_relacionado = fields.Char(string=_('CFDI Relacionado'))
-    xml_invoice_link = fields.Char(string=_('XML Invoice Link'))
     qr_value = fields.Char(string=_('QR Code Value'))
     qrcode_image = fields.Binary("QRCode")
     comment = fields.Text("Comentario")
@@ -248,14 +227,15 @@ class CfdiTraslado(models.Model):
     selo_sat = fields.Char(string=_('Selo del SAT'))
     moneda = fields.Char(string=_('Moneda'))
     tipocambio = fields.Char(string=_('TipoCambio'))
-    folio = fields.Char(string=_('Folio'))
-    version = fields.Char(string=_('Version'))
+    #folio = fields.Char(string=_('Folio'))
+    #version = fields.Char(string=_('Version'))
     number_folio = fields.Char(string=_('Folio'), compute='_get_number_folio')
     amount_to_text = fields.Char('Amount to Text', compute='_get_amount_to_text',
-                                 size=256,
+                                 size=256, 
                                  help='Amount of the invoice in letter')
     qr_value = fields.Char(string=_('QR Code Value'))
     invoice_datetime = fields.Char(string=_('11/12/17 12:34:12'))
+    proceso_timbrado = fields.Boolean(string=_('Proceso de timbrado'))
     rfc_emisor = fields.Char(string=_('RFC'))
     name_emisor = fields.Char(string=_('Name'))
     serie_emisor = fields.Char(string=_('A'))
@@ -338,7 +318,7 @@ class CfdiTraslado(models.Model):
     @api.depends('number')
     def _get_number_folio(self):
         if self.number:
-            self.number_folio = self.number.replace('FG','').replace('/','')
+            self.number_folio = self.number.replace('CT','').replace('/','')
 
     @api.model
     def _get_amount_2_text(self, amount_total):
@@ -395,7 +375,14 @@ class CfdiTraslado(models.Model):
 
     @api.model
     def to_json(self):
-        no_decimales_prod = 2
+        if self.partner_id.vat == 'XAXX010101000':
+            nombre = 'PUBLICO EN GENERAL'
+        else:
+            nombre = self.partner_id.name.upper()
+
+        no_decimales = self.currency_id.no_decimales
+        no_decimales_prod = self.currency_id.decimal_places
+        no_decimales_tc = self.currency_id.no_decimales_tc
 
         #corregir hora
         timezone = self._context.get('tz')
@@ -404,47 +391,51 @@ class CfdiTraslado(models.Model):
         # timezone = tools.ustr(timezone).encode('utf-8')
 
         local = pytz.timezone(timezone)
-        naive_from = datetime.datetime.now()
+        if not self.fecha_factura:
+           naive_from = datetime.datetime.now()
+        else:
+           naive_from = self.fecha_factura
         local_dt_from = naive_from.replace(tzinfo=pytz.UTC).astimezone(local)
         date_from = local_dt_from.strftime ("%Y-%m-%dT%H:%M:%S")
-
-        #if self.currency_id.name == 'MXN':
-        #   tipocambio = 1
-        #else:
-        #   tipocambio = self.set_decimals(1 / self.currency_id.with_context(date=self.invoice_date).rate, no_decimales_tc)
+        if not self.fecha_factura:
+           self.fecha_factura = datetime.datetime.now()
 
         request_params = {
                 'factura': {
                       'serie': self.journal_id.serie_diario or self.company_id.serie_factura,
                       'folio': self.number.replace('CT','').replace('/',''),
                       'fecha_expedicion': date_from,
-                      'forma_pago':'',
+                     # 'forma_pago':'',
                       'subtotal': self.amount_untaxed,
                      # 'descuento': 0,
-                      'moneda': 'XXX', #self.currency_id.name,
+                      'moneda': 'XXX',
                      # 'tipocambio': tipocambio,
                       'total': self.amount_total,
                       'tipocomprobante': self.tipo_comprobante,
                       'metodo_pago': self.methodo_pago,
                       'LugarExpedicion': self.journal_id.codigo_postal or self.company_id.zip,
                       'Confirmacion': self.confirmacion,
-                      'RegimenFiscal': self.company_id.regimen_fiscal,
+                      'Exportacion': '01',
                 },
                 'emisor': {
-                      'rfc': self.company_id.vat,
-                      'nombre': self.clean_text(self.company_id.nombre_fiscal),
+                      'rfc': self.company_id.vat.upper(),
+                      'nombre': self.company_id.nombre_fiscal.upper(),
+                      'RegimenFiscal': self.company_id.regimen_fiscal,
+                      #'FacAtrAdquirente': self.facatradquirente,
                 },
                 'receptor': {
-                      'nombre': self.clean_text(self.partner_id.name),
-                      'rfc': self.partner_id.vat,
+                      'nombre': nombre,
+                      'rfc': self.partner_id.vat.upper(),
                       'ResidenciaFiscal': self.partner_id.residencia_fiscal,
                       'NumRegIdTrib': self.partner_id.registro_tributario,
                       'UsoCFDI': self.uso_cfdi,
+                      'RegimenFiscalReceptor': self.partner_id.regimen_fiscal,
+                      'DomicilioFiscalReceptor': self.partner_id.zip,
                 },
                 'informacion': {
-                      'cfdi': '3.3',
+                      'cfdi': '4.0',
                       'sistema': 'odoo13',
-                      'version': '5',
+                      'version': '2',
                       'api_key': self.company_id.proveedor_timbrado,
                       'modo_prueba': self.company_id.modo_prueba,
                 },
@@ -460,24 +451,13 @@ class CfdiTraslado(models.Model):
                                       'importe': self.set_decimals(line.price_unit * line.quantity, no_decimales_prod),
                                       'descripcion': self.clean_text(line.product_id.name),
                                       'ClaveProdServ': line.product_id.clave_producto,
+                                      'ObjetoImp': '01',
                                       'ClaveUnidad': line.product_id.cat_unidad_medida.clave})
 
         request_params['factura'].update({'subtotal': '0','total': '0'})
 
         request_params.update({'conceptos': invoice_lines})
 
-        if not self.company_id.archivo_cer:
-            raise UserError(_('Archivo .cer path is missing.'))
-        if not self.company_id.archivo_key:
-            raise UserError(_('Archivo .key path is missing.'))
-        archivo_cer = self.company_id.archivo_cer
-        archivo_key = self.company_id.archivo_key
-        request_params.update({
-            'certificados': {
-                'archivo_cer': archivo_cer.decode("utf-8"),
-                'archivo_key': archivo_key.decode("utf-8"),
-                'contrasena': self.company_id.contrasena,
-            }})
         return request_params
 
     def set_decimals(self, amount, precision):
@@ -485,43 +465,79 @@ class CfdiTraslado(models.Model):
             return None
         return '%.*f' % (precision, amount)
 
+    def clean_text(self, text):
+        clean_text = text.replace('\n', ' ').replace('\\', ' ').replace('-', ' ').replace('/', ' ').replace('|', ' ')
+        clean_text = clean_text.replace(',', ' ').replace(';', ' ').replace('>', ' ').replace('<', ' ')
+        return clean_text[:1000]
+
+    def check_cfdi_values(self):
+        if not self.company_id.vat:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('El emisor no tiene RFC configurado.'))
+        if not self.company_id.name:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('El emisor no tiene nombre configurado.'))
+        if not self.partner_id.vat:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('El receptor no tiene RFC configurado.'))
+        if not self.uso_cfdi:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('La factura no tiene uso de cfdi configurado.'))
+        if not self.tipo_comprobante:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('El emisor no tiene tipo de comprobante configurado.'))
+        if self.tipo_comprobante != 'T' and not self.methodo_pago:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('La factura no tiene método de pago configurado.'))
+        if self.tipo_comprobante != 'T' and not self.forma_pago:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('La factura no tiene forma de pago configurado.'))
+        if not self.company_id.regimen_fiscal:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('El emisor no régimen fiscal configurado.'))
+        if not self.journal_id.codigo_postal and not self.company_id.zip:
+            self.write({'proceso_timbrado': False})
+            self.env.cr.commit()
+            raise UserError(_('El emisor no tiene código postal configurado.'))
+
     def _set_data_from_xml(self, xml_invoice):
         if not xml_invoice:
             return None
         NSMAP = {
             'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-            'cfdi': 'http://www.sat.gob.mx/cfd/3',
+            'cfdi': 'http://www.sat.gob.mx/cfd/4',
             'tfd': 'http://www.sat.gob.mx/TimbreFiscalDigital',
         }
 
         xml_data = etree.fromstring(xml_invoice)
-        Emisor = xml_data.find('cfdi:Emisor', NSMAP)
-        RegimenFiscal = Emisor.find('cfdi:RegimenFiscal', NSMAP)
-        Complemento = xml_data.find('cfdi:Complemento', NSMAP)
-        TimbreFiscalDigital = Complemento.find('tfd:TimbreFiscalDigital', NSMAP)
+        Complemento = xml_data.findall('cfdi:Complemento', NSMAP)
 
-        self.rfc_emisor = Emisor.attrib['Rfc']
-        self.name_emisor = Emisor.attrib['Nombre']
-        # self.methodo_pago = xml_data.attrib['MetodoPago']
-        # self.forma_pago = _(xml_data.attrib['FormaPago'])
-        #  self.condicione_pago = xml_data.attrib['condicionesDePago']
-        # self.num_cta_pago = xml_data.get('NumCtaPago', '')
-        self.tipocambio = xml_data.find('TipoCambio') and xml_data.attrib['TipoCambio'] or '1'
-        self.tipo_comprobante = xml_data.attrib['TipoDeComprobante']
+        for complementos in Complemento:
+            TimbreFiscalDigital = complementos.find('tfd:TimbreFiscalDigital', NSMAP)
+            if TimbreFiscalDigital:
+                break
+
+        #self.tipocambio = xml_data.attrib['TipoCambio']
         self.moneda = xml_data.attrib['Moneda']
-        self.regimen_fiscal = Emisor.attrib['RegimenFiscal'] #checar este!!
         self.numero_cetificado = xml_data.attrib['NoCertificado']
         self.cetificaso_sat = TimbreFiscalDigital.attrib['NoCertificadoSAT']
         self.fecha_certificacion = TimbreFiscalDigital.attrib['FechaTimbrado']
         self.selo_digital_cdfi = TimbreFiscalDigital.attrib['SelloCFD']
         self.selo_sat = TimbreFiscalDigital.attrib['SelloSAT']
         self.folio_fiscal = TimbreFiscalDigital.attrib['UUID']
-        self.folio = xml_data.attrib['Folio']
-        if self.company_id.serie_factura:
-            self.serie_emisor = xml_data.attrib['Serie']
         self.invoice_datetime = xml_data.attrib['Fecha']
-        self.version = TimbreFiscalDigital.attrib['Version']
-        self.cadena_origenal = '||%s|%s|%s|%s|%s||' % (self.version, self.folio_fiscal, self.fecha_certificacion,
+#        if not self.fecha_factura:
+#            self.fecha_factura = self.invoice_datetime.replace('T', ' ')
+        version = TimbreFiscalDigital.attrib['Version']
+        self.cadena_origenal = '||%s|%s|%s|%s|%s||' % (version, self.folio_fiscal, self.fecha_certificacion,
                                                        self.selo_digital_cdfi, self.cetificaso_sat)
 
         options = {'width': 275 * mm, 'height': 275 * mm}
@@ -623,7 +639,7 @@ class CfdiTraslado(models.Model):
                 continue
             mercancia_atributos = {
                             'BienesTransp': line.product_id.clave_producto,
-                            'ClaveSTCC': line.product_id.clavestcc.clave,
+                            'ClaveSTCC': line.product_id.clave_stcc,
                             'Descripcion': self.clean_text(line.product_id.name),
                             'Cantidad': line.quantity,
                             'ClaveUnidad': line.product_id.cat_unidad_medida.clave,
@@ -770,16 +786,22 @@ class CfdiTraslado(models.Model):
     def action_cfdi_generate(self):
         # after validate, send invoice data to external system via http post
         for invoice in self:
-            if invoice.fecha_factura == False:
-                invoice.fecha_factura = datetime.datetime.now()
-                invoice.write({'fecha_factura': invoice.fecha_factura})
+            if invoice.proceso_timbrado:
+                return True
+            else:
+               invoice.write({'proceso_timbrado': True})
+               self.env.cr.commit()
             if invoice.estado_factura == 'factura_correcta':
                 if invoice.folio_fiscal:
                     invoice.write({'factura_cfdi': True})
                     return True
                 else:
+                    invoice.write({'proceso_timbrado': False})
+                    self.env.cr.commit()
                     raise UserError(_('Error para timbrar factura, Factura ya generada.'))
             if invoice.estado_factura == 'factura_cancelada':
+                invoice.write({'proceso_timbrado': False})
+                self.env.cr.commit()
                 raise UserError(_('Error para timbrar factura, Factura ya generada y cancelada.'))
 
             values = invoice.to_json()
@@ -797,6 +819,8 @@ class CfdiTraslado(models.Model):
                 else:
                     url = '%s' % ('https://itadmin.gecoerp.com/invoice/?handler=OdooHandler33')
             else:
+                invoice.write({'proceso_timbrado': False})
+                self.env.cr.commit()
                 raise UserError(_('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
 
             try:
@@ -805,18 +829,23 @@ class CfdiTraslado(models.Model):
                                          headers={"Content-type": "application/json"})
             except Exception as e:
                 error = str(e)
+                invoice.write({'proceso_timbrado': False})
+                self.env.cr.commit()
                 if "Name or service not known" in error or "Failed to establish a new connection" in error:
-                    raise Warning("Servidor fuera de servicio, favor de intentar mas tarde")
+                    raise Warning("No se pudo conectar con el servidor.")
                 else:
                     raise Warning(error)
 
-            #_logger.info('something ... %s', response.text)
             if "Whoops, looks like something went wrong." in response.text:
-               raise Warning("Error en la respuesta del servidor de facturación.")
+                invoice.write({'proceso_timbrado': False})
+                self.env.cr.commit()
+                raise Warning("Error en el proceso de timbrado, espere un minuto y vuelva a intentar timbrar nuevamente. \nSi el error aparece varias veces reportarlo con la persona de sistemas.")
             else:
-               json_response = response.json()
+                json_response = response.json()
             estado_factura = json_response['estado_factura']
             if estado_factura == 'problemas_factura':
+                invoice.write({'proceso_timbrado': False})
+                self.env.cr.commit()
                 raise UserError(_(json_response['problemas_message']))
             # Receive and stroe XML invoice
             if json_response.get('factura_xml'):
@@ -833,14 +862,10 @@ class CfdiTraslado(models.Model):
                     })
 
             invoice.write({'estado_factura': estado_factura,
-                           'factura_cfdi': True})
+                           'factura_cfdi': True,
+                           'proceso_timbrado': False})
             invoice.message_post(body="CFDI emitido")
         return True
-
-    def clean_text(self, text):
-        clean_text = text.replace('\n', ' ').replace('\\', ' ').replace('-', ' ').replace('/', ' ').replace('|', ' ')
-        clean_text = clean_text.replace(',', ' ').replace(';', ' ').replace('>', ' ').replace('<', ' ')
-        return clean_text[:1000]
 
     def action_cfdi_cancel(self):
         for invoice in self:
@@ -848,30 +873,30 @@ class CfdiTraslado(models.Model):
                 if invoice.estado_factura == 'factura_cancelada':
                     pass
                     # raise UserError(_('La factura ya fue cancelada, no puede volver a cancelarse.'))
-                if not invoice.company_id.archivo_cer:
-                    raise UserError(_('Falta la ruta del archivo .cer'))
-                if not invoice.company_id.archivo_key:
-                    raise UserError(_('Falta la ruta del archivo .key'))
-                archivo_cer = self.company_id.archivo_cer
-                archivo_key = self.company_id.archivo_key
+                if not invoice.company_id.contrasena:
+                  raise UserError(_('El campo de contraseña de los certificados está vacío.'))
                 domain = [
                     ('res_id', '=', invoice.id),
                     ('res_model', '=', invoice._name),
                     ('name', '=', invoice.number.replace('/', '_') + '.xml')]
-                xml_file = self.env['ir.attachment'].search(domain)[0]
+                xml_file = self.env['ir.attachment'].search(domain)
+                if not xml_file:
+                  raise UserError(_('No se encontró el archivo XML para enviar a cancelar.'))
                 values = {
                     'rfc': invoice.company_id.vat,
                     'api_key': invoice.company_id.proveedor_timbrado,
-                    'uuid': self.folio_fiscal,
-                    'folio': self.folio,
-                    'serie_factura': invoice.company_id.serie_factura,
+                    'uuid': invoice.folio_fiscal,
+                    'folio': invoice.number.replace('CT','').replace('/',''),
+                    'serie_factura': invoice.journal_id.serie_diario or invoice.company_id.serie_factura,
                     'modo_prueba': invoice.company_id.modo_prueba,
                     'certificados': {
-                        'archivo_cer': archivo_cer.decode("utf-8"),
-                        'archivo_key': archivo_key.decode("utf-8"),
+                    #    'archivo_cer': archivo_cer.decode("utf-8"),
+                    #    'archivo_key': archivo_key.decode("utf-8"),
                         'contrasena': invoice.company_id.contrasena,
                     },
-                    'xml': xml_file.datas.decode("utf-8"),
+                    'xml': xml_file[0].datas.decode("utf-8"),
+                    'motivo': self.env.context.get('motivo_cancelacion',False),
+                    'foliosustitucion': self.env.context.get('foliosustitucion',''),
                 }
                 if self.company_id.proveedor_timbrado == 'multifactura':
                     url = '%s' % ('http://facturacion.itadmin.com.mx/api/refund')
@@ -894,10 +919,13 @@ class CfdiTraslado(models.Model):
                 except Exception as e:
                     error = str(e)
                     if "Name or service not known" in error or "Failed to establish a new connection" in error:
-                        raise Warning("Servidor fuera de servicio, favor de intentar mas tarde")
+                        raise Warning("No se pudo conectar con el servidor.")
                     else:
                         raise Warning(error)
-                _logger.info('something ... %s', response.text)
+
+                if "Whoops, looks like something went wrong." in response.text:
+                    raise Warning("Error en el proceso de timbrado, espere un minuto y vuelva a intentar timbrar nuevamente. \nSi el error aparece varias veces reportarlo con la persona de sistemas.")
+
                 json_response = response.json()
 
                 log_msg = ''
@@ -946,6 +974,9 @@ class CfdiTraslado(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
+    def unlink(self):
+        raise UserError("Los registros no se pueden borrar, solo cancelar.")
 
 class CfdiTrasladoMail(models.Model):
     _name = "cfdi.traslado.mail"

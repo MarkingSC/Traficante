@@ -20,6 +20,7 @@
         "views/res_currency_rate_provider.xml",
         "views/res_config_settings.xml",
         "wizards/res_currency_rate_update_wizard.xml",
+        "views/account_move_views.xml",
     ],
     "installable": True,
 }
