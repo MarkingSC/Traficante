@@ -75,12 +75,20 @@ class AccountMoveLine(models.Model):
             nuevo_precio_lista = dolares / nueva_tasa_referencia
 
             _logger.info('nuevo precio de lista del producto: ' + str(nuevo_precio_lista))
-            line.product_id.list_price = nuevo_precio_lista
+
+            line.product_id.sudo().write({
+                'list_price': nuevo_precio_lista
+            })
+            
+            #line.product_id.list_price = nuevo_precio_lista
 
             line.price_unit = line._get_computed_price_unit()
             _logger.info('nuevo precio unitario en moneda destino: ' + str(line.price_unit))
 
-            line.product_id.list_price = pesos
+            line.product_id.sudo().write({
+                'list_price': pesos
+            })
+            #line.product_id.list_price = pesos
             _logger.info('Regresó el precio de lista del producto: ' + str(pesos))
 
     # -------------------------------------------------------------------------
@@ -117,12 +125,19 @@ class AccountMoveLine(models.Model):
                 nuevo_precio_lista = dolares / nueva_tasa_referencia
 
                 _logger.info('nuevo precio de lista del producto: ' + str(nuevo_precio_lista))
-                line.product_id.list_price = nuevo_precio_lista
+                #line.product_id.list_price = nuevo_precio_lista
+
+                line.product_id.sudo().write({
+                    'list_price': nuevo_precio_lista
+                })
 
                 line.price_unit = line._get_computed_price_unit()
                 _logger.info('nuevo precio unitario en moneda destino: ' + str(line.price_unit))
 
-                line.product_id.list_price = pesos
+                line.product_id.sudo().write({
+                    'list_price': pesos
+                })
+                #line.product_id.list_price = pesos
                 _logger.info('Regresó el precio de lista del producto: ' + str(pesos))
                 
             # --
