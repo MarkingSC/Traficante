@@ -47,54 +47,30 @@ class AccountMoveLine(models.Model):
                 taxes = line.move_id.fiscal_position_id.map_tax(taxes, partner=line.partner_id)
             line.tax_ids = taxes
             line.product_uom_id = line._get_computed_uom() 
-            line.price_unit = line._get_computed_price_unit()
+
+            standard_price =  line.product_id.standard_price
+            _logger.info('standard_price: ' + str(standard_price))
+
+            line.price_unit = line.product_id.standard_price
 
         if len(self) == 1:
             return {'domain': {'product_uom_id': [('category_id', '=', self.product_uom_id.category_id.id)]}}
 
-    
+    '''
     @api.onchange('price_unit')
     def _onchange_price_unit_set_currency_price(self):
+        _logger.info('*** _onchange_price_unit_set_currency_price ***')
         for line in self:
-            if not line.product_id or line.display_type in ('line_section', 'line_note'):
-                continue
-
-            pesos = line.product_id.list_price
-            dolares = line._get_computed_price_unit()
-            tasa = (dolares / pesos)
-            
-            _logger.info('precio de lista del producto: ' + str(pesos))
-            _logger.info('precio unitario en moneda destino: ' + str(dolares))
-            _logger.info('tasa de cambio personalizada: ' + str(tasa))
-
-            unidad_tasa = tasa / (pesos / dolares)
-            
-            custom_tasa = line.move_id.currency_rate
-            nueva_tasa_referencia = unidad_tasa * custom_tasa
-
-            nuevo_precio_lista = dolares / nueva_tasa_referencia
-
-            _logger.info('nuevo precio de lista del producto: ' + str(nuevo_precio_lista))
-
-            line.product_id.sudo().write({
-                'list_price': nuevo_precio_lista
-            })
-            
-            #line.product_id.list_price = nuevo_precio_lista
-
-            line.price_unit = line._get_computed_price_unit()
-            _logger.info('nuevo precio unitario en moneda destino: ' + str(line.price_unit))
-
-            line.product_id.sudo().write({
-                'list_price': pesos
-            })
-            #line.product_id.list_price = pesos
-            _logger.info('Regresó el precio de lista del producto: ' + str(pesos))
-
+            if not line.tax_repartition_line_id:
+                line.recompute_tax_line = True
+    '''
+       
     # -------------------------------------------------------------------------
     # ONCHANGE METHODS
     # -------------------------------------------------------------------------
 
+
+    #@api.onchange('amount_currency', 'currency_id', 'debit', 'credit', 'tax_ids', 'account_id')
     @api.onchange('amount_currency', 'currency_id', 'debit', 'credit', 'tax_ids', 'account_id', 'price_unit')
     def _onchange_mark_recompute_taxes(self):
         _logger.info('*** _onchange_mark_recompute_taxes ***')
@@ -106,38 +82,18 @@ class AccountMoveLine(models.Model):
             if not line.tax_repartition_line_id:
                 line.recompute_tax_line = True
             
-            # --
-            pesos = line.product_id.list_price
-            dolares = line._get_computed_price_unit()
+            pesos = line.product_id.standard_price
 
-            if pesos and dolares:
-                
-                _logger.info('precio de lista del producto: ' + str(pesos))
-                _logger.info('precio unitario en moneda destino: ' + str(dolares))
-                tasa = (dolares / pesos)
-                _logger.info('tasa de cambio personalizada: ' + str(tasa))
+            price_unit_line = line.price_unit
+            _logger.info('price_unit_line: ' + str(price_unit_line))
+            
+            pesos = price_unit_line if price_unit_line != pesos else pesos
 
-                unidad_tasa = tasa / (pesos / dolares)
-                
-                custom_tasa = line.move_id.currency_rate
-                nueva_tasa_referencia = unidad_tasa * custom_tasa
+            custom_tasa = line.move_id.currency_rate
 
-                nuevo_precio_lista = dolares / nueva_tasa_referencia
+            nuevo_precio_lista = pesos / custom_tasa
 
-                _logger.info('nuevo precio de lista del producto: ' + str(nuevo_precio_lista))
-                #line.product_id.list_price = nuevo_precio_lista
+            _logger.info('nuevo precio de lista del producto: ' + str(nuevo_precio_lista))
 
-                line.product_id.sudo().write({
-                    'list_price': nuevo_precio_lista
-                })
-
-                line.price_unit = line._get_computed_price_unit()
-                _logger.info('nuevo precio unitario en moneda destino: ' + str(line.price_unit))
-
-                line.product_id.sudo().write({
-                    'list_price': pesos
-                })
-                #line.product_id.list_price = pesos
-                _logger.info('Regresó el precio de lista del producto: ' + str(pesos))
-                
-            # --
+            #line.price_unit = nuevo_precio_lista
+                     
