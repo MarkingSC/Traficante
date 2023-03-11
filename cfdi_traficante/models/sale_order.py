@@ -63,8 +63,16 @@ class SaleOrder(models.Model):
         string=_('Uso CFDI (cliente)'), related = 'partner_id.uso_cfdi'
     )
 
-    @api.onchange("partner_id")
+    @api.onchange("partner_invoice_id")
     def get_cfdi_data_from_partner(self):
-        self.methodo_pago = self.partner_id.methodo_pago
-        self.forma_pago = self.partner_id.forma_pago
-        self.uso_cfdi = self.partner_id.uso_cfdi
+        _logger.info('*** get_cfdi_data_from_partner ***')
+        self.methodo_pago = self.partner_invoice_id.methodo_pago
+        self.forma_pago = self.partner_invoice_id.forma_pago
+        self.uso_cfdi = self.partner_invoice_id.uso_cfdi
+
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        super(SaleOrder, self).onchange_partner_id()
+        self.methodo_pago = self.partner_invoice_id.methodo_pago
+        self.forma_pago = self.partner_invoice_id.forma_pago
+        self.uso_cfdi = self.partner_invoice_id.uso_cfdi
