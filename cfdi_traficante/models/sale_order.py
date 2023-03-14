@@ -32,13 +32,13 @@ class SaleOrder(models.Model):
                    ('29', '29 - Tarjeta de servicios'),
                    ('30', '30 - Aplicación de anticipos'),
                    ('99', '99 - Por definir'),],
-        string=_('Forma de pago'), related = 'partner_id.forma_pago'
+        string=_('Forma de pago'), compute='_get_def_cfdi_data'
     )
     #num_cta_pago = fields.Char(string=_('Núm. Cta. Pago'))
     methodo_pago = fields.Selection(
         selection=[('PUE', _('Pago en una sola exhibición')),
                    ('PPD', _('Pago en parcialidades o diferido')),],
-        string=_('Método de pago'), related = 'partner_id.methodo_pago'
+        string=_('Método de pago'), compute='_get_def_cfdi_data'
     )
     uso_cfdi = fields.Selection(
         selection=[('G01', _('Adquisición de mercancías')),
@@ -60,9 +60,10 @@ class SaleOrder(models.Model):
                    ('D08', _('Gastos de transportación escolar obligatoria')),
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
                    ('P01', _('Por definir')),],
-        string=_('Uso CFDI (cliente)'), related = 'partner_id.uso_cfdi'
+        string=_('Uso CFDI (cliente)'), compute='_get_def_cfdi_data'
     )
 
+    '''
     @api.onchange("partner_invoice_id")
     def get_cfdi_data_from_partner(self):
         _logger.info('*** get_cfdi_data_from_partner ***')
@@ -72,7 +73,29 @@ class SaleOrder(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
+        _logger.info('*** onchange_partner_id ***')
         super(SaleOrder, self).onchange_partner_id()
         self.methodo_pago = self.partner_invoice_id.methodo_pago
         self.forma_pago = self.partner_invoice_id.forma_pago
         self.uso_cfdi = self.partner_invoice_id.uso_cfdi
+
+    '''
+    
+    api.depends('partner_invoice_id')
+    def _get_def_cfdi_data(self):
+        _logger.info('*** _get_def_cfdi_data ***')
+        self.methodo_pago = self.partner_invoice_id.methodo_pago
+        self.forma_pago = self.partner_invoice_id.forma_pago
+        self.uso_cfdi = self.partner_invoice_id.uso_cfdi
+    
+
+    def write(self, vals):
+        _logger.info('*** write ')
+        if 'partner_invoice_id' in vals:
+            partner_invoice_id = self.env['res.partner'].search([('id', '=', partner_invoice_id)])
+            vals['methodo_pago'] = partner_invoice_id.methodo_pago
+            vals['forma_pago'] = partner_invoice_id.forma_pago
+            vals['uso_cfdi'] = partner_invoice_id.uso_cfdi    
+
+        res = super(SaleOrder, self).write(vals)
+        return res

@@ -36,12 +36,12 @@ class AccountMove(models.Model):
                    ('29', '29 - Tarjeta de servicios'), 
                    ('30', '30 - Aplicación de anticipos'), 
                    ('99', '99 - Por definir'),],
-        string=_('Forma de pago'), related = 'partner_id.forma_pago', required = True
+        string=_('Forma de pago'), required = True
     )
     methodo_pago = fields.Selection(
         selection=[('PUE', _('Pago en una sola exhibición')),
 				   ('PPD', _('Pago en parcialidades o diferido')),],
-        string=_('Método de pago'), related = 'partner_id.methodo_pago', required = True
+        string=_('Método de pago'), required = True
     )
     uso_cfdi = fields.Selection(
         selection=[('G01', _('Adquisición de mercancías')),
