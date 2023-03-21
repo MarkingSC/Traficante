@@ -59,6 +59,7 @@ class SaleOrder(models.Model):
                    ('D07', _('Primas por seguros de gastos médicos')),
                    ('D08', _('Gastos de transportación escolar obligatoria')),
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
+                   ('S01', _('Sin efectos fiscales')),
                    ('P01', _('Por definir')),],
         string=_('Uso CFDI (cliente)'), compute='_get_def_cfdi_data'
     )
