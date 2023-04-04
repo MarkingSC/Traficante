@@ -61,7 +61,7 @@ Luego se puede descargar con
 
 
 Ver el espacio que ocupan los archivos en el directorio actual:
-du - sh *
+du -sh *
 
 Ver el espacio que ocupan los archivos en root:
 df -H

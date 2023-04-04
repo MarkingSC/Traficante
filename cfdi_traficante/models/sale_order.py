@@ -93,7 +93,7 @@ class SaleOrder(models.Model):
     def write(self, vals):
         _logger.info('*** write ')
         if 'partner_invoice_id' in vals:
-            partner_invoice_id = self.env['res.partner'].search([('id', '=', partner_invoice_id)])
+            partner_invoice_id = self.env['res.partner'].search([('id', '=', vals['partner_invoice_id'])])
             vals['methodo_pago'] = partner_invoice_id.methodo_pago
             vals['forma_pago'] = partner_invoice_id.forma_pago
             vals['uso_cfdi'] = partner_invoice_id.uso_cfdi    
