@@ -1,0 +1,38 @@
+<odoo>
+    <record id="res_partner_client_base_tracking_form_view" model="ir.ui.view">
+        <field name="name">res.partner.client.base.tracking.form.view</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale']/field[@name='user_id']" position="after">
+                <field name="executive_tracking" readonly="1"/>
+            </xpath>
+            <page name="internal_notes" position="inside">
+                <group string="Assignment history" name="assignment_history">
+                    <field name="client_base_history_ids" nolabel="1">
+                        <tree editable="bottom" default_order='assignment_date desc'>
+                            <field name="user_name"/>
+                            <field name="assignment_date"/>
+                        </tree>
+                    </field>
+                </group>
+            </page>
+        </field>
+    </record>
+
+    
+
+    <record id="mb_sales_detailed_report_executive_tracking" model="ir.ui.view">
+        <field name="name">sales.detailed.report.executive.tracking</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="traficante_sales_detailed_report.sales_detailed_report_tree_view" />
+        <field name="priority">8</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='salesperson']" position="replace">
+                <field name="executive_tracking" optional="show" string="Sales person"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

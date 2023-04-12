@@ -32,6 +32,7 @@
                         <group>
                             <field name="before_condition" string="Before condition"/>
                             <field name="after_condition" string="After condition"/>
+                            <field name="changed_field" string="Changed field"/>
                             <field name="model_id" string="Model"/>
                             <field name="default_description" string="Default description"/>
                             <field name="default_priority" widget="priority" string="Default priority"/>

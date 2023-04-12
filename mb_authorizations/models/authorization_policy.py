@@ -7,8 +7,9 @@ class AuthorizationPolicy(models.Model):
     _name = "authorization.policy"
 
     name = fields.Char(required=True)
-    before_condition = fields.Char(string='Before condition')
-    after_condition = fields.Char(string='After condition')
+    before_condition = fields.Char(string='Before condition', help='Condition to meet before the record changes. Set null if changed field is specified.')
+    after_condition = fields.Char(string='After condition', help='Condition to meet after the record changes. Set null if changed field is specified.')
+    changed_field = fields.Char(string='Changed field', help='Field on which this policy is launched.')
     model_id = fields.Many2one('ir.model', string='Model', required=True)
 
     default_description = fields.Char(string="Default description")

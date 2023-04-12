@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0-20220620\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-14 18:38+0000\n"
-"PO-Revision-Date: 2022-07-14 13:42-0500\n"
+"POT-Creation-Date: 2023-04-03 17:40+0000\n"
+"PO-Revision-Date: 2023-04-03 11:41-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. module: mb_authorizations
 #: model:mail.template,body_html:mb_authorizations.authorization_assigned_notification_template
@@ -394,6 +394,30 @@ msgid "Before condition"
 msgstr "Condición (antes)"
 
 #. module: mb_authorizations
+#: model:ir.model.fields,field_description:mb_authorizations.field_authorization_policy__changed_field
+#: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_policy_form
+msgid "Changed field"
+msgstr "Cambio en campo"
+
+#. module: mb_authorizations
+#: model:ir.model.fields,help:mb_authorizations.field_authorization_policy__after_condition
+msgid ""
+"Condition to meet after the record changes. Set null if changed field is "
+"specified."
+msgstr ""
+"Condición a cumplir después del cambio. Dejar nulo si se especifica un "
+"cambio en campo."
+
+#. module: mb_authorizations
+#: model:ir.model.fields,help:mb_authorizations.field_authorization_policy__before_condition
+msgid ""
+"Condition to meet before the record changes. Set null if changed field is "
+"specified."
+msgstr ""
+"Condición a cumplir antes del cambio. Dejar nulo si se especifica un cambio "
+"en campo."
+
+#. module: mb_authorizations
 #: model:ir.ui.menu,name:mb_authorizations.app_mb_authorizations_settings
 msgid "Configuration"
 msgstr "Configuración"
@@ -438,6 +462,11 @@ msgstr "Nombre mostrado"
 #: model_terms:ir.ui.view,arch_db:mb_authorizations.view_authorization_task_filter
 msgid "Draft"
 msgstr "Borrador"
+
+#. module: mb_authorizations
+#: model:ir.model.fields,help:mb_authorizations.field_authorization_policy__changed_field
+msgid "Field on which this policy is launched."
+msgstr "Campo sobre el que se ah de lanzar esta política."
 
 #. module: mb_authorizations
 #: model:ir.model.fields,field_description:mb_authorizations.field_authorization_task__message_follower_ids
