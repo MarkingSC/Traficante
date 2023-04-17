@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--    # Sales goals report    -->
+    <report
+            id="action_account_payments_report"
+            model="account.payments.report.wizard"
+            string="Accounting and payments report"
+            report_type="xlsx"
+            name="account.payments.report"
+            file="account_payments_report"
+    />
+</odoo>

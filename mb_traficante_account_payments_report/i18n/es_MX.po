@@ -1,0 +1,166 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mb_traficante_account_payments_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0-20220620\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-14 17:06+0000\n"
+"PO-Revision-Date: 2023-04-14 11:37-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.ui.menu,name:mb_traficante_account_payments_report.menu_account_payments_report
+msgid "Account Payments Report"
+msgstr "Reporte de contabilidad y cobranza"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.actions.report,name:mb_traficante_account_payments_report.action_account_payments_report
+msgid "Accounting and payments report"
+msgstr "Reporte de contabilidad y cobranza"
+
+#. module: mb_traficante_account_payments_report
+#: model_terms:ir.ui.view,arch_db:mb_traficante_account_payments_report.account_payments_report_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_estado_factura__solicitud_cancelar
+msgid "Cancelación en proceso"
+msgstr ""
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_estado_factura__solicitud_rechazada
+msgid "Cancelación rechazada"
+msgstr ""
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_state__cancel
+msgid "Cancelled"
+msgstr "Cancelada"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__create_uid
+msgid "Created by"
+msgstr "Creada por"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__create_date
+msgid "Created on"
+msgstr "Creada el"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__display_name
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_report_account_payments_report__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_state__draft
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__move_id_estado_factura
+msgid "Estado de factura"
+msgstr "Estado de CDFI"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_estado_factura__factura_cancelada
+msgid "Factura cancelada"
+msgstr ""
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_estado_factura__factura_correcta
+msgid "Factura correcta"
+msgstr ""
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_estado_factura__factura_no_generada
+msgid "Factura no generada"
+msgstr ""
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__date_start
+msgid "From date"
+msgstr "Desde"
+
+#. module: mb_traficante_account_payments_report
+#: model_terms:ir.ui.view,arch_db:mb_traficante_account_payments_report.account_payments_report_wizard
+msgid "Get report"
+msgstr "Obtener reporte"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__id
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_report_account_payments_report__id
+msgid "ID"
+msgstr ""
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard____last_update
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_report_account_payments_report____last_update
+msgid "Last Modified on"
+msgstr "Última modificación"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__partner_id
+msgid "Partner"
+msgstr "Razón social"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields.selection,name:mb_traficante_account_payments_report.selection__account_payments_report_wizard__move_id_state__posted
+msgid "Posted"
+msgstr "Validado"
+
+#. module: mb_traficante_account_payments_report
+#: model_terms:ir.ui.view,arch_db:mb_traficante_account_payments_report.account_payments_report_wizard
+msgid "Report Options"
+msgstr "Opciones del reporte"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,help:mb_traficante_account_payments_report.field_account_payments_report_wizard__date_start
+msgid "Set the date from you want to get the report."
+msgstr "Establezca la fecha inicial para el reporte. Se basa en fecha de factura"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,help:mb_traficante_account_payments_report.field_account_payments_report_wizard__date_end
+msgid "Set the date to you want to get the report."
+msgstr "Establezca la fecha final para el reporte. Se basa en fecha de factura"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__move_id_state
+msgid "Status"
+msgstr "Estado del documento"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model.fields,field_description:mb_traficante_account_payments_report.field_account_payments_report_wizard__date_end
+msgid "To date"
+msgstr "Hasta"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model,name:mb_traficante_account_payments_report.model_account_payments_report_wizard
+msgid "account.payments.report.wizard"
+msgstr "Reporte de contabilidad y cobranza"
+
+#. module: mb_traficante_account_payments_report
+#: model:ir.model,name:mb_traficante_account_payments_report.model_report_account_payments_report
+msgid "report.account.payments.report"
+msgstr "Reporte de contabilidad y cobranza"
