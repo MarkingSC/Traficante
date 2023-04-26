@@ -137,8 +137,12 @@ class AccountPayment(models.Model):
                                     'BaseP': self.set_decimals(line['BaseP'],6),
                                     })
                   if line['ImpuestoP'] == '002' and line['TasaOCuotaP'] == '0.160000':
+                       _logger.info('**** line[BaseP] ' + str(line['BaseP'] * float(self.tipocambiop)))
+                       _logger.info('**** line[BaseP] redondeado ' + str(self.set_decimals(line['BaseP'] * float(self.tipocambiop),2)))
                        totales.update({'TotalTrasladosBaseIVA16': self.set_decimals(line['BaseP'] * float(self.tipocambiop),2),
                                        'TotalTrasladosImpuestoIVA16': self.set_decimals(line['ImporteP'] * float(self.tipocambiop),2),})
+                       _logger.info('**** TotalTrasladosBaseIVA16 ' + str(totales.get('TotalTrasladosBaseIVA16')))
+                       
                   if line['ImpuestoP'] == '002' and line['TasaOCuotaP'] == '0.080000':
                        totales.update({'TotalTrasladosBaseIVA8': self.set_decimals(line['BaseP'] * float(self.tipocambiop),2),
                                        'TotalTrasladosImpuestoIVA8': self.set_decimals(line['ImporteP'] * float(self.tipocambiop),2),})
