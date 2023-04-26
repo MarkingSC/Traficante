@@ -499,4 +499,8 @@ class AccountMove(models.Model):
     def set_decimals(self, amount, precision):
         if amount is None or amount is False:
             return None
-        return float_utils.float_round(amount,precision)
+
+        if precision > 2:
+            return '%.*f' % (precision, amount)
+        else:
+            return float_utils.float_round(amount,precision)
