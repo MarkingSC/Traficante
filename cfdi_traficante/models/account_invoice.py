@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api,_ 
+from odoo import fields, models, api,_, tools
+from odoo.tools import float_utils
 
 import pytz
 import datetime
@@ -494,3 +495,8 @@ class AccountMove(models.Model):
                 'ref': ref,
             })
         return reconciled_vals
+
+    def set_decimals(self, amount, precision):
+        if amount is None or amount is False:
+            return None
+        return float_utils.float_round(amount,precision)
