@@ -503,4 +503,4 @@ class AccountMove(models.Model):
         if precision > 2:
             return '%.*f' % (precision, amount)
         else:
-            return float_utils.float_round(amount,precision)
+            return '%.*f' % (precision, float_utils.float_round(amount,precision))
