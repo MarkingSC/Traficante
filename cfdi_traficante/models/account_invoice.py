@@ -66,7 +66,7 @@ class AccountMove(models.Model):
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
                    ('S01', _('Sin efectos fiscales')),
                    ('P01', _('Por definir (obsoleto)')),],
-        string=_('Uso CFDI (cliente)'), required = True, )
+        string=_('Uso CFDI (cliente)'), required = True)
 
     motivo_cancelacion = fields.Selection(
         selection=[('01', ('Comprobante emitido con errores con relación')),
