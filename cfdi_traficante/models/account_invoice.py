@@ -37,11 +37,11 @@ class AccountMove(models.Model):
                    ('29', '29 - Tarjeta de servicios'), 
                    ('30', '30 - Aplicación de anticipos'), 
                    ('99', '99 - Por definir'),],
-        string=_('Forma de pago'))
+        string=_('Forma de pago'), required = true)
     methodo_pago = fields.Selection(
         selection=[('PUE', _('Pago en una sola exhibición')),
 				   ('PPD', _('Pago en parcialidades o diferido')),],
-        string=_('Método de pago'))
+        string=_('Método de pago'), required = true)
     uso_cfdi = fields.Selection(
         selection=[('G01', _('Adquisición de mercancías')),
                    ('G02', _('Devoluciones, descuentos o bonificaciones')),
@@ -66,7 +66,7 @@ class AccountMove(models.Model):
                    ('D10', _('Pagos por servicios educativos (colegiaturas)')),
                    ('S01', _('Sin efectos fiscales')),
                    ('P01', _('Por definir (obsoleto)')),],
-        string=_('Uso CFDI (cliente)'))
+        string=_('Uso CFDI (cliente)')required = true, )
 
     motivo_cancelacion = fields.Selection(
         selection=[('01', ('Comprobante emitido con errores con relación')),
