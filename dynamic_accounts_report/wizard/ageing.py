@@ -171,6 +171,10 @@ class AgeingView(models.TransientModel):
             vals.update({'target_move': vals.get('target_move').lower()})
 
         if vals.get('partner_ids'):
+            vals_aux = {}
+            vals_aux.update({'partner_ids': [(5,)]})
+            super(AgeingView, self).write(vals_aux)
+
             vals.update(
                 {'partner_ids': [(4, j) for j in vals.get('partner_ids')]})
         if not vals.get('partner_ids'):
@@ -641,11 +645,11 @@ class AgeingView(models.TransientModel):
         sheet.merge_range('A7:C7', 'Partner', heading)
         sheet.write('D7', 'Total', heading)
         sheet.write('E7', 'Not Due', heading)
-        sheet.write('F7', '0-30', heading)
-        sheet.write('G7', '30-60', heading)
-        sheet.write('H7', '60-90', heading)
-        sheet.write('I7', '90-120', heading)
-        sheet.write('J7', '120+', heading)
+        sheet.write('F7', '1-7', heading)
+        sheet.write('G7', '8-14', heading)
+        sheet.write('H7', '15-21', heading)
+        sheet.write('I7', '22-30', heading)
+        sheet.write('J7', '30+', heading)
 
         lst = []
         for rec in report_data_main[0]:
@@ -679,11 +683,11 @@ class AgeingView(models.TransientModel):
             sheet.write(row, col + 2, 'Journal', sub_heading)
             sheet.write(row, col + 3, 'Account', sub_heading)
             sheet.write(row, col + 4, 'Not Due', sub_heading)
-            sheet.write(row, col + 5, '0 - 30', sub_heading)
-            sheet.write(row, col + 6, '30 - 60', sub_heading)
-            sheet.write(row, col + 7, '60 - 90', sub_heading)
-            sheet.write(row, col + 8, '90 - 120', sub_heading)
-            sheet.write(row, col + 9, '120 +', sub_heading)
+            sheet.write(row, col + 5, '1 - 7', sub_heading)
+            sheet.write(row, col + 6, '8 - 14', sub_heading)
+            sheet.write(row, col + 7, '15 - 21', sub_heading)
+            sheet.write(row, col + 8, '22 - 30', sub_heading)
+            sheet.write(row, col + 9, '30 +', sub_heading)
 
             for line_data in rec_data['child_lines']:
                 row += 1

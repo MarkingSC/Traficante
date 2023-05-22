@@ -53,6 +53,8 @@ odoo.define('dynamic_accounts_report.ageing', function (require) {
 
             var self = this;
 
+                console.log('this.wizard_id: ' + this.wizard_id);
+
                 self.$(".categ").empty();
                 try{
                     var self = this;
@@ -61,6 +63,7 @@ odoo.define('dynamic_accounts_report.ageing', function (require) {
                         method: 'view_report',
                         args: [[this.wizard_id]],
                     }).then(function(datas) {
+                        console.log('datas: ', datas);
                     _.each(datas['report_lines'][0], function(rep_lines) {
                             rep_lines.total = self.format_currency(datas['currency'],rep_lines.total);
                             rep_lines[4] = self.format_currency(datas['currency'],rep_lines[4]);
@@ -324,20 +327,25 @@ odoo.define('dynamic_accounts_report.ageing', function (require) {
             var partner_text = [];
             var span_res = document.getElementById("partner_res")
             var partner_list = $(".partners").select2('data')
+            console.log('partner_list: ', partner_list);
             for (var i = 0; i < partner_list.length; i++) {
             if(partner_list[i].element[0].selected === true)
             {partner_ids.push(parseInt(partner_list[i].id))
+            console.log('partner_text: ', partner_text);
             if(partner_text.includes(partner_list[i].text) === false)
             {partner_text.push(partner_list[i].text)
             }
+            console.log('partner_text: ', partner_text);
             span_res.value = partner_text
             span_res.innerHTML=span_res.value;
             }
             }
+
             if (partner_list.length == 0){
             span_res.value = ""
             span_res.innerHTML="";
             }
+            console.log('partner_ids: ', partner_ids);
             filter_data_selected.partner_ids = partner_ids
 
             var partner_category_ids = [];
@@ -386,6 +394,7 @@ odoo.define('dynamic_accounts_report.ageing', function (require) {
               }
             }
 
+            console.log('filter_data_selected: ', filter_data_selected);
 
             rpc.query({
                 model: 'account.partner.ageing',
