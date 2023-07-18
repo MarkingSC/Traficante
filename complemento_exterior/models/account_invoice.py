@@ -235,7 +235,7 @@ class AccountMove(models.Model):
                                'NoIdentificacion': self.clean_text(merc.product_id.code),
                                'FraccionArancelaria': merc.fraccionarancelaria.c_fraccionarancelaria,
                                'CantidadAduana': merc.cantidadaduana,
-                               'ValorUnitarioAduana': merc.valorunitarioaduana,
+                               'ValorUnitarioAduana': round(merc.valorunitarioaduana, 2),
                                'ValorDolares': round(merc.valordolares,2),
                                'UnidadAduana': merc.unidadAduana.c_unidadmedidaaduana,
                                'Marca': aux_marca,
