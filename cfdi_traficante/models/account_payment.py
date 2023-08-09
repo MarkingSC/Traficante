@@ -15,6 +15,16 @@ _logger = logging.getLogger(__name__)
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
+    folios_cfdi_facturas = fields.Char(string='Folio factura', compute='_get_folios_cfdi_facturas', store=False)
+
+    def _get_folios_cfdi_facturas(self):
+        for payment in self:
+            _logger.info('**** entra a _get_folios_cfdi_facturas: ')
+            foliosMap = payment.reconciled_invoice_ids.mapped('folio_fiscal')
+            foliosStr = [str(folio) for folio in foliosMap if isinstance(folio, str)]
+            foliosComa = ','.join(foliosStr)
+            payment.folios_cfdi_facturas = foliosComa
+
     @api.onchange('partner_id')
     def _get_default_forma_pago(self):
         _logger.info('***** Entra a _get_default_forma_pago *****')

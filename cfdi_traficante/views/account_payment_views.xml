@@ -15,5 +15,19 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="account_payment_tree_traficante" model="ir.ui.view">
+            <field name="name">account.payment.tree.traficante</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="cdfi_invoice.view_payment_inherit_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='estado_pago']" position="after">
+                    <field name="folio_fiscal"/>
+                </xpath>
+                <xpath expr="//field[@name='communication']" position="after">
+                    <field name="folios_cfdi_facturas"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>
