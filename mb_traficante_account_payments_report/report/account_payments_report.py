@@ -104,6 +104,7 @@ class AccountPaymentsReport(models.AbstractModel):
         sheet.merge_range('U1:W1', 'PARCIALIDAD 3', super_header_col_format)
         sheet.merge_range('X1:Z1', 'PARCIALIDAD 4', super_header_col_format)
         sheet.merge_range('AA1:AC1', 'INFORMATIVA', super_header_col_format)
+        sheet.write('AD1', 'NOMBRE DE FACTURA', super_header_col_format)
 
         sheet.write(1,0, 'ESTATUS UUID', header_col_format)
         sheet.write(1,1, 'SERIE', header_col_format)
@@ -134,6 +135,7 @@ class AccountPaymentsReport(models.AbstractModel):
         sheet.write(1,26, 'NOTA DE CRÉDITO', header_col_format)
         sheet.write(1,27, 'FOLIO DE SUSTITUCIÓN', header_col_format)
         sheet.write(1,28, 'MTO. DE SUSTITUCIÓN', header_col_format)
+        sheet.write(1, 29, 'NOMBRE', header_col_format)
         
         # busca las facturas que se van a mostrar en el reporte
         moves = self.env['account.move'].search([
@@ -275,6 +277,7 @@ class AccountPaymentsReport(models.AbstractModel):
         sheet.write(row, 26, str("${:,.2f}".format(nc_asociada.amount_total) if nc_asociada else ''))
         sheet.write(row, 27, str(sustitucion.folio_fiscal if sustitucion else ''))
         sheet.write(row, 28, str("${:,.2f}".format(sustitucion.amount_total) if susticion else ''))
+        sheet.write(row, 29, str(move.name))
         
         row += 1
         _logger.info('**** Fin print_goal_row ****')   
