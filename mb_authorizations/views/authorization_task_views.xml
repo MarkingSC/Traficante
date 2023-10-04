@@ -190,6 +190,7 @@
                     <field name="applicant_uid" string="Applicant" filter_domain="[('applicant_uid.name', 'ilike', self)]"/>
                     <field name="assigned_uid" string="Authorizer" filter_domain="[('assigned_uid.name', 'ilike', self)]"/>
                     <field name="model_id" string="Object" filter_domain="[('model_id.name', 'ilike', self)]"/>
+                    <field name="policy_id" string="Politica" filter_domain="[('policy_id.name', 'ilike', self)]"/>
                     <separator />
                     <filter string="Assigned to me" name="assigned_to_me" domain="[('assigned_uid', '=', uid)]" help="Tasks that are assigned to me"/>
                     <filter string="My requests" name="requested_by_me" domain="[('applicant_uid', '=', uid)]" help="Tasks that I requested"/>
@@ -204,6 +205,7 @@
                         <filter string="Assigned" name="assigned_uid" context="{'group_by':'assigned_uid'}"/>
                         <filter string="Applicant" name="applicant_uid" context="{'group_by':'applicant_uid'}"/>
                         <filter string="Model" name="model" context="{'group_by':'model_id'}"/>
+                        <filter string="Politica" name="policy" context="{'group_by':'policy_id'}"/>
                     </group>
                 </search>
             </field>
