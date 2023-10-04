@@ -255,6 +255,8 @@ class AccountPayment(models.Model):
 
         else:
             raise Warning("No tiene ninguna factura ligada al documento de pago, debe al menos tener una factura ligada. \n Desde la factura crea el pago para que se asocie la factura al pago.")
+
+        _logger.info('*** json antes de mandar a timbrar: ' + str(request_params))
         return request_params
         
     def set_decimals(self, amount, precision):
@@ -265,3 +267,135 @@ class AccountPayment(models.Model):
             return '%.*f' % (precision, amount)
         else:
             return '%.*f' % (precision, float_utils.float_round(amount,precision))
+
+    def add_resitual_amounts(self):
+        for payment in self:
+          no_decimales = payment.currency_id.no_decimales
+          no_decimales_tc = payment.currency_id.no_decimales_tc
+          docto_relacionados = []
+          tax_grouped_tras = {}
+          tax_grouped_ret = {}
+          moneda_facturas = payment.invoice_ids.mapped  ('currency_id')[0]
+          _logger.info('**** moneda_facturas: ' +  str(moneda_facturas.name))
+          factura_extranjera = True if moneda_facturas.name != 'MXN' else False
+          if payment.invoice_ids:
+            for invoice in payment.invoice_ids:
+                if invoice.factura_cfdi:
+
+                    payment_dict = json.loads(invoice.invoice_payments_widget)
+                    payment_content = payment_dict['content']
+                    monto_pagado = 0                    
+
+                    for invoice_payments in payment_content:
+
+                        _logger.info('**** invoice_payments[amount_mxn] ' +  str(invoice_payments['amount_mxn']))
+                        _logger.info('**** invoice_payments: ' +  str(invoice_payments))
+
+                        if invoice_payments['account_payment_id'] == payment.id:
+                            monto_pagado = invoice_payments['amount'] if factura_extranjera else invoice_payments['amount_mxn']
+
+                    #revisa la cantidad que se va a pagar en el docuemnto
+                    if payment.currency_id.name != invoice.moneda:
+                        if payment.currency_id.name == 'MXN':
+                            equivalenciadr = round(invoice.currency_id.with_context(date=payment.payment_date).rate,6)
+                        else:
+                            equivalenciadr = round(float(invoice.tipocambio)/float(payment.currency_id.with_context(date=payment.payment_date).rate),6)
+                    else:
+                        equivalenciadr = 1
+
+                    decimal_p = 6
+
+                    if not invoice.total_factura > 0:
+                       raise Warning("No hay información del monto de la factura. Carga el XML en la factura para agregar el monto total.")
+
+                    paid_pct = payment.truncate(monto_pagado, decimal_p) / invoice.total_factura
+                    monto_pagado = payment.truncate(monto_pagado, 2)
+
+                    if not factura_extranjera:
+                        if not invoice.tax_payment:
+                           raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
+                        taxes = json.loads(invoice.tax_payment)
+                        objetoimpdr = '01'
+                        trasladodr = []
+                        retenciondr = []
+                        if "translados" in taxes:
+                           objetoimpdr = '02'
+                           traslados = taxes['translados']
+                           for traslado in traslados:
+                               basedr = payment.truncate(float(traslado['base']) * paid_pct, decimal_p)
+                               importedr = traslado['importe'] and payment.truncate(float(traslado['tasa']) * basedr, decimal_p) or 0
+                               trasladodr.append({
+                                             'BaseDR': payment.set_decimals(basedr, decimal_p),
+                                             'ImpuestoDR': traslado['impuesto'],
+                                             'TipoFactorDR': traslado['TipoFactor'],
+                                             'TasaOcuotaDR': traslado['tasa'],
+                                             'ImporteDR': payment.set_decimals(importedr, decimal_p) if traslado['TipoFactor'] != 'Exento' else '',
+                                             })
+                               key = traslado['tax_id']
+
+                               basep = basedr / equivalenciadr
+                               importep = importedr / equivalenciadr
+                               if str(basep)[::-1].find('.') > 6:
+                                  basep = payment.truncate(basep, decimal_p)
+                               if str(importep)[::-1].find('.') > 6:
+                                  importep = payment.truncate(importep, decimal_p)
+
+                               val = {'BaseP': basep,
+                                      'ImpuestoP': traslado['impuesto'],
+                                      'TipoFactorP': traslado['TipoFactor'],
+                                      'TasaOCuotaP': traslado['tasa'],
+                                      'ImporteP': importep,}
+                               if key not in tax_grouped_tras:
+                                   tax_grouped_tras[key] = val
+                               else:
+                                   tax_grouped_tras[key]['BaseP'] += basep
+                                   tax_grouped_tras[key]['ImporteP'] += importep
+                        if "retenciones" in taxes:
+                           objetoimpdr = '02'
+                           retenciones = taxes['retenciones']
+                           for retencion in retenciones:
+                               basedr = payment.truncate(float(retencion['base']) * paid_pct, decimal_p)
+                               importedr = retencion['importe'] and payment.truncate(float(retencion['tasa']) * basedr, decimal_p) or 0
+                               retenciondr.append({
+                                             'BaseDR': payment.set_decimals(basedr, decimal_p),
+                                             'ImpuestoDR': retencion['impuesto'],
+                                             'TipoFactorDR': retencion['TipoFactor'],
+                                             'TasaOcuotaDR': retencion['tasa'],
+                                             'ImporteDR': payment.set_decimals(importedr, decimal_p),
+                                             })
+                               key = retencion['tax_id']
+
+                               importep = importedr / equivalenciadr
+                               if str(importep)[::-1].find('.') > 6:
+                                  importep = payment.truncate(importep, decimal_p)
+
+                               val = {'ImpuestoP': retencion['impuesto'],
+                                      'ImporteP': importep,}
+                               if key not in tax_grouped_ret:
+                                   tax_grouped_ret[key] = val
+                               else:
+                                   tax_grouped_ret[key]['ImporteP'] += importep
+
+                        if objetoimpdr == '02' and not trasladodr and not retenciondr:
+                           raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
+                    else:
+                        objetoimpdr = '01'
+                        trasladodr = []
+                        retenciondr = []
+
+                    docto_relacionados.append({
+                          'MonedaDR': invoice.moneda,
+                          'EquivalenciaDR': equivalenciadr,
+                          'IdDocumento': invoice.folio_fiscal,
+                          'folio_facura': invoice.number_folio,
+                          'NumParcialidad': len(payment_content), 
+                          'ImpSaldoAnt': payment.set_decimals(invoice.amount_residual + monto_pagado, no_decimales),
+                          'ImpPagado': payment.set_decimals(monto_pagado, no_decimales),
+                          'ImpSaldoInsoluto': payment.set_decimals(invoice.amount_residual, no_decimales),
+                          'ObjetoImpDR': objetoimpdr,
+                          'ImpuestosDR': {'traslados': trasladodr, 'retenciones': retenciondr,},
+                    })
+
+            payment.write({'docto_relacionados': json.dumps(docto_relacionados), 
+                        'retencionesp': json.dumps(tax_grouped_ret), 
+                        'trasladosp': json.dumps(tax_grouped_tras),})
