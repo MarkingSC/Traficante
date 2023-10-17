@@ -161,7 +161,7 @@ class AccountPaymentsReport(models.AbstractModel):
 
         row = 2
         for move in moves:
-            row = self.print_line_row(row, sheet, move)
+            row = self.print_line_row(workbook, row, sheet, move)
 
             '''
             total_quantity += line.quantity
@@ -187,9 +187,12 @@ class AccountPaymentsReport(models.AbstractModel):
 
         _logger.info('**** Fin generate_xlsx_report ****')   
 
-    def print_line_row(self, row, sheet, move):
+    def print_line_row(self, workbook, row, sheet, move):
         _logger.info('**** Inicio print_line_row ****')   
         _logger.info('**** Linea: ' + str(move.name))
+
+        date_format = workbook.add_format({'num_format': 'mm/dd/yyyy'})
+        #date_invoice = datetime.strptime(move.date, '%Y-%m-%d')
 
         #line.ieps_taxes = line.tax_ids.filtered(lambda tax: tax.tax_group_id.ieps_section == True)
         #line.iva_taxes = line.tax_ids.filtered(lambda tax: tax.tax_group_id.iva_section == True)
@@ -206,7 +209,7 @@ class AccountPaymentsReport(models.AbstractModel):
         sheet.write(row, 0, str(estado_factura_dict[move.estado_factura]))
         sheet.write(row, 1, str(move.company_id.serie_factura))
         sheet.write(row, 2, str(move.folio_fiscal))
-        sheet.write(row, 3, str(move.date))
+        sheet.write(row, 3, move.date, date_format)
         sheet.write(row, 4, str(move.partner_id.name))
         sheet.write(row, 5, str("${:,.2f}".format(move.amount_untaxed)))
         sheet.write(row, 6, str("${:,.2f}".format(move.discount)))
@@ -238,24 +241,24 @@ class AccountPaymentsReport(models.AbstractModel):
         # PAGO
         sheet.write(row, 11, str("${:,.2f}".format(imp_pagado)))
         sheet.write(row, 12, str("${:,.2f}".format(imp_restante)))
-        sheet.write(row, 13, str(fecha_pago.strftime('%d/%m/%Y') if fecha_pago else ''))        
+        sheet.write(row, 13, fecha_pago, date_format if fecha_pago else '')
 
         # PLAZOS
         # Imprime las columnas para los datos de plazos de pago.
         if max_range > 0:
-            sheet.write(row, 14, str(payments[0].payment_date.strftime('%d/%m/%Y')))
+            sheet.write(row, 14, payments[0].payment_date, date_format)
             sheet.write(row, 15, str(payments[0].bank_reference if payments[0].bank_reference else ''))
             sheet.write(row, 16, str(payments[0].folio_fiscal if payments[0].folio_fiscal else ''))
         if max_range > 1:
-            sheet.write(row, 17, str(payments[1].payment_date.strftime('%d/%m/%Y')))
+            sheet.write(row, 17, payments[1].payment_date, date_format)
             sheet.write(row, 18, str(payments[1].bank_reference if payments[1].bank_reference else ''))
             sheet.write(row, 19, str(payments[1].folio_fiscal if payments[1].folio_fiscal else ''))
         if max_range > 2:
-            sheet.write(row, 20, str(payments[2].payment_date.strftime('%d/%m/%Y')))
+            sheet.write(row, 20, payments[2].payment_date, date_format)
             sheet.write(row, 21, str(payments[2].bank_reference if payments[2].bank_reference else ''))
             sheet.write(row, 22, str(payments[2].folio_fiscal if payments[2].folio_fiscal else ''))
         if max_range > 3:
-            sheet.write(row, 23, str(payments[3].payment_date.strftime('%d/%m/%Y')))
+            sheet.write(row, 23, payments[3].payment_date, date_format)
             sheet.write(row, 24, str(payments[3].bank_reference if payments[3].bank_reference else ''))
             sheet.write(row, 25, str(payments[3].folio_fiscal if payments[3].folio_fiscal else ''))
 
