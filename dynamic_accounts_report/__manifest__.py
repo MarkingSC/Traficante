@@ -19,7 +19,10 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-
+#
+#   MasByte specific changes were made to the xlsx and pdf reports.
+#
+#############################################################################
 {
     'name': 'Dynamic Financial Reports',
     'version': '13.0.1.0.1',

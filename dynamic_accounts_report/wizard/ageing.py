@@ -103,7 +103,11 @@ class AgeingView(models.TransientModel):
         filters['category_list'] = data.get('category_list')
         filters['company_name'] = data.get('company_name')
         filters['target_move'] = data.get('target_move').capitalize()
-
+        filters['partner_name'] = self.env['res.partner'].browse(data.get('partners')).mapped('business_name')
+        filters['vats'] = self.env['res.partner'].browse(data.get('partners')).mapped('vat')
+        filters['credit_days'] = self.env['res.partner'].browse(data.get('partners')).mapped('property_payment_term_id.name')
+            #self.env['res.partner'].browse(data.get('partners')).mapped('property_payment_term_id')
+        filters['deposit_accounts'] = self.env['res.partner'].browse(data.get('partners')).mapped('property_account_receivable_id.name')
 
         return filters
 
@@ -293,6 +297,7 @@ class AgeingView(models.TransientModel):
             move_name = line.move_id.name
             user_name = line.move_id.invoice_user_id.name
             inv_date = line.move_id.invoice_date
+            ref = line.move_id.ref
             date_maturity = line.date_maturity
             account_id = line.account_id.name
             account_code = line.account_id.code
@@ -324,6 +329,7 @@ class AgeingView(models.TransientModel):
                     'move': move_name,
                     'sales_person': user_name,
                     'inv_date': inv_date,
+                    'ref': ref,
                     'jrnl': jrnl_id,
                     'currency': currency_id,
                     'symbol': currency_symbol,
@@ -403,6 +409,7 @@ class AgeingView(models.TransientModel):
                 move_name = line.move_id.name
                 user_name = line.move_id.invoice_user_id.name
                 inv_date = line.move_id.invoice_date
+                ref = line.move_id.ref
                 date_maturity = line.date_maturity
                 account_id = line.account_id.name
                 account_code = line.account_id.code
@@ -438,6 +445,7 @@ class AgeingView(models.TransientModel):
                             'move': move_name,
                             'sales_person': user_name,
                             'inv_date': inv_date,
+                            'ref': ref,
                             'currency': currency_id,
                             'symbol': currency_symbol,
                             'jrnl': jrnl_id,
@@ -457,6 +465,7 @@ class AgeingView(models.TransientModel):
                             'move': move_name,
                             'sales_person': user_name,
                             'inv_date': inv_date,
+                            'ref': ref,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
@@ -476,6 +485,7 @@ class AgeingView(models.TransientModel):
                             'move': move_name,
                             'sales_person': user_name,
                             'inv_date': inv_date,
+                            'ref': ref,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
@@ -495,6 +505,7 @@ class AgeingView(models.TransientModel):
                             'move': move_name,
                             'sales_person': user_name,
                             'inv_date': inv_date,
+                            'ref': ref,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
@@ -514,6 +525,7 @@ class AgeingView(models.TransientModel):
                             'move': move_name,
                             'sales_person': user_name,
                             'inv_date': inv_date,
+                            'ref': ref,
                             'jrnl': jrnl_id,
                             'acc_name': account_id,
                             'currency': currency_id,
@@ -642,14 +654,14 @@ class AgeingView(models.TransientModel):
              filters['partner_tags']]),
                           date_head)
 
-        sheet.merge_range('A7:C7', 'Partner', heading)
-        sheet.write('D7', 'Total', heading)
-        sheet.write('E7', 'Not Due', heading)
-        sheet.write('F7', '1-7', heading)
-        sheet.write('G7', '8-14', heading)
-        sheet.write('H7', '15-21', heading)
-        sheet.write('I7', '22-30', heading)
-        sheet.write('J7', '30+', heading)
+        sheet.merge_range('A7:D7', 'Partner', heading)
+        sheet.write('E7', 'Total', heading)
+        sheet.write('F7', 'Not Due', heading)
+        sheet.write('G7', '1-7', heading)
+        sheet.write('H7', '8-14', heading)
+        sheet.write('I7', '15-21', heading)
+        sheet.write('J7', '22-30', heading)
+        sheet.write('K7', '30+', heading)
 
         lst = []
         for rec in report_data_main[0]:
@@ -669,57 +681,59 @@ class AgeingView(models.TransientModel):
             two_lst = []
 
             row += 1
-            sheet.merge_range(row, col, row, col + 2, rec_data['name'], txt_l)
-            sheet.write(row, col + 3, rec_data['total'], txt_l)
-            sheet.write(row, col + 4, rec_data['direction'], txt_l)
-            sheet.write(row, col + 5, rec_data['4'], txt_l)
-            sheet.write(row, col + 6, rec_data['3'], txt_l)
-            sheet.write(row, col + 7, rec_data['2'], txt_l)
-            sheet.write(row, col + 8, rec_data['1'], txt_l)
-            sheet.write(row, col + 9, rec_data['0'], txt_l)
+            sheet.merge_range(row, col, row, col + 3, rec_data['name'], txt_l)
+            sheet.write(row, col + 4, rec_data['total'], txt_l)
+            sheet.write(row, col + 5, rec_data['direction'], txt_l)
+            sheet.write(row, col + 6, rec_data['4'], txt_l)
+            sheet.write(row, col + 7, rec_data['3'], txt_l)
+            sheet.write(row, col + 8, rec_data['2'], txt_l)
+            sheet.write(row, col + 9, rec_data['1'], txt_l)
+            sheet.write(row, col + 10, rec_data['0'], txt_l)
             row += 1
             sheet.write(row, col, 'Entry Label', sub_heading)
-            sheet.write(row, col + 1, 'Due Date', sub_heading)
-            sheet.write(row, col + 2, 'Journal', sub_heading)
-            sheet.write(row, col + 3, 'Account', sub_heading)
-            sheet.write(row, col + 4, 'Not Due', sub_heading)
-            sheet.write(row, col + 5, '1 - 7', sub_heading)
-            sheet.write(row, col + 6, '8 - 14', sub_heading)
-            sheet.write(row, col + 7, '15 - 21', sub_heading)
-            sheet.write(row, col + 8, '22 - 30', sub_heading)
-            sheet.write(row, col + 9, '30 +', sub_heading)
+            sheet.write(row, col + 1, 'Invoice Date', sub_heading)
+            sheet.write(row, col + 2, 'Due Date', sub_heading)
+            sheet.write(row, col + 3, 'Journal', sub_heading)
+            sheet.write(row, col + 4, 'Account', sub_heading)
+            sheet.write(row, col + 5, 'Not Due', sub_heading)
+            sheet.write(row, col + 6, '1 - 7', sub_heading)
+            sheet.write(row, col + 7, '8 - 14', sub_heading)
+            sheet.write(row, col + 8, '15 - 21', sub_heading)
+            sheet.write(row, col + 9, '22 - 30', sub_heading)
+            sheet.write(row, col + 10, '30 +', sub_heading)
 
             for line_data in rec_data['child_lines']:
                 row += 1
                 sheet.write(row, col, line_data.get('move'), txt)
-                sheet.write(row, col + 1, line_data.get('date'), txt)
-                sheet.write(row, col + 2, line_data.get('jrnl'), txt)
-                sheet.write(row, col + 3, line_data.get('acc_code'), txt)
+                if line_data.get('inv_date'):
+                    sheet.write(row, col + 1, line_data.get('inv_date'), txt)
+                sheet.write(row, col + 2, line_data.get('date'), txt)
+                sheet.write(row, col + 3, line_data.get('jrnl'), txt)
+                sheet.write(row, col + 4, line_data.get('acc_code'), txt)
                 if line_data.get('period6'):
-                    sheet.write(row, col + 4, line_data.get('amount'), txt)
-                else:
-                    sheet.write(row, col + 4, "0", txt_v)
-                if line_data.get('period5'):
                     sheet.write(row, col + 5, line_data.get('amount'), txt)
                 else:
                     sheet.write(row, col + 5, "0", txt_v)
-                if line_data.get('period4'):
+                if line_data.get('period5'):
                     sheet.write(row, col + 6, line_data.get('amount'), txt)
                 else:
                     sheet.write(row, col + 6, "0", txt_v)
-                if line_data.get('period3'):
+                if line_data.get('period4'):
                     sheet.write(row, col + 7, line_data.get('amount'), txt)
                 else:
                     sheet.write(row, col + 7, "0", txt_v)
-                if line_data.get('period2'):
+                if line_data.get('period3'):
                     sheet.write(row, col + 8, line_data.get('amount'), txt)
                 else:
                     sheet.write(row, col + 8, "0", txt_v)
-                if line_data.get('period1'):
+                if line_data.get('period2'):
                     sheet.write(row, col + 9, line_data.get('amount'), txt)
                 else:
                     sheet.write(row, col + 9, "0", txt_v)
-
+                if line_data.get('period1'):
+                    sheet.write(row, col + 10, line_data.get('amount'), txt)
+                else:
+                    sheet.write(row, col + 10, "0", txt_v)
         workbook.close()
         output.seek(0)
         response.stream.write(output.read())

@@ -9,11 +9,34 @@
                     <div class="oe_structure"/>
                     <h3 style="text-align:centre;left:50%;"><span t-esc="Filters.get('company_name')"/>: Partner Ageing
                     </h3>
-                    <strong> As On Date:</strong>
-                    <t t-esc="Filters['date_from']"/>
+                    <!--<strong> As On Date:</strong>
+                    <t t-esc="Filters['date_from']"/>-->
                     <div>
                         <div style="text-align:centre;left:50%;" class="row">
-                                <div class="col-3">
+                            <div class="col-4">
+                                <strong> A la Fecha:</strong>
+                                <br></br>
+                                <t t-esc="Filters['date_from']"/>
+                            </div>
+                            <div class="col-4">
+                                <strong> Nombre Comercial:</strong>
+                                <br></br>
+                                <t t-foreach="Filters['partner_name']" t-as="name">
+                                    <t t-esc="name"/>
+                                </t>
+                            </div>
+                            <div class="col-4">
+                                <strong> RFC:</strong>
+                                <br></br>
+                                <t t-foreach="Filters['vats']" t-as="vat">
+                                    <t t-esc="vat"/>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="text-align:centre;left:50%;" class="row">
+                            <!--<div class="col-3">
                                     <strong>Target move:</strong>
                                         <li>
                                             <t t-esc="Filters['target_move']"/>
@@ -40,6 +63,33 @@
                                             <t t-esc="pt"/>
                                         </li>
                                     </t>
+                                </div>-->
+                                <div class="col-3">
+                                    <strong>Target move:</strong>
+                                        <li>
+                                            <t t-esc="Filters['target_move']"/>
+                                        </li>
+                                </div>
+                                <div class="col-3">
+                                    <strong>Cuenta de Depósito:</strong>
+                                    <br></br>
+                                    <t t-foreach="Filters['deposit_accounts']" t-as="deposit_account">
+                                        <t t-esc="deposit_account"/>
+                                    </t>
+                                </div>
+                                 <div class="col-3" style="">
+                                    <strong>Razón Social :</strong>
+                                     <br></br>
+                                    <t t-foreach="Filters['partners']" t-as="pa">
+                                        <t t-esc="pa"/>
+                                    </t>
+                                </div>
+                                 <div class="col-3" style="">
+                                    <strong>Días de Crédito :</strong>
+                                    <br></br>
+                                    <t t-foreach="Filters['credit_days']" t-as="credit_day">
+                                        <t t-esc="credit_day"/>
+                                    </t>
                                 </div>
                         </div>
 
@@ -49,6 +99,7 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Entry Label</th>
+                                <th>Referencia</th>
                                 <th>Executive</th>
                                 <th>Invoice Date</th>
                                 <th style="max-width: 70px">DueDate</th>
@@ -97,6 +148,7 @@
                                 </tr>
                                 <tr t-foreach="account['child_lines']" t-as="line">
                                     <td><span t-esc="line['move']"/></td>
+                                    <td><span t-esc="line['ref']"/></td>
                                     <td><span t-esc="line['sales_person']"/></td>
                                     <td><span t-esc="line['inv_date']"/></td>
                                     <td><span t-esc="line['date']"/></td>
