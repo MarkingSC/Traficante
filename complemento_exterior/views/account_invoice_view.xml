@@ -35,8 +35,8 @@
                                 <field name="unidadAduana"/>
                                 <field name="info_mercancias"/>
                                 <field name="cantidadaduana"/>
-                                <field name="valorunitarioaduana"/> 
-                                <field name="valordolares"/> 
+                                <field name="valorunitarioaduana"/>
+                                <field name="valordolares" readonly="0"/>
                             </tree>
                         </field>
                  </page>
