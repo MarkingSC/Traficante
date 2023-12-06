@@ -3,6 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 import logging
+from datetime import datetime, timedelta
 from odoo import api, fields, models, _
 from odoo.addons.base.models import decimal_precision as dp
 
@@ -12,11 +13,28 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     # Campo específico para la implementación de TRaficante
-    currency_rate = fields.Float(string="Rate", digits = 0, default=lambda self: 1/self.currency_id.rate if self.currency_id.rate > 0 else self.currency_id.rate)
+    currency_rate = fields.Float(string="Rate", digits=0, default=lambda self: 1 / self.currency_id.rate if self.currency_id.rate > 0 else self.currency_id.rate)
+
+    today = fields.Date.today()
 
     @api.onchange('currency_id')
     def _get_currency_rate(self):
-        self.currency_rate =  1/self.currency_id.rate if self.currency_id.rate > 0 else self.currency_id.rate
+        #self.currency_rate = 1 / self.currency_id.rate if self.currency_id.rate > 0 else self.currency_id.rate
+        #_logger.info('***** TASA ACTUAL *****: ' + str(self.currency_id.rate))
+        # _logger.info('***** FECHA DE LA TASA *****: ' + str(self.currency_id.rate_ids.name))
+
+        today = fields.Date.today()
+        currency = self.currency_id.name
+        # verifica si el dia actual es lunes, de ser así toma la tasa del viernes, si no toma la actual
+        if today.weekday() == 0 and currency != "MXN":
+            #_logger.info('***** es lunes *****: ')
+            latest_rate = sorted(self.currency_id.rate_ids, key=lambda r: r.id)[-2]
+            self.currency_rate = 1 / latest_rate.rate if latest_rate.rate > 0 else latest_rate.rate
+            #_logger.info('***** tasa del viernes  *****: ' + str(latest_rate.rate))
+        else:
+            #_logger.info('***** no es lunes *****: ')
+            self.currency_rate = 1 / self.currency_id.rate if self.currency_id.rate > 0 else self.currency_id.rate
+            #_logger.info('***** tasa actual *****: ' + str(self.currency_id.rate))
 
     def write(self, vals):
         res = super(AccountMove, self).write(vals)
