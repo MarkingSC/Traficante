@@ -38,6 +38,10 @@ class StockPicking(models.Model):
     partner_address =fields.Char(string="Delivery address", compute=get_delivery_address)
     partner_business_name = fields.Char(string="Business name", store=True, related='partner_id.business_name')
     partner_zip_code = fields.Char(string="Zip Code", store=True, related='partner_id.zip')
+    folio_provider = fields.Char(string='Folio provisto del proveedor', required=True)
+    name_receives = fields.Char(string='Nombre de quien recibe', required=False)
+    job_receives = fields.Char(string='Puesto de quien recibe', required=False)
+    reception_date = fields.Datetime(string='Fecha de recepción', required=False)
 
     @api.depends('origin', 'invoice_ids')
     def get_invoices_amount(self):

@@ -27,6 +27,19 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_picking_form_reception">
+            <field name="inherit_id" ref="stock.view_picking_form"></field>
+            <field name="model">stock.picking</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='backorder_id']" position="after">
+                    <field name="folio_provider" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')], 'required': [('picking_type_code', '=', 'incoming')]}"/>
+                    <field name="name_receives" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')], 'required': [('picking_type_code', '=', 'incoming')]}"/>
+                    <field name="job_receives" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')], 'required': [('picking_type_code', '=', 'incoming')]}"/>
+                    <field name="reception_date" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')], 'required': [('picking_type_code', '=', 'incoming')]}"/>
+                </xpath>
+            </field>
+        </record>
+
         <record id="action_on_delivery_route" model="ir.actions.server">
             <field name="name">Mandar a ruta</field>
             <field name="model_id" ref="stock.model_stock_picking"/>
