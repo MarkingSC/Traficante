@@ -8,8 +8,13 @@
                 <field name="product_id"></field>
                 <field name="partner_id"></field>
                 <field name="receipt_type"></field>
+                <field name="origin"></field>
+                <field name="elaboration_date"></field>
+                <field name="received_name"></field>
                 <field name="received_date"></field>
                 <field name="product_qty"></field>
+                <field name="price_unit"/>
+                <field name="price_tax"></field>
                 <field name="price_total"></field>
                 <field name="state" optional="show"></field>
             </field>
