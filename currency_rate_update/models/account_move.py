@@ -28,7 +28,7 @@ class AccountMove(models.Model):
         # verifica si el dia actual es lunes, de ser así toma la tasa del viernes, si no toma la actual
         if today.weekday() == 0 and currency != "MXN":
             #_logger.info('***** es lunes *****: ')
-            latest_rate = sorted(self.currency_id.rate_ids, key=lambda r: r.id)[-2]
+            latest_rate = sorted(self.currency_id.rate_ids, key=lambda r: r.id)[-1]
             self.currency_rate = 1 / latest_rate.rate if latest_rate.rate > 0 else latest_rate.rate
             #_logger.info('***** tasa del viernes  *****: ' + str(latest_rate.rate))
         else:
