@@ -91,8 +91,6 @@ class BaseModelExtend(models.AbstractModel):
                         _logger.info('***** Fue un cambio realizado por un autorizador, entonces procede con el cambio **** ')
 
 
-
-
             _logger.info('*** Evaluó las condiciones de change field ***')
 
             matching_policies_1 = []
@@ -112,7 +110,7 @@ class BaseModelExtend(models.AbstractModel):
                 res = super(BaseModelExtend, self).write(vals)
 
                 #evaluar condicion despues
-                for policy in all_policies:
+                for policy in double_check_policies:
                     if policy.after_condition:
                         matches_condition_2 = False
                         matches_condition_2 = self.filtered(lambda record: eval(policy.after_condition))

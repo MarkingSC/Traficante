@@ -215,13 +215,23 @@ class AuthorizationTask(models.Model):
                 related_record.x_current_authorization_id = False
 
     def action_authorize(self):
-        #_logger.info('***** Entra a action_authorize *****')
+        _logger.info('***** Entra a action_authorize *****')
         for task in self:
             #_logger.info('***** Se autorizó, así que se actualizarán los datos: ' + str(task.new_vals))
             record = self.env[task.model_id.model].search([('id', '=', task.res_id)])
             if not record:
                 record = self.env[task.model_id.model].search([('id', '=', task.res_id), ('active', '=', False)])
-            record.write(eval(task.new_vals))
+            
+            _logger.info('*** record._name: ' + str(record._name))
+            _logger.info('*** task.policy_id.after_condition: ' + str(task.policy_id.after_condition))
+            ## ejecuta los cambios que se habian solicitado, hay tratamiento exclusivo para actualizaciones de inventario.
+            if record._name == 'stock.inventory' and task.policy_id.after_condition == "record.state == 'done'":
+                _logger.info('*** es ajuste de inventario y lo va a validar ***')
+                record.action_validate();
+            else:
+                _logger.info('*** es un modelo cualquiera, entonces solo actualiza el campo ***')
+                record.write(eval(task.new_vals))
+
             task.write({'state': 'authorized','authorization_date': datetime.today(), 'authorizer_uid': self.env.uid})
 
             task._get_notified_emails(type='action')

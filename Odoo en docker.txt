@@ -92,3 +92,34 @@ journalctl --vacuum-size=50M
 
 Establecer limite para los logs de syslog
 nano /etc/logrotate.d/rsyslog
+
+
+#Acceder a la base de datos en produccion
+Acceder a prod
+sudo su postgres
+psql
+\c traficante-prod-f2e1
+A partir de aqui ya se pueden hacer consultas
+
+
+## Borrar headers de aws
+sudo su -
+apt-get autoremove
+
+## Eliminar los logs de journal
+sudo su -
+journalctl --rotate
+
+## Eliminar los logs de syslog
+sudo su -
+echo "" > /var/log/kern.log
+echo "" > /var/log/syslog
+service syslog restart
+
+## Borrar logs de nginx
+Entrar a /var/log/nginx
+borrar los logs actuales con: rm ./*
+echo "" > /var/log/access.log
+echo "" > /var/log/error.log
+echo "" > /var/log/odoo.access.log
+echo "" > /var/log/odoo.error.log

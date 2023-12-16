@@ -1,1 +1,1 @@
-from . import authorization_policy, authorization_task, base_model
+from . import authorization_policy, authorization_task, base_model, stock_inventory
