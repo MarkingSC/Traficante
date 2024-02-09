@@ -3,7 +3,7 @@
 import base64
 import json
 import requests
-import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from lxml import etree
 
@@ -113,12 +113,16 @@ class AccountMove(models.Model):
         usd = self.env["res.currency"].search([('name', '=', 'USD')], limit=1)
         _logger.info('usd: ' + str(usd))
         #usd_rate = usd.rate_ids.search([('name', '=',  (self.invoice_date - relativedelta(days=1))), ('company_id', '=', self.company_id)], limit=1).rate
-        usd_rate_res = usd.rate_ids.filtered(lambda rate_id: rate_id.name == (self.invoice_date - relativedelta(days=1)) and rate_id.company_id == self.company_id)[0]
-        usd_rate = usd_rate_res.rate
+        if self.invoice_date.weekday() == 0:  # Verifica si la fecha es un lunes
+            usd_rate_res = usd.rate_ids.filtered(lambda rate_id: rate_id.name == (self.invoice_date - relativedelta(days=3)) and rate_id.company_id == self.company_id)[0]
+            curr_rate = round(usd.with_context(date=self.invoice_date - relativedelta(days=3)).rate, 6) / round(self.currency_id.with_context(date=self.invoice_date).rate, 6)
+        else:
+            usd_rate_res = usd.rate_ids.filtered(lambda rate_id: rate_id.name == (self.invoice_date - relativedelta(days=1)) and rate_id.company_id == self.company_id)[0]
+            curr_rate = round(usd.with_context(date=self.invoice_date - relativedelta(days=1)).rate, 6) / round(self.currency_id.with_context(date=self.invoice_date).rate, 6)
         #usd_rate_res = usd.rate_ids.search([('name', '=',  (self.invoice_date - relativedelta(days=1))), ('company_id', '=', self.company_id)], limit=1)
+        usd_rate = usd_rate_res.rate
         _logger.info('usd_rate_res: ' + str(usd_rate_res))
         _logger.info('usd_rate: ' + str(usd_rate))
-        curr_rate = round(usd.with_context(date=self.invoice_date  - relativedelta(days=1)).rate,6) / round(self.currency_id.with_context(date=self.invoice_date).rate,6)
         _logger.info('curr_rate: ' + str(curr_rate))
 
         if self.cce_habilitar_cee or self.cce_habilitar_exterior:

@@ -16,6 +16,7 @@ class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
     folios_cfdi_facturas = fields.Char(string='Folio factura', compute='_get_folios_cfdi_facturas', store=False)
+    pue_flag = fields.Boolean(string="Metodo de pago PUE", compute='_compute_pue_flag', store=True)
 
     def _get_folios_cfdi_facturas(self):
         for payment in self:
@@ -65,18 +66,32 @@ class AccountPayment(models.Model):
             record.forma_pago = record.forma_pago_2
             _logger.info('**** record.forma_pago: ' + str(record.forma_pago))
 
+    @api.depends('communication')
+    def _compute_pue_flag(self):
+        for payment in self:
+            if payment.communication:
+                original_invoice = self.env['account.move'].search([('name', '=', payment.communication)], limit=1)
+                payment.pue_flag = original_invoice.methodo_pago == 'PUE' if original_invoice else False
+            else:
+                payment.pue_flag = False
+
     # Para enviar de forma automática el complemento de pago una vez timbrado   
     def complete_payment(self):
         _logger.info('**** entra a complete_payment: ')
-        _logger.info('**** el usario es  empleado interno: ' + str(self.env.user.has_group('base.group_user')))
-        _logger.info('**** el usario es admin: ' + str(self.env.is_admin()))
-        _logger.info('**** el usario es el sistema: ' + str(self.env.is_system() ))
-        result = super(AccountPayment, self).complete_payment()
-        #result = super(AccountPayment, self).complete_payment()
-        _logger.info('**** Se generó el complemento de pago y se enviará por correo. ')
-        self.send_payment()
-        #_logger.info('**** Complemento de pago enviado. ')
-        return result
+        if self.pue_flag:
+            # Detener el proceso y enviar un mensaje de error
+            raise Warning("El método de pago es PUE. No se puede completar el pago.")
+        else:
+            # Continuar con la ejecución de complete_payment
+            _logger.info('**** el usario es  empleado interno: ' + str(self.env.user.has_group('base.group_user')))
+            _logger.info('**** el usario es admin: ' + str(self.env.is_admin()))
+            _logger.info('**** el usario es el sistema: ' + str(self.env.is_system()))
+            result = super(AccountPayment, self).complete_payment()
+            # result = super(AccountPayment, self).complete_payment()
+            _logger.info('**** Se generó el complemento de pago y se enviará por correo. ')
+            self.send_payment()
+            # _logger.info('**** Complemento de pago enviado. ')
+            return result
 
     # 23 de Febrero 2022 - Marco Martinez - cambiar el nombre del cliente por la razón social (business_name)
     @api.model
