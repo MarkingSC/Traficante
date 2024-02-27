@@ -78,10 +78,10 @@
                 <attribute name="optional">hide</attribute>
             </xpath>
             <xpath expr="//field[@name='amount_untaxed_signed']" position="attributes">
-                <attribute name="optional">hide</attribute>
+                <attribute name="optional">show</attribute>
             </xpath>
             <xpath expr="//field[@name='amount_residual_signed']" position="attributes">
-                <attribute name="optional">hide</attribute>
+                <attribute name="optional">show</attribute>
             </xpath>
         </field>
     </record>
