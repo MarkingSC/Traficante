@@ -25,3 +25,14 @@ class PurchaseOrder(models.Model):
 
         # Si todo sale bien guarda la orden de compra
         return super(PurchaseOrder, self).create(vals)
+
+    #logica para ocultar el boton editar de las ordenes de compra, el field se agrega en la vista form
+    test_css = fields.Html(string='CSS', sanitize=False, compute='_compute_css', store=False)
+
+    @api.depends('state')
+    def _compute_css(self):
+        for record in self:
+            if record.state != 'draft':
+                record.test_css = '<style>.o_form_button_edit {display: none !important;}</style>'
+            else:
+                record.test_css = False

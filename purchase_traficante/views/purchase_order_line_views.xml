@@ -34,6 +34,9 @@
                     <filter name="credito" string="Crédito" domain="[('receipt_type', '=', 'credito')]"/>
                     <filter name="consigna" string="Consigna" domain="[('receipt_type', '=', 'consigna')]"/>
                     <separator/>
+                    <filter name="recibidos" string="Recibidos" domain="[('received_date', '!=', False)]"/>
+                    <filter name="no_recibidos" string="No recibidos" domain="[('received_date', '=', False), ('state', '=', 'purchase')]"/>
+                    <separator/>
                     <filter name="product_id" string="Producto" context="{'group_by': 'product_id'}"></filter>
                     <filter name="partner_id" string="Proveedor" context="{'group_by': 'partner_id'}"></filter>
                     <filter string="Estado" name="status" domain="[]" context="{'group_by' : 'state'}"/>

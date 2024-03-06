@@ -24,6 +24,7 @@
                                         }" force_save="1" domain="[('purchase_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
                 </xpath>
                 <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="test_css" invisible="1"/> <!--campo para ocultar el boton editar-->
                     <field name="receipt_type" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>
                     <field name="payment_term_id" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')], 'required': [('receipt_type', '=', 'credito')], 'invisible': ['|',('receipt_type', '=', 'regular'), ('receipt_type', '=', 'consigna')]}" options="{'no_create': True}"/>
                 </xpath>
