@@ -28,6 +28,20 @@
             </field>
         </record>
 
+        <record id="view_invoice_inherit_tree" model="ir.ui.view">
+            <field name="name">account.move.inherit.tree</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree" />
+            <field name="arch" type="xml">
+                <field name="folio_fiscal" position="after" attrs="{'invisible': [('type', '!=', 'out_refund')]}">
+                    <field name="ref" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>
+                    <field name="uuid_relacionado" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>
+                    <field name="original_order_amount" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>
+                    <field name="original_invoice_date" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>
+                </field>
+            </field>
+        </record>
+
         <record id="view_account_invoice_filter_traficante_inherit" model="ir.ui.view">
             <field name="type">search</field>
             <field name="model">account.move</field>

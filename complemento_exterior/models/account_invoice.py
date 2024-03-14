@@ -44,7 +44,7 @@ class MercanciasComplemento(models.Model):
     cantidadaduana = fields.Float(string='Cantidad aduana', default=1.0, digits=dp.get_precision('Product Price'))
     valorunitarioaduana = fields.Float(string='Valor unitario USD', digits=dp.get_precision('Product Price'))
     #valordolares = fields.Float(string='Valor dólares', compute='_compute_total_amount', digits=dp.get_precision('Product Price'))
-    valordolares = fields.Float(string='Valor dólares', digits=dp.get_precision('Product Price'))
+    valordolares = fields.Float(string='Valor dólares', digits=(16, 4)) #digits=dp.get_precision('Product Price'))
     unidadAduana = fields.Many2one('catalogos.unidadmedidaaduana', string='Unidad aduana')
     info_mercancias = fields.Many2one('account.move.mercancias.info', string='Información mercancia')
     order_id = fields.Many2one('account.move', string='Mercancias', required=True, ondelete='cascade', index=True, copy=False)

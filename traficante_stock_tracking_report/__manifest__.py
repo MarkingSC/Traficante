@@ -24,6 +24,7 @@
     # always loaded
     'data': [
         'views/stock_move_line_views.xml',
+        'views/stock_move_view.xml',
         'security/ir.model.access.csv',
         'report/report.xml',
         'wizard/report_view.xml',

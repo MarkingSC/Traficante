@@ -220,3 +220,8 @@ class productTemplate(models.Model):
         self._get_margins()
         _logger.info('**** fin _get_margins_on_sp *****')
 
+    @api.model
+    def create(self, vals):
+        record = super(productTemplate, self).create(vals)
+        record._get_product_price()
+        return record

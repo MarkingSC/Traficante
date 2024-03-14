@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="product_product_view_stock_product_invoiceable">
+            <field name="inherit_id" ref="stock.view_stock_product_tree"></field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <field name="price" position="after">
+                    <field name="qty_invoiceable" attrs="{'invisible':[('type', '!=', 'product')]}" optional="show"/>
+                </field>
+                <field name="uom_id" position="after">
+                    <field name="total_sale" attrs="{'invisible':[('type', '!=', 'product')]}" widget="monetary" optional="show"/>
+                    <field name="total_purchase" attrs="{'invisible':[('type', '!=', 'product')]}" widget="monetary" optional="show"/>
+                    <field name="product_location" attrs="{'invisible':[('type', '!=', 'product')]}" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_product_search_view" model="ir.ui.view">
+            <field name="name">product.product.search.view</field>
+            <field name="model">product.product</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar líneas">
+                    <separator/>
+                    <filter name="location" string="Ubicación" context="{'group_by': 'product_location'}"></filter>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>

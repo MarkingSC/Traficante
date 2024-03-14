@@ -39,6 +39,25 @@
                             <span class="m-0" t-field="o.invoice_date_due"/>
                         </div>
                     </div>
+                    <div t-if="o.type == 'out_invoice'" class="row">
+                        <div class="col-3">
+                            <strong>Referencia origen: </strong>
+                            <span t-if="o.ref === '' and o.type == 'out_invoice'" class="m-0"> </span>
+                            <span t-if="o.ref !== '' and o.type == 'out_invoice'" class="m-0" t-field="o.ref"/>
+                        </div>
+                        <div class="col-3">
+                            <strong>CFDI Relacionado: </strong>
+                            <span t-if="o.type == 'out_invoice'" class="m-0" t-field="o.uuid_relacionado"/>
+                        </div>
+                        <div class="col-3">
+                            <strong>Monto de factura origen: </strong>
+                            <span t-if="o.type == 'out_invoice'" class="m-0" t-field="original_order_amount"/>
+                        </div>
+                        <div class="col-3">
+                            <strong>Fecha de factura origen: </strong>
+                            <span t-if="o.type == 'out_invoice'" class="m-0" t-field="original_invoice_date"/>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12">
                             <div style="border-bottom: 1px solid black;"></div>

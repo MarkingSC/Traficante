@@ -8,7 +8,6 @@ _logger = logging.getLogger(__name__)
 class stockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
-
     # Fecha de entrada del lote
     lot_incoming_date = fields.Date(string='Lot incoming date')
     # días de inventario o tiempo de inactividad (desde la entrada del lote)
@@ -28,6 +27,17 @@ class stockMoveLine(models.Model):
     # usuario responsable
     lot_uid = fields.Many2one('res.users', string='User')
 
+    invoice_name = fields.Char(string="Factura", compute='_get_invoice_name')
+
+    @api.depends('origin')
+    def _get_invoice_name(self):  # función para obtener el nombre de la factura origen
+        _logger.info('**** entra a _get_invoice_name: ')
+        for move in self:
+            if move.origin:
+                invoice = self.env['account.move'].search([('invoice_origin', '=', move.origin)], limit=1)
+                move.invoice_name = invoice.name if invoice else False
+            else:
+                move.invoice_name = False
 
 class stockPicking(models.Model):
     _inherit = 'stock.picking'

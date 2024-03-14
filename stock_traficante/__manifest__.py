@@ -33,6 +33,7 @@
         'views/stock_quant_views.xml',
         'views/stock_picking_views.xml',
         'views/product_template_views.xml',
+        'views/product_product_views.xml',
         'views/ir_ui_menu_views.xml',
         'report/stock_reports.xml'
     ],
