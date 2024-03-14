@@ -50,11 +50,11 @@
                         </div>
                         <div class="col-3">
                             <strong>Monto de factura origen: </strong>
-                            <span t-if="o.type == 'out_refund'" class="m-0" t-field="original_order_amount"/>
+                            <span t-if="o.type == 'out_refund'" class="m-0" t-field="o.original_order_amount"/>
                         </div>
                         <div class="col-3">
                             <strong>Fecha de factura origen: </strong>
-                            <span t-if="o.type == 'out_refund'" class="m-0" t-field="original_invoice_date"/>
+                            <span t-if="o.type == 'out_refund'" class="m-0" t-field="o.original_invoice_date"/>
                         </div>
                     </div>
                     <div class="row">
