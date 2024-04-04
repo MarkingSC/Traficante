@@ -49,3 +49,8 @@ class AccountMove(models.Model):
                     move.write({'original_invoice_date': False})
             else:
                 move.write({'original_invoice_date': False})
+
+    class AccountMoveLine(models.Model):
+        _inherit = "account.move.line"
+
+        price_unit = fields.Float(string='Unit Price', digits='Unit price')
