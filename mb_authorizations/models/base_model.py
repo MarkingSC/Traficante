@@ -145,7 +145,8 @@ class BaseModelExtend(models.AbstractModel):
                                     'assigned_uid': policy.authorizer_uid.id
                                 })
                                 
-                                self.write(before_values)
+                                #self.write(before_values)
+                                super(BaseModelExtend, self).write(before_values)
                                 # Asocia la nueva autorización
                                 self.write({'x_current_authorization_id': created_task.id})
 
