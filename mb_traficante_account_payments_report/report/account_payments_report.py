@@ -113,8 +113,8 @@ class AccountPaymentsReport(models.AbstractModel):
         sheet.write(1,4, 'RECEPTOR', header_col_format)
         sheet.write(1,5, 'SUBTOTAL', header_col_format)
         sheet.write(1,6, 'DESCUENTO', header_col_format)
-        sheet.write(1,7, 'MTO. IEPS', header_col_format)
-        sheet.write(1,8, 'IVA', header_col_format)
+        sheet.write(1,7, 'IVA', header_col_format)
+        sheet.write(1,8, 'MTO. IEPS', header_col_format)
         sheet.write(1,9, 'IEPS', header_col_format)
         sheet.write(1,10, 'TOTAL', header_col_format)
         sheet.write(1,11, 'IMP.PAGADO', header_col_format)
@@ -205,7 +205,7 @@ class AccountPaymentsReport(models.AbstractModel):
         estado_cfdi = dict([('factura_no_generada', 'Factura no generada'), ('factura_correcta', 'Factura correcta'), ('solicitud_cancelar', 'Cancelación en proceso'),('factura_cancelada', 'Factura cancelada'),('solicitud_rechazada', 'Cancelación rechazada')]).get(move.estado_factura)
         _logger.info('**** estado_doc: ' + str(estado_doc))
 
-        col = 7
+        '''col = 7
         for amount_by_group in move.amount_by_group:   #obtener los impuestos y el iva directamente de la factura
             if len(move.line_ids.filtered(lambda line: line.tax_line_id)) == 1 and move.amount_untaxed == round(amount_by_group[2], 2):
                 sheet.write(row, 7, '$0.00')
@@ -215,7 +215,7 @@ class AccountPaymentsReport(models.AbstractModel):
                     sheet.write(row, col, str(amount_by_group[3]))
                 else:
                     sheet.write(row, col, False)
-            col += 1
+            col += 1'''
         #FACTURA
         sheet.write(row, 0, str(estado_factura_dict[move.estado_factura]))
         sheet.write(row, 1, str(move.company_id.serie_factura))
@@ -224,8 +224,8 @@ class AccountPaymentsReport(models.AbstractModel):
         sheet.write(row, 4, str(move.partner_id.name))
         sheet.write(row, 5, str("${:,.2f}".format(move.amount_untaxed)))
         sheet.write(row, 6, str("${:,.2f}".format(move.discount)))
-        #sheet.write(row, 7, str("${:,.2f}".format(move.iva_amount)))
-        #sheet.write(row, 8, str("${:,.2f}".format(move.ieps_amount)))
+        sheet.write(row, 7, str("${:,.2f}".format(move.iva_amount)))
+        sheet.write(row, 8, str("${:,.2f}".format(move.ieps_amount)))
         sheet.write(row, 9, str(ieps_taxes_str))
         sheet.write(row, 10, str("${:,.2f}".format(move.amount_total)))
 

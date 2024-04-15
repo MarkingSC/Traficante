@@ -84,7 +84,7 @@ class AccountMoveLine(models.Model):
                 record.product_cost = product_cost_pp * qtty
         _logger.info('**** termina _get_product_cost: ')
 
-    @api.depends('product_id')
+    @api.depends('product_id', 'tax_ids', 'price_unit')
     def _get_taxes_amount(self):
         for record in self:
             _logger.info('**** _get_taxes_amount para a linea: ' + str(record))

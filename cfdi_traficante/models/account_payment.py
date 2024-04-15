@@ -327,85 +327,86 @@ class AccountPayment(models.Model):
                     monto_pagado = payment.truncate(monto_pagado, 2)
 
                     #obj_imp_prod = invoice.invoice_line_ids.mapped('product_id').product_tmpl_id.objetoimp #verificar si el producto tiene impuestos
-                    #_logger.info('**** Objeto impuesto del producto ****: '+str(obj_imp_prod))
+                    obj_imp_prod = sorted(invoice.invoice_line_ids.mapped('product_id'))[0].product_tmpl_id.objetoimp
+                    _logger.info('**** Objeto impuesto del producto ****: '+str(obj_imp_prod))
                     _logger.info('**** factura extranjera: ' + str(factura_extranjera))
 
-                    #if obj_imp_prod != '01':
-                    if not factura_extranjera:
-                        if not invoice.tax_payment:
-                           raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
-                        taxes = json.loads(invoice.tax_payment)
-                        objetoimpdr = '01'
-                        trasladodr = []
-                        retenciondr = []
-                        if "translados" in taxes:
-                           objetoimpdr = '02'
-                           traslados = taxes['translados']
-                           for traslado in traslados:
-                               basedr = payment.truncate(float(traslado['base']) * paid_pct, decimal_p)
-                               importedr = traslado['importe'] and payment.truncate(float(traslado['tasa']) * basedr, decimal_p) or 0
-                               trasladodr.append({
-                                             'BaseDR': payment.set_decimals(basedr, decimal_p),
-                                             'ImpuestoDR': traslado['impuesto'],
-                                             'TipoFactorDR': traslado['TipoFactor'],
-                                             'TasaOcuotaDR': traslado['tasa'],
-                                             'ImporteDR': payment.set_decimals(importedr, decimal_p) if traslado['TipoFactor'] != 'Exento' else '',
-                                             })
-                               key = traslado['tax_id']
+                    if obj_imp_prod != '01':
+                        if not factura_extranjera:
+                            if not invoice.tax_payment:
+                               raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
+                            taxes = json.loads(invoice.tax_payment)
+                            objetoimpdr = '01'
+                            trasladodr = []
+                            retenciondr = []
+                            if "translados" in taxes:
+                               objetoimpdr = '02'
+                               traslados = taxes['translados']
+                               for traslado in traslados:
+                                   basedr = payment.truncate(float(traslado['base']) * paid_pct, decimal_p)
+                                   importedr = traslado['importe'] and payment.truncate(float(traslado['tasa']) * basedr, decimal_p) or 0
+                                   trasladodr.append({
+                                                 'BaseDR': payment.set_decimals(basedr, decimal_p),
+                                                 'ImpuestoDR': traslado['impuesto'],
+                                                 'TipoFactorDR': traslado['TipoFactor'],
+                                                 'TasaOcuotaDR': traslado['tasa'],
+                                                 'ImporteDR': payment.set_decimals(importedr, decimal_p) if traslado['TipoFactor'] != 'Exento' else '',
+                                                 })
+                                   key = traslado['tax_id']
 
-                               basep = basedr / equivalenciadr
-                               importep = importedr / equivalenciadr
-                               if str(basep)[::-1].find('.') > 6:
-                                  basep = payment.truncate(basep, decimal_p)
-                               if str(importep)[::-1].find('.') > 6:
-                                  importep = payment.truncate(importep, decimal_p)
+                                   basep = basedr / equivalenciadr
+                                   importep = importedr / equivalenciadr
+                                   if str(basep)[::-1].find('.') > 6:
+                                      basep = payment.truncate(basep, decimal_p)
+                                   if str(importep)[::-1].find('.') > 6:
+                                      importep = payment.truncate(importep, decimal_p)
 
-                               val = {'BaseP': basep,
-                                      'ImpuestoP': traslado['impuesto'],
-                                      'TipoFactorP': traslado['TipoFactor'],
-                                      'TasaOCuotaP': traslado['tasa'],
-                                      'ImporteP': importep,}
-                               if key not in tax_grouped_tras:
-                                   tax_grouped_tras[key] = val
-                               else:
-                                   tax_grouped_tras[key]['BaseP'] += basep
-                                   tax_grouped_tras[key]['ImporteP'] += importep
-                        if "retenciones" in taxes:
-                           objetoimpdr = '02'
-                           retenciones = taxes['retenciones']
-                           for retencion in retenciones:
-                               basedr = payment.truncate(float(retencion['base']) * paid_pct, decimal_p)
-                               importedr = retencion['importe'] and payment.truncate(float(retencion['tasa']) * basedr, decimal_p) or 0
-                               retenciondr.append({
-                                             'BaseDR': payment.set_decimals(basedr, decimal_p),
-                                             'ImpuestoDR': retencion['impuesto'],
-                                             'TipoFactorDR': retencion['TipoFactor'],
-                                             'TasaOcuotaDR': retencion['tasa'],
-                                             'ImporteDR': payment.set_decimals(importedr, decimal_p),
-                                             })
-                               key = retencion['tax_id']
+                                   val = {'BaseP': basep,
+                                          'ImpuestoP': traslado['impuesto'],
+                                          'TipoFactorP': traslado['TipoFactor'],
+                                          'TasaOCuotaP': traslado['tasa'],
+                                          'ImporteP': importep,}
+                                   if key not in tax_grouped_tras:
+                                       tax_grouped_tras[key] = val
+                                   else:
+                                       tax_grouped_tras[key]['BaseP'] += basep
+                                       tax_grouped_tras[key]['ImporteP'] += importep
+                            if "retenciones" in taxes:
+                               objetoimpdr = '02'
+                               retenciones = taxes['retenciones']
+                               for retencion in retenciones:
+                                   basedr = payment.truncate(float(retencion['base']) * paid_pct, decimal_p)
+                                   importedr = retencion['importe'] and payment.truncate(float(retencion['tasa']) * basedr, decimal_p) or 0
+                                   retenciondr.append({
+                                                 'BaseDR': payment.set_decimals(basedr, decimal_p),
+                                                 'ImpuestoDR': retencion['impuesto'],
+                                                 'TipoFactorDR': retencion['TipoFactor'],
+                                                 'TasaOcuotaDR': retencion['tasa'],
+                                                 'ImporteDR': payment.set_decimals(importedr, decimal_p),
+                                                 })
+                                   key = retencion['tax_id']
 
-                               importep = importedr / equivalenciadr
-                               if str(importep)[::-1].find('.') > 6:
-                                  importep = payment.truncate(importep, decimal_p)
+                                   importep = importedr / equivalenciadr
+                                   if str(importep)[::-1].find('.') > 6:
+                                      importep = payment.truncate(importep, decimal_p)
 
-                               val = {'ImpuestoP': retencion['impuesto'],
-                                      'ImporteP': importep,}
-                               if key not in tax_grouped_ret:
-                                   tax_grouped_ret[key] = val
-                               else:
-                                   tax_grouped_ret[key]['ImporteP'] += importep
+                                   val = {'ImpuestoP': retencion['impuesto'],
+                                          'ImporteP': importep,}
+                                   if key not in tax_grouped_ret:
+                                       tax_grouped_ret[key] = val
+                                   else:
+                                       tax_grouped_ret[key]['ImporteP'] += importep
 
-                        if objetoimpdr == '02' and not trasladodr and not retenciondr:
-                           raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
+                            if objetoimpdr == '02' and not trasladodr and not retenciondr:
+                               raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
+                        else:
+                            objetoimpdr = '01'
+                            trasladodr = []
+                            retenciondr = []
                     else:
                         objetoimpdr = '01'
                         trasladodr = []
                         retenciondr = []
-                    #else:
-                        #objetoimpdr = '01'
-                        #trasladodr = []
-                        #retenciondr = []
 
                     docto_relacionados.append({
                           'MonedaDR': invoice.moneda,
