@@ -107,6 +107,7 @@ class AccountMoveLine(models.Model):
 
                 record.ieps_amount = total_ieps
                 record.ieps_taxes = ieps_taxes
+                _logger.info('**** valor de ieps_amount de la linea: ' + str(total_ieps))
 
                 if record.price_subtotal:
                     record.ieps_percent = record.ieps_amount / record.price_subtotal
@@ -117,7 +118,8 @@ class AccountMoveLine(models.Model):
                 iva_taxes = record.tax_ids.filtered(lambda tax: tax.tax_group_id.iva_section == True)
 
                 total_iva = 0
-                base_amount = (record.price_unit * record.quantity) + total_ieps
+                #base_amount = (record.price_unit * record.quantity) + total_ieps
+                base_amount = record.price_subtotal
                 price_unit = record.price_unit
                 quantity = record.quantity
                 product = record.product_id
@@ -131,6 +133,7 @@ class AccountMoveLine(models.Model):
 
                 record.iva_amount = total_iva
                 record.iva_taxes = iva_taxes
+                _logger.info('**** valor de iva_amount de la linea: ' + str(total_iva))
 
                 if record.id == 25516:
                     _logger.info('**** record.id: ' + str(record.id))
