@@ -28,6 +28,7 @@ class stockMoveLine(models.Model):
     lot_uid = fields.Many2one('res.users', string='User')
 
     invoice_name = fields.Char(string="Factura", compute='_get_invoice_name')
+    product_type = fields.Char(string='Tipo de producto', compute='_get_product_type', store=True)
 
     @api.depends('origin')
     def _get_invoice_name(self):  # función para obtener el nombre de la factura origen
@@ -38,6 +39,11 @@ class stockMoveLine(models.Model):
                 move.invoice_name = invoice.name if invoice else False
             else:
                 move.invoice_name = False
+    @api.depends('product_id')
+    def _get_product_type(self): # función para obtener el tipo de producto
+        for line in self:
+            product = line.product_id.mapped('type')
+            line.product_type = product[0]
 
 class stockPicking(models.Model):
     _inherit = 'stock.picking'
