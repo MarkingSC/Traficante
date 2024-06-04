@@ -119,7 +119,7 @@ class AccountMoveLine(models.Model):
 
                 total_iva = 0
                 #base_amount = (record.price_unit * record.quantity) + total_ieps
-                base_amount = record.price_subtotal
+                base_amount = record.price_subtotal + total_ieps
                 price_unit = record.price_unit
                 quantity = record.quantity
                 product = record.product_id
