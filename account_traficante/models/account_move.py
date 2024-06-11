@@ -34,7 +34,9 @@ class AccountMove(models.Model):
         for move in self:
             if move.invoice_origin:
                 original_order = self.env['sale.order'].search([('name', '=', move.invoice_origin)], limit=1)
-                move.original_order_amount = original_order.amount_total if original_order else 0.0
+                move.original_order_amount = original_order.amount_total if original_order else 0.00
+            else:
+                move.original_order_amount = 0.00
 
     @api.depends('uuid_relacionado')
     def _compute_original_invoice_date(self):   # función para obtener la fecha de factura origen a la que pertenece cada nota de crédito
