@@ -41,6 +41,7 @@ class stockMoveLine(models.Model):
                 move.invoice_name = False
     @api.depends('product_id')
     def _get_product_type(self): # función para obtener el tipo de producto
+        _logger.info('**** entra a _get_product_type: ')
         for line in self:
             product = line.product_id.mapped('type')
             line.product_type = product[0]
@@ -80,6 +81,12 @@ class stockPicking(models.Model):
                         lot_incoming_line = self.env['stock.move.line'].search([
                         ('picking_id.picking_type_id.code', '=', 'internal'), 
                         ('state', '=', 'done'), 
+                        ('lot_id', '=', lot_line.lot_id.id)
+                    ], order="date asc", limit = 1)
+
+                    if not lot_incoming_line:
+                        lot_incoming_line = self.env['stock.move.line'].search([
+                        ('state', '=', 'done'),
                         ('lot_id', '=', lot_line.lot_id.id)
                     ], order="date asc", limit = 1)
 
