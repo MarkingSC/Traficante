@@ -75,7 +75,7 @@ class stockPicking(models.Model):
                         ('picking_id.picking_type_id.code', '=', 'incoming'), 
                         ('state', '=', 'done'), 
                         ('lot_id', '=', lot_line.lot_id.id)
-                    ])
+                    ], order="date asc", limit = 1)
 
                     if not lot_incoming_line:
                         lot_incoming_line = self.env['stock.move.line'].search([
