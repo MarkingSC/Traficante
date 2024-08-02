@@ -60,6 +60,8 @@ class PurchaseOrderLine(models.Model):
     origin = fields.Char(string='Documento origen', compute='_get_origin', store=False)
     elaboration_date = fields.Date(string='Fecha de elaboración', compute='_get_elaboration_date', store=False)
 
+    price_unit = fields.Float(string='Unit Price', digits='Unit price') # 4 decimales para el costo unitario en OC
+
     def _get_origin(self):
         for line in self:
             originMap = line.order_id.mapped('name')
