@@ -96,13 +96,13 @@ class AccountMoveLine(models.Model):
 
                 total_ieps = 0
                 price_unit = record.price_unit
-                price_base = record.price_subtotal
+                price_base = record.price_subtotal / record.quantity
                 quantity = record.quantity
                 product = record.product_id
                 customer = record.partner_id
 
                 for tax in ieps_taxes:
-                    compute_all_res = tax.compute_all(price_unit, record.currency_id, quantity, product, customer, False, handle_price_include=True) #con estos valores se calcula el amount de los ieps
+                    compute_all_res = tax.compute_all(price_base, record.currency_id, quantity, product, customer, False, handle_price_include=True) #con estos valores se calcula el amount de los ieps
                     #_logger.info('**** compute_all_res de la linea: ' + str(compute_all_res))
                     
                     for calc_tax in compute_all_res['taxes']:
