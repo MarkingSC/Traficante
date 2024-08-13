@@ -35,11 +35,13 @@ class AccountPayment(models.Model):
             try:
                 record.write({'forma_pago': record.partner_id.forma_pago})
                 return {record.id:record.partner_id.forma_pago}
+                _logger.info('**** forma_pago: ' + str(record.partner_id.forma_pago))
             except:
                 _logger.info('***** Tiene forma de pago 99, así que se queda vacío *****')
                 pass
 
     def post(self):
+        _logger.info('**** entra a post ****')
         res = super(AccountPayment, self).post()
         for rec in self:
             rec._get_default_forma_pago()
@@ -68,12 +70,14 @@ class AccountPayment(models.Model):
 
     @api.depends('communication')
     def _compute_pue_flag(self):
+        _logger.info('**** entra a _compute_pue_flag ****')
         for payment in self:
             if payment.communication:
-                original_invoice = self.env['account.move'].search([('name', '=', payment.communication)], limit=1)
+                original_invoice = self.env['account.move'].search([('name', '=', payment.communication)], order="create_date desc", limit=1)
                 payment.pue_flag = original_invoice.methodo_pago == 'PUE' if original_invoice else False
             else:
                 payment.pue_flag = False
+        _logger.info('**** valor de PUE FLAG: ' + str(payment.pue_flag))
 
     # Para enviar de forma automática el complemento de pago una vez timbrado   
     def complete_payment(self):
