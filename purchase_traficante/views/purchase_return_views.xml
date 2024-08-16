@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="stock_picking_tree_view">
+            <field name="model">stock.picking</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <field name="name"></field>
+                <field name="origin"></field>
+                <field name="picking_type_id"></field>
+                <field name="group_id" string="Orden de compra"></field>
+                <field name="state"></field>
+                <field name="date_done"></field>
+                <field name="reason_return"></field>
+                <field name="return_detail"></field>
+            </field>
+        </record>
+
+        <record id="stock_picking_search_view" model="ir.ui.view">
+            <field name="name">stock.picking.search.view</field>
+            <field name="model">stock.picking</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar líneas">
+                    <field name="name"/>
+                    <field name="origin"/>
+                    <field name="date_done" string="Desde" filter_domain="[('date_done', '&gt;=', self)]"/>
+                    <field name="date_done" string="Hasta" filter_domain="[('date_done', '&lt;=', self)]"/>
+                    <separator/>
+                    <filter name="is_return_filter" string="Solo Devoluciones" domain="[('is_return', '=', True)]"/>
+                    <separator/>
+                    <filter name="recibo" string="Recibo equivocado" domain="[('reason_return', '=', 'recibo')]"/>
+                    <filter name="refacturacion" string="Refacturación" domain="[('reason_return', '=', 'refacturacion')]"/>
+                    <separator/>
+                    <filter  string="Orden de compra" name="group_id" domain="[]" context="{'group_by': 'group_id'}"/>
+                    <filter string="Referencia" name="name" domain="[]" context="{'group_by': 'name'}"/>
+                    <filter string="Estado" name="status" domain="[]" context="{'group_by' : 'state'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="stock_picking_action">
+            <field name="name">Devoluciones de productos</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="stock_picking_search_view"></field>
+            <field name="domain">[('is_return', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                Visualice la relación de las devoluciones de producto.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Devoluciones" sequence="2" id="stock_picking_menu" parent="purchase.purchase_report" action="stock_picking_action"></menuitem>
+    </data>
+</odoo>
