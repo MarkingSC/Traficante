@@ -59,6 +59,17 @@
             </field>
         </record>
 
+        <!-- Agregación de un campo booleano para productos consumibles -->
+        <record model="ir.ui.view" id="product_template_form_view_traficante_consumible">
+            <field name="inherit_id" ref="product.product_template_only_form_view"></field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="before">
+                    <field name="consumible_ok" attrs="{'invisible':[('type', '!=', 'product')]}"/>
+                </xpath>
+            </field>
+        </record>
+
         <!-- Deshabilitar el boton para actualizar cantidades desde productos -->
         <!--<button string="Update Quantity" type="object" groups="stock.group_stock_manager" name="action_update_quantity_on_hand" attrs="{'invisible': [('type', '!=', 'product')]}"/>-->
         <record model="ir.ui.view" id="product_template_form_view_traficante_update_quantity">

@@ -29,6 +29,7 @@ class stockMoveLine(models.Model):
 
     invoice_name = fields.Char(string="Factura", compute='_get_invoice_name')
     product_type = fields.Char(string='Tipo de producto', compute='_get_product_type', store=True)
+    consumible_ok = fields.Boolean(string='Producto consumible', compute='_get_product_consumible', store=True)
 
     @api.depends('origin')
     def _get_invoice_name(self):  # función para obtener el nombre de la factura origen
@@ -45,6 +46,16 @@ class stockMoveLine(models.Model):
         for line in self:
             product = line.product_id.mapped('type')
             line.product_type = product[0]
+
+    @api.depends('product_id')
+    def _get_product_consumible(self):  # función para saber si el producto es consumible o no
+        _logger.info('**** entra a _get_product_consumible: ')
+        for line in self:
+            product = line.product_id.mapped('consumible_ok')
+            if (product):
+                line.consumible_ok = product[0]
+            else:
+                line.consumible_ok = False
 
 class stockPicking(models.Model):
     _inherit = 'stock.picking'

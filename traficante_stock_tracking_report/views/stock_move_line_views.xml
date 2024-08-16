@@ -21,7 +21,8 @@
                     <field name='reference'></field>
                     <field name="origin"/>
                     <field name="invoice_name"/>
-                    <!--<field name="product_type"/>-->
+                    <!--<field name="product_type"/>
+                    <field name="consumible_ok"/>-->
                 </xpath>
                 <xpath expr="//field[@name='qty_done']" position='after'>
                     <field name='product_uom_id'></field>
@@ -58,8 +59,9 @@
                 <xpath expr="//filter[@name='done']" position="after">
                     <separator/>
                     <filter string="Lots" name="lots" domain="[('lot_id', '!=', False)]"/>
-                    <filter string="Consumibles" name="consumibles" domain="[('product_type', '=', 'consu')]"/>
-                    <filter string="Insumos" name="insumos" domain="[('product_type', '=', 'product')]"/>
+                    <filter string="Consumibles" name="consumibles" domain="[('consumible_ok', '=', True)]"/>
+                    <filter string="Insumos" name="insumos" domain="[('consumible_ok', '=', False)]"/>
+                    <filter string="Servicios" name="servicios" domain="[('product_type', '=', 'service')]"/>
                 </xpath>
             </field>
         </record>
