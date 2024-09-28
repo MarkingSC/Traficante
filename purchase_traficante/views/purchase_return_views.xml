@@ -1,17 +1,14 @@
 <odoo>
     <data>
-        <record model="ir.ui.view" id="stock_picking_tree_view">
+        <record model="ir.ui.view" id="stock_picking_return_tree_view">
+            <field name="name">stock.picking.return.tree.view</field>
             <field name="model">stock.picking</field>
-            <field name="type">tree</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
             <field name="arch" type="xml">
-                <field name="name"></field>
-                <field name="origin"></field>
-                <field name="picking_type_id"></field>
-                <field name="group_id" string="Orden de compra"></field>
-                <field name="state"></field>
-                <field name="date_done"></field>
-                <field name="reason_return"></field>
-                <field name="return_detail"></field>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="reason_return" optional="show"/>
+                    <field name="return_detail" optional="show"/>
+                </xpath>
             </field>
         </record>
 
