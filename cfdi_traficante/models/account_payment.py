@@ -330,9 +330,22 @@ class AccountPayment(models.Model):
                     paid_pct = payment.truncate(monto_pagado, decimal_p) / invoice.total_factura
                     monto_pagado = payment.truncate(monto_pagado, 2)
 
-                    #obj_imp_prod = invoice.invoice_line_ids.mapped('product_id').product_tmpl_id.objetoimp #verificar si el producto tiene impuestos
-                    obj_imp_prod = sorted(invoice.invoice_line_ids.mapped('product_id'))[0].product_tmpl_id.objetoimp
-                    _logger.info('**** Objeto impuesto del producto ****: '+str(obj_imp_prod))
+                    #obj_imp_prod = sorted(invoice.invoice_line_ids.mapped('product_id'))[0].product_tmpl_id.objetoimp #verificar si el producto tiene impuestos
+                    products = sorted(invoice.invoice_line_ids.mapped('product_id')) # Mapeamos las líneas de la factura (aplica para las facturas y pagos al timbrar, el ERP desgloza o no impuestos)
+                    if len(products) > 1:
+                        # Obtenemos los objetos de impuesto de las posiciones 0 y 1
+                        obj_imp_0 = products[0].product_tmpl_id.objetoimp
+                        obj_imp_1 = products[1].product_tmpl_id.objetoimp
+                        # Si ambos objetos de impuesto son iguales, tomamos el de la posición 0
+                        if obj_imp_0 == obj_imp_1:
+                            obj_imp_prod = obj_imp_0
+                        else:
+                            # Si son diferentes
+                            obj_imp_prod = '02'
+                    else:
+                        # Si solo hay un producto, tomamos el objeto de impuesto de la posición 0
+                        obj_imp_prod = products[0].product_tmpl_id.objetoimp
+                    _logger.info('****El objeto de impuesto ****: '+str(obj_imp_prod))
                     _logger.info('**** factura extranjera: ' + str(factura_extranjera))
 
                     if obj_imp_prod != '01':
