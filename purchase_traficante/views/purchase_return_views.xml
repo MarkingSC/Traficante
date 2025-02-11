@@ -48,6 +48,12 @@
             </field>
         </record>
 
+        <record id="stock.act_stock_return_picking" model="ir.actions.act_window">
+            <field name="context">{
+                 'reason_return': 'recibo'
+            }</field>
+        </record>
+
         <menuitem name="Devoluciones" sequence="2" id="stock_picking_menu" parent="purchase.purchase_report" action="stock_picking_action"></menuitem>
     </data>
 </odoo>

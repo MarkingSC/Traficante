@@ -15,5 +15,5 @@ class StockPicking(models.Model):
     # product return information
     is_return = fields.Boolean(string="Devolución de productos", default=False)
     reason_return = fields.Selection([('recibo', 'Recibo equivocado'),('refacturacion', 'Refacturación')],
-                                     string='Motivo de la devolución', required=True, default='recibo')
+                                     string='Motivo de la devolución')
     return_detail = fields.Text(string='Detalle de la devolución', required=False)
