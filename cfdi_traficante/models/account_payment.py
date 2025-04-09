@@ -51,7 +51,8 @@ class AccountPayment(models.Model):
                    ('02', '02 - Cheque nominativo'), 
                    ('03', '03 - Transferencia electrónica de fondos'),
                    ('04', '04 - Tarjeta de Crédito'), 
-                   ('28', '28 - Tarjeta de débito'), ],
+                   ('28', '28 - Tarjeta de débito'),                    
+                   ('17', '17 - Compensación'), ],
                                 string=_('Forma de pago'), default=_get_default_forma_pago
                             )
 
