@@ -74,7 +74,7 @@ class AccountPayment(models.Model):
         _logger.info('**** entra a _compute_pue_flag ****')
         for payment in self:
             if payment.communication:
-                original_invoice = self.env['account.move'].search([('name', '=', payment.communication),('company_id', '=', payment.company_id)], order="create_date desc", limit=1)
+                original_invoice = self.env['account.move'].search([('name', '=', payment.communication),('company_id', '=', payment.company_id.id)], order="create_date desc", limit=1)
                 payment.pue_flag = original_invoice.methodo_pago == 'PUE' if original_invoice else False
             else:
                 payment.pue_flag = False
