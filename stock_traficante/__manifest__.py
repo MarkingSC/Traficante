@@ -36,7 +36,8 @@
         'views/product_product_views.xml',
         'views/ir_ui_menu_views.xml',
         'views/stock_return_picking_form_views.xml',
-        'report/stock_reports.xml'
+        'report/stock_reports.xml',
+        'security/security.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
