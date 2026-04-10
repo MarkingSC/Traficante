@@ -5,7 +5,7 @@ _logger = logging.getLogger(__name__)
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    invoice_file = fields.Binary(string='Invoice document' compute='_compute_invoice_file')
+    invoice_file = fields.Binary(string='Invoice document', compute='_compute_invoice_file')
     partner_business_name = fields.Char(string='Razón social', related="partner_id.business_name")
     partner_commercial_name = fields.Char(string='Nombre Comercial', compute='_get_client_name', store=True)
     #partner_commercial_name = fields.Char(string='Nombre Comercial')
