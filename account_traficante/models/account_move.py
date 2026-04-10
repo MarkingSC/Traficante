@@ -5,7 +5,7 @@ _logger = logging.getLogger(__name__)
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    invoice_file = fields.Binary(string='Invoice document')
+    invoice_file = fields.Binary(string='Invoice document' compute='_compute_invoice_file')
     partner_business_name = fields.Char(string='Razón social', related="partner_id.business_name")
     partner_commercial_name = fields.Char(string='Nombre Comercial', compute='_get_client_name', store=True)
     #partner_commercial_name = fields.Char(string='Nombre Comercial')
@@ -51,6 +51,21 @@ class AccountMove(models.Model):
                     move.write({'original_invoice_date': False})
             else:
                 move.write({'original_invoice_date': False})
+
+    def _compute_invoice_file(self):
+        Attachment = self.env['ir.attachment']
+
+        for move in self:
+
+            ## BUSCAR EL DOCUMENTO
+            attachment = Attachment.search([
+                ('res_model', '=', 'account.move'),
+                ('res_id', '=', self.id),
+                ('mimetype', '=', 'application/pdf'),
+            ], limit=1)
+
+            self.invoice_file = attachment.datas if attachment else False
+
 
     class AccountMoveLine(models.Model):
         _inherit = "account.move.line"

@@ -283,10 +283,10 @@
     </record>
 
     <!-- Elemento del menú para ver los prospectos-->
-    <menuitem name="Prospectos" sequence="5" action="res_partner_prospectos_tree" id="res_partner_prospectos_menu" parent="sale.sale_order_menu"/>
+    <menuitem name="Prospectos" sequence="5" action="res_partner_prospectos_tree" id="res_partner_prospectos_menu" parent="sale.sale_order_menu" groups="sales_team.group_sale_salesman"/>
 
     <!-- Elemento del menú para ver los clientes suspendidos-->
-    <menuitem name="Suspendidos" sequence="6" action="res_partner_suspendidos_tree" id="res_partner_suspendidos_menu" parent="sale.sale_order_menu"/>
+    <menuitem name="Suspendidos" sequence="6" action="res_partner_suspendidos_tree" id="res_partner_suspendidos_menu" parent="sale.sale_order_menu" groups="sales_team.group_sale_salesman"/>
 
     <!-- INVOICE AVERAGE CRON -->
     <record model="ir.cron" id="daily_invoiced_avg_cron">
