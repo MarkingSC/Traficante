@@ -17,6 +17,7 @@ class stockQuant(models.Model):
     warehouse_id = fields.Many2one(
         'stock.warehouse', 'Warehouse', store=True, compute='_get_quant_warehouse_id')
 
+    @api.depends('location_id')
     def _get_quant_warehouse_id(self):
         for quant in self:
             location = quant.location_id
