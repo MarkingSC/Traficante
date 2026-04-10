@@ -60,7 +60,7 @@ class AccountMove(models.Model):
             ## BUSCAR EL DOCUMENTO
             attachment = Attachment.search([
                 ('res_model', '=', 'account.move'),
-                ('res_id', '=', self.id),
+                ('res_id', '=', move.id),
                 ('mimetype', '=', 'application/pdf'),
             ], limit=1)
 
