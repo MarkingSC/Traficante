@@ -103,6 +103,10 @@ class AccountMoveLine(models.Model):
         set a custom value.
         '''
         for line in self:
+
+            _logger.info('*** line.move_id.currency_id: ' + str(line.move_id.currency_id.id))
+            _logger.info('*** line.move_id.currency_rate: ' + str(line.move_id.currency_rate))
+
             if not line.tax_repartition_line_id:
                 line.recompute_tax_line = True
             
@@ -115,9 +119,10 @@ class AccountMoveLine(models.Model):
 
             custom_tasa = line.move_id.currency_rate
 
-            nuevo_precio_lista = pesos / custom_tasa
+            #nuevo_precio_lista = pesos / custom_tasa
 
-            _logger.info('nuevo precio de lista del producto: ' + str(nuevo_precio_lista))
+            #_logger.info('nuevo precio de lista del producto: ' + str(nuevo_precio_lista))
+            _logger.info('*** esta funcion al final no cambia nada pero se conserva por en caso de. ***')
 
             #line.price_unit = nuevo_precio_lista
                      
