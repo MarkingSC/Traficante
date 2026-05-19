@@ -103,7 +103,10 @@ class PurchaseOrder(models.Model):
     
     
     def action_view_invoice(self):
+        _logger.info('**** entra a action_view_invoice de cdfi_invoice ****')
         res = super(PurchaseOrder,self).action_view_invoice()
+        _logger.info('**** obtuvo resultado de action_view_invoice ****')
+        
         if res:
             if res.get('context')==None:
                 res['context']={}
