@@ -48,6 +48,7 @@ class AccountMove(models.Model):
             self._get_currency_rate()
         return res
     
+    @api.model
     def create(self, vals):
         res = super(AccountMove, self).create(vals)
         res._get_currency_rate()

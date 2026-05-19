@@ -43,7 +43,7 @@ class AccountMove(models.Model):
         
         return res
         
-
+    @api.model
     def create(self, vals):
         res = super(AccountMove, self).create(vals)
         res.calculate_discount()
