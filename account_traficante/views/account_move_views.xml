@@ -33,7 +33,8 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_invoice_tree" />
             <field name="arch" type="xml">
-                <field name="folio_fiscal" position="after" attrs="{'invisible': [('type', '!=', 'out_refund')]}">
+                <field name="state" position="after">
+                    <field name="folio_fiscal" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>
                     <field name="ref" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>
                     <field name="uuid_relacionado" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>
                     <field name="original_order_amount" attrs="{'invisible': [('type', '!=', 'out_refund')]}"/>

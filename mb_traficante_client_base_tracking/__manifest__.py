@@ -24,12 +24,12 @@
     'depends': ['base', 'traficante_sales_detailed_report', 'partner_business_name'],
 
     # always loaded
-    'data': [        
+    'data': [
         'security/ir.model.access.csv',
-        'views/res_partner_views.xml',
+        'views/res_partner_views.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
-    ],
+    ]
 }

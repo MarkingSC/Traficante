@@ -16,7 +16,8 @@ class ProductTemplate(models.Model):
     def _get_new_product_type(self):
         selection = [
             ('product', 'Almacenable'),
-            ('service', 'Servicio')]
+            ('service', 'Servicio'),
+            ('consu', 'Consumible')]
         return selection
 
     @api.model

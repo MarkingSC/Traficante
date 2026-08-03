@@ -10,7 +10,8 @@
             <xpath expr="//field[@name='invoice_date']" position="before">
                 <field name="customer_vat" optional="show" string="Customer VAT"/>
             </xpath>
-            <xpath expr="//field[@name='amount_tax']" position="after">
+            <xpath expr="//field[@name='amount_tax_signed']" position="after">
+                <field name="amount_tax" string="amount_tax" sum="Total" optional="hide"/>
                 <field name="discount" widget='monetary' optional="show" string="Discount"/>
                 <field name="ieps_taxes" widget="many2many_tags" optional="show" string="IEPS"/>
                 <field name="ieps_percent" widget="percentage" optional="show" string="IEPS Pct."/>

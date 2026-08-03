@@ -8,6 +8,7 @@
     'description': """
         - Modifica el campo 'valor' del reporte de inventario para volverlo opcional en la vista.
         - Crea registros de categorías de productos propios de Traficante.
+        - Agrega un campo de justificación obligatorio a los desechos de inventario (scrap).
     """,
 
     'author': "Marco Martinez",
@@ -36,6 +37,7 @@
         'views/product_product_views.xml',
         'views/ir_ui_menu_views.xml',
         'views/stock_return_picking_form_views.xml',
+        'views/stock_scrap_views.xml',
         'report/stock_reports.xml',
         'security/security.xml',
     ],

@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'base_accounting_kit', 'report_xlsx'],
+    'depends': ['base', 'sale', 'base_accounting_kit', 'report_xlsx', 'dev_multi_discount'],    
 
     # always loaded
     'data': [
@@ -29,10 +29,10 @@
         'views/account_move_views.xml',
         'wizard/report_view.xml',
         'report/report.xml',
-        'data/ir_cron_data.xml',
+        'data/ir_cron_data.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
-    ],
+    ]
 }

@@ -24,7 +24,8 @@
                 <xpath expr="//field[@name='estado_pago']" position="after">
                     <field name="folio_fiscal"/>
                 </xpath>
-                <xpath expr="//field[@name='communication']" position="after">
+                <xpath expr="//field[@name='payment_date']" position="after">
+                    <field name="communication"/>
                     <field name="folios_cfdi_facturas"/>
                 </xpath>
             </field>

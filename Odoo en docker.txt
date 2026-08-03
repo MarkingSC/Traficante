@@ -117,9 +117,24 @@ echo "" > /var/log/syslog
 service syslog restart
 
 ## Borrar logs de nginx
-Entrar a /var/log/nginx
+cd /var/log/nginx
 borrar los logs actuales con: rm ./*
 echo "" > /var/log/access.log
 echo "" > /var/log/error.log
 echo "" > /var/log/odoo.access.log
 echo "" > /var/log/odoo.error.log
+
+
+## LEVANTAR INSTANCIAS DE DOCKER 
+
+## ODOO 19
+    CREAR LA BASE DE POSTGRES
+    docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -e POSTGRES_DB=postgres --name db19 postgres:15
+
+    CREAR LA INSTANCIA DE ODOO 19 CON CUSTOM ADDONS
+    docker run -v /Users/marck/OneDrive/Documentos/Odoo/19/custom-addons:/mnt/extra-addons -p 8069:8069 --name odoo19 --link db19:db -t odoo:19
+
+docker stop odoo
+docker start -a odoo
+
+master password: k9rw-s6fj-4bhx
