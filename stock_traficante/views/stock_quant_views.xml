@@ -22,6 +22,7 @@
       </field>
     </record>
 
+    <!-- Non-editable Tree View 
     <record id="view_stock_quant_tree_non_editable" model="ir.ui.view">
       <field name="name">stock.quant.tree.non.editable</field>
       <field name="model">stock.quant</field>
@@ -32,6 +33,7 @@
         </xpath>
       </field>
     </record>
+    -->
     
     <record id="view_stock_quant_form_editable" model="ir.ui.view">
       <field name="name">stock.quant.form.editable</field>
