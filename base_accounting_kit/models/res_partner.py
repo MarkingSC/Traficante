@@ -63,7 +63,7 @@ class ResPartner(models.Model):
                     if is_overdue:
                         total_overdue += not am.invoice_sent and amount or 0
             min_date = record.get_min_date()
-            action = record.action_after()
+            action = record.action_after() or 0
             if min_date:
                 date_reminder = min_date + timedelta(days=action)
                 if date_reminder:
@@ -85,10 +85,8 @@ class ResPartner(models.Model):
         today = date.today()
         for this in self:
             if this.invoice_list:
-                min_list = this.invoice_list.mapped('invoice_date_due')
-                while False in min_list:
-                    min_list.remove(False)
-                return min(min_list)
+                min_list = [d for d in this.invoice_list.mapped('invoice_date_due') if d]
+                return min(min_list) if min_list else today
             else:
                 return today
 
