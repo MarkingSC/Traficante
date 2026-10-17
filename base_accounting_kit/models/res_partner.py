@@ -32,8 +32,10 @@ class ResPartner(models.Model):
                                    string="Invoice Details",
                                    readonly=True,
                                    domain=(
-                                   [('invoice_payment_state', '=', 'not_paid'),
-                                    ('type', '=', 'out_invoice')]))
+                                   [('state', '=', 'posted'),
+                                    ('invoice_payment_state', '=', 'not_paid'),
+                                    ('type', '=', 'out_invoice'),
+                                    ('amount_residual', '>', 0)]))
     total_due = fields.Monetary(compute='_compute_for_followup', store=False,
                                 readonly=True)
     next_reminder_date = fields.Date(compute='_compute_for_followup',
