@@ -1501,6 +1501,7 @@ msgstr "Informes de seguimiento"
 
 #. module: base_accounting_kit
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_tree_view
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_partner_tree_view
 msgid "Follow-up Reports Tree View"
 msgstr "Informes de seguimiento Vista en árbol"
 
@@ -1528,6 +1529,8 @@ msgstr "Seguidores (Clientes)"
 #. module: base_accounting_kit
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__followup_status
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__followup_status
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__branch_followup_status
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__branch_followup_status
 msgid "Followup status"
 msgstr "Estado del seguimiento"
 
@@ -1733,6 +1736,8 @@ msgstr ""
 #. module: base_accounting_kit
 #: model:ir.model.fields.selection,name:base_accounting_kit.selection__res_partner__followup_status__in_need_of_action
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_search_view
+#: model:ir.model.fields.selection,name:base_accounting_kit.selection__res_partner__branch_followup_status__in_need_of_action
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_branch_search_view
 msgid "In need of action"
 msgstr "Necesidad de acción"
 
@@ -1793,6 +1798,9 @@ msgstr "Factura"
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__invoice_list
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__invoice_list
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_form_view
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__branch_invoice_list
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__branch_invoice_list
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_partner_form_view
 msgid "Invoice Details"
 msgstr "Detalles de la factura"
 
@@ -2153,6 +2161,8 @@ msgstr "Next Period Depreciation"
 #. module: base_accounting_kit
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__next_reminder_date
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__next_reminder_date
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__branch_next_reminder_date
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__branch_next_reminder_date
 msgid "Next Reminder Date"
 msgstr "Próxima fecha de recordatorio"
 
@@ -2169,6 +2179,8 @@ msgstr "Sin filtros"
 #. module: base_accounting_kit
 #: model:ir.model.fields.selection,name:base_accounting_kit.selection__res_partner__followup_status__no_action_needed
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_search_view
+#: model:ir.model.fields.selection,name:base_accounting_kit.selection__res_partner__branch_followup_status__no_action_needed
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_branch_search_view
 msgid "No action needed"
 msgstr "No se requiere ninguna acción"
 
@@ -2179,6 +2191,7 @@ msgstr "Sin detalles"
 
 #. module: base_accounting_kit
 #: model_terms:ir.actions.act_window,help:base_accounting_kit.action_view_list_customer_statements
+#: model_terms:ir.actions.act_window,help:base_accounting_kit.action_view_list_customer_statements_partner
 msgid "No follow-up to send!"
 msgstr "No hay que enviar ningún seguimiento."
 
@@ -2273,6 +2286,7 @@ msgstr "Otros datos"
 
 #. module: base_accounting_kit
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_search_view
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_branch_search_view
 msgid "Overdue Invoices"
 msgstr "Facturas vencidas"
 
@@ -2933,12 +2947,15 @@ msgstr ""
 #. module: base_accounting_kit
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_tree_view
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.report_agedpartnerbalance
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_partner_tree_view
 msgid "Total"
 msgstr "Total"
 
 #. module: base_accounting_kit
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__total_due
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__total_due
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__branch_total_due
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__branch_total_due
 msgid "Total Due"
 msgstr "Total de la deuda"
 
@@ -2959,6 +2976,8 @@ msgstr "Ingresos totales"
 #. module: base_accounting_kit
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__total_overdue
 #: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__total_overdue
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_partner__branch_total_overdue
+#: model:ir.model.fields,field_description:base_accounting_kit.field_res_users__branch_total_overdue
 msgid "Total Overdue"
 msgstr "Total de atrasos"
 
@@ -3128,6 +3147,7 @@ msgstr "Con los movimientos"
 
 #. module: base_accounting_kit
 #: model:ir.model.fields.selection,name:base_accounting_kit.selection__res_partner__followup_status__with_overdue_invoices
+#: model:ir.model.fields.selection,name:base_accounting_kit.selection__res_partner__branch_followup_status__with_overdue_invoices
 msgid "With overdue invoices"
 msgstr "Con facturas vencidas"
 
@@ -3231,6 +3251,7 @@ msgstr ""
 
 #. module: base_accounting_kit
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_form_view
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_partner_form_view
 msgid "has no due amount."
 msgstr ""
 
@@ -3247,5 +3268,30 @@ msgstr "months"
 
 #. module: base_accounting_kit
 #: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_form_view
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_partner_form_view
 msgid "report"
 msgstr "informe"
+
+#. module: base_accounting_kit
+#: model:ir.actions.act_window,name:base_accounting_kit.action_view_list_customer_statements_partner
+#: model:ir.ui.menu,name:base_accounting_kit.customer_statements_partner_menu
+msgid "Follow-up Reports by Customer"
+msgstr "Informes de seguimiento por cliente"
+
+#. module: base_accounting_kit
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_tree_view
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_branch_search_view
+msgid "Branch"
+msgstr "Sucursal"
+
+#. module: base_accounting_kit
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_form_view
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_tree_view
+#: model_terms:ir.ui.view,arch_db:base_accounting_kit.customer_statements_branch_search_view
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: base_accounting_kit
+#: model:ir.model.fields,field_description:base_accounting_kit.field_account_move__followup_partner_id
+msgid "Follow-up Branch"
+msgstr "Sucursal de seguimiento"

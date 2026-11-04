@@ -38,6 +38,18 @@ class AccountMove(models.Model):
                                              string='Assets Depreciation Lines',
                                              ondelete="restrict")
 
+    # Sucursal para el seguimiento de cobranza: dirección de entrega de la
+    # factura o, si no tiene, el cliente de la factura.
+    followup_partner_id = fields.Many2one('res.partner',
+                                          string='Follow-up Branch',
+                                          compute='_compute_followup_partner_id',
+                                          store=True, index=True)
+
+    @api.depends('partner_shipping_id', 'partner_id')
+    def _compute_followup_partner_id(self):
+        for move in self:
+            move.followup_partner_id = move.partner_shipping_id or move.partner_id
+
     def button_cancel(self):
         for move in self:
             for line in move.asset_depreciation_ids:
