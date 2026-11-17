@@ -14,6 +14,7 @@ import pytz
 from .tzlocal import get_localzone
 import os
 import math
+from odoo.tools.float_utils import float_round
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
@@ -51,6 +52,7 @@ class AccountPayment(models.Model):
     #monto_pagar = fields.Float("Monto a pagar", compute='_compute_monto_pagar')
     #saldo_restante = fields.Float("Saldo restante", readonly=True)
     fecha_pago = fields.Datetime("Fecha de pago")
+    date_payment = fields.Datetime("Fecha de CFDI")
     cuenta_emisor = fields.Many2one('res.partner.bank', string=_('Cuenta del emisor'))
     banco_emisor = fields.Char("Banco del emisor", related='cuenta_emisor.bank_name', readonly=True)
     rfc_banco_emisor = fields.Char(_("RFC banco emisor"), related='cuenta_emisor.bank_bic', readonly=True)
@@ -104,12 +106,48 @@ class AccountPayment(models.Model):
     cep_claveSPEI = fields.Char(string=_('cep_claveSPEI'))
     retencionesp = fields.Text("traslados P",default='[]')
     trasladosp = fields.Text("retenciones P",default='[]')
-    total_pago = fields.Float("Total pagado") 
+    total_pago = fields.Float("Total pagado")
+    partials_payment_ids = fields.One2many('facturas.pago', 'doc_id', 'Montos')
+    manual_partials = fields.Boolean("Montos manuales")
+    different_currency = fields.Boolean(_("Diferente moneda"), compute='_compute_different_currency')
+    requiere_rep = fields.Boolean("Requiere REP", compute='_get_requiere_rep')
+    redondeo_t_base = fields.Selection(
+        selection=[('01', _('Tradicional')),
+                   ('02', _('Decimal')),
+                   ('03', _('Techo')),
+                   ('04', _('Truncar')),],
+        default='01',
+        string=_('Redondeo base'), 
+    )
+    redondeo_t_impuesto = fields.Selection(
+        selection=[('01', _('Tradicional')),
+                   ('02', _('Decimal')),
+                   ('03', _('Techo')),
+                   ('04', _('Truncar')),],
+        default='01',
+        string=_('Redondeo impuesto'), 
+    )
+    redondeo_t_total = fields.Selection(
+        selection=[('01', _('Tradicional')),
+                   ('02', _('Decimal')),
+                   ('03', _('Techo')),
+                   ('04', _('Truncar')),],
+        default='01',
+        string=_('Redondeo total'), 
+    )
+
+    def _get_requiere_rep(self):
+        for record in self:
+            record.requiere_rep = False
+            if record.reconciled_invoice_ids:
+                for invoice in record.reconciled_invoice_ids:
+                    if invoice.methodo_pago == 'PPD':
+                       record.requiere_rep = True
 
     @api.depends('name')
     def _get_number_folio(self):
         for record in self:
-            if record.number:
+            if record.name:
                 record.number_folio = record.name.replace('CUST.IN','').replace('/','')
 
     @api.model
@@ -119,8 +157,19 @@ class AccountPayment(models.Model):
         except Exception:
             data = []
         return data
-    
-    
+
+    def _compute_different_currency(self):
+        for payment in self:
+          if payment.invoice_ids:
+            for invoice in payment.invoice_ids:
+               if invoice.currency_id != payment.currency_id:
+                  payment.different_currency = True
+                  break
+               else:
+                  payment.different_currency = False
+          else:
+            payment.different_currency = False
+
     def importar_incluir_cep(self):
         ctx = {'default_payment_id':self.id}
         return {
@@ -133,7 +182,7 @@ class AccountPayment(models.Model):
             'type': 'ir.actions.act_window',
             'target': 'new',
         }
-        
+
     @api.onchange('journal_id')
     def _onchange_journal(self):
         if self.journal_id:
@@ -158,123 +207,245 @@ class AccountPayment(models.Model):
           no_decimales_tc = payment.currency_id.no_decimales_tc
           docto_relacionados = []
           tax_grouped_tras = {}
-          tax_grouped_ret = {}          
-          if payment.invoice_ids:
-            for invoice in payment.invoice_ids:
-                if invoice.factura_cfdi:
+          tax_grouped_ret = {}
+          mxn_currency = self.env["res.currency"].search([('name', '=', 'MXN')], limit=1)
 
-                    payment_dict = json.loads(invoice.invoice_payments_widget)
-                    payment_content = payment_dict['content']
-                    monto_pagado = 0
-                    for invoice_payments in payment_content:
-                        if invoice_payments['account_payment_id'] == payment.id:
-                            monto_pagado = invoice_payments['amount_mxn']
+          if payment.invoice_ids or payment.reconciled_invoices_count > 0:
+            if payment.manual_partials:
+               for partial in payment.partials_payment_ids:
+                      equivalenciadr = partial.equivalenciadr
+                      if equivalenciadr == 0:
+                         raise Warning("La equivalencia debe ser diferente de cero.")
 
-                    #revisa la cantidad que se va a pagar en el docuemnto
-                    if payment.currency_id.name != invoice.moneda:
-                        if payment.currency_id.name == 'MXN':
-                            equivalenciadr = round(invoice.currency_id.with_context(date=payment.payment_date).rate,6)
-                        else:
-                            equivalenciadr = round(float(invoice.tipocambio)/float(payment.currency_id.with_context(date=payment.payment_date).rate),6)
-                    else:
-                        equivalenciadr = 1
+                      if partial.facturas_id.total_factura <= 0:
+                          raise Warning("No hay monto total de la factura. Carga el XML en la factura para agregar el monto total.")
 
-                    decimal_p = 6
+                      paid_pct = float_round(partial.imp_pagado, precision_digits=6, rounding_method='UP') / partial.facturas_id.total_factura
 
-                    if not invoice.total_factura > 0:
-                       raise Warning("No hay información del monto de la factura. Carga el XML en la factura para agregar el monto total.")
+                      if not partial.facturas_id.tax_payment:
+                          raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
 
-                    paid_pct = payment.truncate(monto_pagado, decimal_p) / invoice.total_factura
-                    monto_pagado = payment.truncate(monto_pagado, 2)
+                      taxes = json.loads(partial.facturas_id.tax_payment)
+                      objetoimpdr = '01'
+                      trasladodr = []
+                      retenciondr = []
+                      if "translados" in taxes:
+                          objetoimpdr = '02'
+                          traslados = taxes['translados']
+                          for traslado in traslados:
+                              basedr = float_round(float(traslado['base']) * paid_pct, precision_digits=2, rounding_method='UP')
+                              importedr = traslado['importe'] and float_round(float(traslado['tasa']) * basedr, precision_digits=2, rounding_method='UP') or 0
+                              trasladodr.append({
+                                            'BaseDR': payment.set_decimals(basedr, 2),
+                                            'ImpuestoDR': traslado['impuesto'],
+                                            'TipoFactorDR': traslado['TipoFactor'],
+                                            'TasaOcuotaDR': traslado['tasa'],
+                                            'ImporteDR': payment.set_decimals(importedr, 2) if traslado['TipoFactor'] != 'Exento' else '',
+                                            })
+                              key = traslado['tax_id']
 
-                    if not invoice.tax_payment:
-                        raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
-                    taxes = json.loads(invoice.tax_payment)
-                    objetoimpdr = '01'
-                    trasladodr = []
-                    retenciondr = []
-                    if "translados" in taxes:
-                        objetoimpdr = '02'
-                        traslados = taxes['translados']
-                        for traslado in traslados:
-                            basedr = payment.truncate(float(traslado['base']) * paid_pct, decimal_p)
-                            importedr = traslado['importe'] and payment.truncate(float(traslado['tasa']) * basedr, decimal_p) or 0
-                            trasladodr.append({
+                              if equivalenciadr == 1:
+                                 basep = basedr
+                                 importep = importedr
+                              else:
+                                 basep = basedr / equivalenciadr
+                                 importep = importedr / equivalenciadr
+
+                              val = {'BaseP': basep,
+                                     'ImpuestoP': traslado['impuesto'],
+                                     'TipoFactorP': traslado['TipoFactor'],
+                                     'TasaOCuotaP': traslado['tasa'],
+                                     'ImporteP': importep,}
+                              if key not in tax_grouped_tras:
+                                  tax_grouped_tras[key] = val
+                              else:
+                                  tax_grouped_tras[key]['BaseP'] += basep
+                                  tax_grouped_tras[key]['ImporteP'] += importep
+                      if "retenciones" in taxes:
+                          objetoimpdr = '02'
+                          retenciones = taxes['retenciones']
+                          for retencion in retenciones:
+                              basedr = float_round(float(retencion['base']) * paid_pct, precision_digits=2, rounding_method='UP')
+                              importedr = retencion['importe'] and float_round(float(retencion['tasa']) * basedr, precision_digits=2, rounding_method='UP') or 0
+                              retenciondr.append({
+                                            'BaseDR': payment.set_decimals(basedr, 2),
+                                            'ImpuestoDR': retencion['impuesto'],
+                                            'TipoFactorDR': retencion['TipoFactor'],
+                                            'TasaOcuotaDR': retencion['tasa'],
+                                            'ImporteDR': payment.set_decimals(importedr, 2),
+                                            })
+                              key = retencion['tax_id']
+
+                              if equivalenciadr == 1:
+                                 importep = importedr
+                              else:
+                                 importep = importedr / equivalenciadr
+
+                              val = {'ImpuestoP': retencion['impuesto'],
+                                     'ImporteP': importep,}
+                              if key not in tax_grouped_ret:
+                                  tax_grouped_ret[key] = val
+                              else:
+                                  tax_grouped_ret[key]['ImporteP'] += importep
+
+                      if len(payment.partials_payment_ids) > 1 and payment.different_currency:
+                          if equivalenciadr == 1:
+                             equivalenciadr = payment.set_decimals(equivalenciadr, 10)
+                      docto_relacionados.append({
+                             'MonedaDR': partial.facturas_id.moneda,
+                             'EquivalenciaDR': equivalenciadr,
+                             'IdDocumento': partial.facturas_id.folio_fiscal,
+                             'folio_facura': partial.facturas_id.number_folio,
+                             'NumParcialidad': partial.parcialidad,
+                             'ImpSaldoAnt': partial.imp_saldo_ant,
+                             'ImpPagado': partial.imp_pagado,
+                             'ImpSaldoInsoluto': partial.imp_saldo_insoluto,
+                             'ObjetoImpDR': objetoimpdr,
+                             'ImpuestosDR': {'traslados': trasladodr, 'retenciones': retenciondr,},
+                      })
+
+               payment.write({'docto_relacionados': json.dumps(docto_relacionados),
+                           'retencionesp': json.dumps(tax_grouped_ret), 
+                           'trasladosp': json.dumps(tax_grouped_tras),})
+            else:
+               pay_rec_lines = payment.move_line_ids.filtered(lambda line: line.account_internal_type in ('receivable', 'payable'))
+               if payment.currency_id == mxn_currency:
+                  rate_payment_curr_mxn = None
+                  paid_amount_comp_curr = payment.amount
+               else:
+                  rate_payment_curr_mxn = payment.currency_id._convert(1.0, mxn_currency, payment.company_id, payment.payment_date, round=False)
+                  paid_amount_comp_curr = payment.currency_id.round(payment.amount * rate_payment_curr_mxn)
+
+               for field1, field2 in (('debit', 'credit'), ('credit', 'debit')):
+                  for partial in pay_rec_lines[f'matched_{field1}_ids']:
+                      payment_line = partial[f'{field2}_move_id']
+                      invoice_line = partial[f'{field1}_move_id']
+                      invoice_amount = partial['amount']
+                      invoice = invoice_line.move_id
+                      decimal_p = 2
+
+                      if partial.amount == 0:
+                          raise Warning("Una factura adjunta en el pago no tiene un monto liquidado por el pago. \nRevisa que todas las facturas tengan un monto pagado, puede ser necesario desvincular las facturas y vinculalas en otro orden.")
+
+                      if invoice.currency_id != mxn_currency:
+                           invoice_amount = invoice_amount * partial.amount_currency / partial.amount
+
+                      if not invoice.factura_cfdi:
+                          continue
+
+                      payment_dict = json.loads(invoice.invoice_payments_widget)
+                      payment_content = payment_dict['content']
+
+                      if invoice.total_factura <= 0:
+                          raise Warning("No hay monto total de la factura. Carga el XML en la factura para agregar el monto total.")
+
+                      if invoice.currency_id == payment.currency_id:
+                          amount_paid_invoice_curr = invoice_amount
+                          equivalenciadr = 1
+                      elif invoice.currency_id == mxn_currency and invoice.currency_id != payment_line.currency_id:
+                          amount_paid_invoice_curr = invoice_amount
+                          amount_paid_invoice_comp_curr = payment_line.company_currency_id.round(payment.amount  * (abs(payment_line.balance) / paid_amount_comp_curr))
+                          invoice_rate = partial.amount_currency / partial.amount
+                          exchange_rate = amount_paid_invoice_curr / amount_paid_invoice_comp_curr
+                          equivalenciadr = round(exchange_rate, 6) + 0.000001
+                      else:
+                          amount_paid_invoice_curr = invoice_amount
+                          exchange_rate = partial.amount_currency / partial.amount
+                          equivalenciadr = round(exchange_rate, 6) + 0.000001
+                      paid_pct = float_round(amount_paid_invoice_curr, precision_digits=6, rounding_method='UP') / invoice.total_factura
+
+                      if not invoice.tax_payment:
+                          raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")
+
+                      taxes = json.loads(invoice.tax_payment)
+                      objetoimpdr = '01'
+                      trasladodr = []
+                      retenciondr = []
+                      if "translados" in taxes:
+                          objetoimpdr = '02'
+                          traslados = taxes['translados']
+                          for traslado in traslados:
+                              basedr = float_round(float(traslado['base']) * paid_pct, precision_digits=decimal_p, rounding_method='UP')
+                              importedr = traslado['importe'] and float_round(float(traslado['tasa']) * basedr, precision_digits=decimal_p, rounding_method='UP') or 0
+                              trasladodr.append({
                                             'BaseDR': payment.set_decimals(basedr, decimal_p),
                                             'ImpuestoDR': traslado['impuesto'],
                                             'TipoFactorDR': traslado['TipoFactor'],
                                             'TasaOcuotaDR': traslado['tasa'],
                                             'ImporteDR': payment.set_decimals(importedr, decimal_p) if traslado['TipoFactor'] != 'Exento' else '',
                                             })
-                            key = traslado['tax_id']
+                              key = traslado['tax_id']
 
-                            basep = basedr / equivalenciadr
-                            importep = importedr / equivalenciadr
-                            if str(basep)[::-1].find('.') > 6:
-                                basep = payment.truncate(basep, decimal_p)
-                            if str(importep)[::-1].find('.') > 6:
-                                importep = payment.truncate(importep, decimal_p)
+                              if equivalenciadr == 1:
+                                 basep = basedr
+                                 importep = importedr
+                              else:
+                                 basep = basedr / equivalenciadr
+                                 importep = importedr / equivalenciadr
 
-                            val = {'BaseP': basep,
-                                    'ImpuestoP': traslado['impuesto'],
-                                    'TipoFactorP': traslado['TipoFactor'],
-                                    'TasaOCuotaP': traslado['tasa'],
-                                    'ImporteP': importep,}
-                            if key not in tax_grouped_tras:
-                                tax_grouped_tras[key] = val
-                            else:
-                                tax_grouped_tras[key]['BaseP'] += basep
-                                tax_grouped_tras[key]['ImporteP'] += importep
-                    if "retenciones" in taxes:
-                        objetoimpdr = '02'
-                        retenciones = taxes['retenciones']
-                        for retencion in retenciones:
-                            basedr = payment.truncate(float(retencion['base']) * paid_pct, decimal_p)
-                            importedr = retencion['importe'] and payment.truncate(float(retencion['tasa']) * basedr, decimal_p) or 0
-                            retenciondr.append({
+                              val = {'BaseP': basep,
+                                     'ImpuestoP': traslado['impuesto'],
+                                     'TipoFactorP': traslado['TipoFactor'],
+                                     'TasaOCuotaP': traslado['tasa'],
+                                     'ImporteP': importep,}
+                              if key not in tax_grouped_tras:
+                                  tax_grouped_tras[key] = val
+                              else:
+                                  tax_grouped_tras[key]['BaseP'] += basep
+                                  tax_grouped_tras[key]['ImporteP'] += importep
+                      if "retenciones" in taxes:
+                          objetoimpdr = '02'
+                          retenciones = taxes['retenciones']
+                          for retencion in retenciones:
+                              basedr = float_round(float(retencion['base']) * paid_pct, precision_digits=decimal_p, rounding_method='UP')
+                              importedr = retencion['importe'] and float_round(float(retencion['tasa']) * basedr, precision_digits=decimal_p, rounding_method='UP') or 0
+                              retenciondr.append({
                                             'BaseDR': payment.set_decimals(basedr, decimal_p),
                                             'ImpuestoDR': retencion['impuesto'],
                                             'TipoFactorDR': retencion['TipoFactor'],
                                             'TasaOcuotaDR': retencion['tasa'],
                                             'ImporteDR': payment.set_decimals(importedr, decimal_p),
                                             })
-                            key = retencion['tax_id']
+                              key = retencion['tax_id']
 
-                            importep = importedr / equivalenciadr
-                            if str(importep)[::-1].find('.') > 6:
-                                importep = payment.truncate(importep, decimal_p)
+                              if equivalenciadr == 1:
+                                 importep = importedr
+                              else:
+                                 importep = importedr / equivalenciadr
 
-                            val = {'ImpuestoP': retencion['impuesto'],
-                                    'ImporteP': importep,}
-                            if key not in tax_grouped_ret:
-                                tax_grouped_ret[key] = val
-                            else:
-                                tax_grouped_ret[key]['ImporteP'] += importep
+                              val = {'ImpuestoP': retencion['impuesto'],
+                                     'ImporteP': importep,}
+                              if key not in tax_grouped_ret:
+                                  tax_grouped_ret[key] = val
+                              else:
+                                  tax_grouped_ret[key]['ImporteP'] += importep
 
-                    if objetoimpdr == '02' and not trasladodr and not retenciondr:
-                        raise Warning("No hay información de impuestos en el documento. Carga el XML en la factura para agregar los impuestos.")                    
+                      if len(payment.reconciled_invoice_ids) > 1 and payment.different_currency:
+                          if equivalenciadr == 1:
+                             equivalenciadr = payment.set_decimals(equivalenciadr, 10)
 
-                    docto_relacionados.append({
-                          'MonedaDR': invoice.moneda,
-                          'EquivalenciaDR': equivalenciadr,
-                          'IdDocumento': invoice.folio_fiscal,
-                          'folio_facura': invoice.number_folio,
-                          'NumParcialidad': len(payment_content), 
-                          'ImpSaldoAnt': payment.set_decimals(invoice.amount_residual + monto_pagado, no_decimales),
-                          'ImpPagado': payment.set_decimals(monto_pagado, no_decimales),
-                          'ImpSaldoInsoluto': payment.set_decimals(invoice.amount_residual, no_decimales),
-                          'ObjetoImpDR': objetoimpdr,
-                          'ImpuestosDR': {'traslados': trasladodr, 'retenciones': retenciondr,},
-                    })
+                      docto_relacionados.append({
+                             'MonedaDR': invoice.moneda,
+                             'EquivalenciaDR': equivalenciadr,
+                             'IdDocumento': invoice.folio_fiscal,
+                             'folio_facura': invoice.number_folio,
+                             'NumParcialidad': len(payment_content),
+                             'ImpSaldoAnt': float_round(min(invoice.amount_residual + amount_paid_invoice_curr, invoice.amount_total), precision_digits=decimal_p, rounding_method='UP'),
+                             'ImpPagado': float_round(amount_paid_invoice_curr, precision_digits=decimal_p, rounding_method='UP'),
+                             'ImpSaldoInsoluto': round(float_round(min(invoice.amount_residual + amount_paid_invoice_curr, invoice.amount_total), precision_digits=decimal_p, rounding_method='UP') - \
+                                              float_round(amount_paid_invoice_curr, precision_digits=decimal_p, rounding_method='UP'),2),
+                             'ObjetoImpDR': objetoimpdr,
+                             'ImpuestosDR': {'traslados': trasladodr, 'retenciones': retenciondr,},
+                      })
 
-            payment.write({'docto_relacionados': json.dumps(docto_relacionados), 
-                        'retencionesp': json.dumps(tax_grouped_ret), 
-                        'trasladosp': json.dumps(tax_grouped_tras),})
+               payment.write({'docto_relacionados': json.dumps(docto_relacionados),
+                           'retencionesp': json.dumps(tax_grouped_ret), 
+                           'trasladosp': json.dumps(tax_grouped_tras),})
 
     def post(self):
         res = super(AccountPayment, self).post()
         for rec in self:
-            rec.add_resitual_amounts()
+    #        rec.add_resitual_amounts()
             rec._onchange_payment_date()
             rec._onchange_journal()
         return res
@@ -308,13 +479,18 @@ class AccountPayment(models.Model):
     def _get_amount_to_text(self):
         for record in self:
             record.amount_to_text = amount_to_text_es_MX.get_amount_to_text(record, record.amount_total, 'es_cheque', record.currency_id.name)
-        
+
     @api.model
     def _get_amount_2_text(self, amount_total):
         return amount_to_text_es_MX.get_amount_to_text(self, amount_total, 'es_cheque', self.currency_id.name)
-            
+
     @api.model
     def to_json(self):
+        if self.partner_id.vat == 'XAXX010101000' or self.partner_id.vat == 'XEXX010101000':
+            zipreceptor = self.journal_id.codigo_postal or self.company_id.zip
+        else:
+            zipreceptor = self.partner_id.zip
+
         no_decimales = self.currency_id.no_decimales
         no_decimales_tc = self.currency_id.no_decimales_tc
 
@@ -340,22 +516,27 @@ class AccountPayment(models.Model):
 
         #corregir hora
         local2 = pytz.timezone(timezone)
-        naive_from2 = datetime.now() 
+        if not self.date_payment:
+            naive_from2 = datetime.now()
+        else:
+            naive_from2 = self.date_payment
         local_dt_from2 = naive_from2.replace(tzinfo=pytz.UTC).astimezone(local2)
-        date_payment = local_dt_from2.strftime ("%Y-%m-%dT%H:%M:%S")
+        date_cfdi = local_dt_from2.strftime("%Y-%m-%dT%H:%M:%S")
+        if not self.date_payment:
+            self.date_payment = datetime.now()
 
         self.check_cfdi_values()
 
         conceptos = []
         conceptos.append({
-                          'ClaveProdServ': '84111506',
-                          'ClaveUnidad': 'ACT',
-                          'cantidad': 1,
-                          'descripcion': 'Pago',
-                          'valorunitario': '0',
-                          'importe': '0',
-                          'ObjetoImp': '01',
-                    })
+            'ClaveProdServ': '84111506',
+            'ClaveUnidad': 'ACT',
+            'cantidad': 1,
+            'descripcion': 'Pago',
+            'valorunitario': '0',
+            'importe': '0',
+            'ObjetoImp': '01',
+        })
 
         taxes_traslado = json.loads(self.trasladosp)
         taxes_retenciones = json.loads(self.retencionesp)
@@ -367,42 +548,45 @@ class AccountPayment(models.Model):
            trasladop = []
            if taxes_traslado:
               for line in taxes_traslado.values():
+                  line['BaseP'] = self.roundTraditional(line['BaseP'], 2)
+                  line['ImporteP'] = self.roundTraditional(line['ImporteP'], 2)
                   trasladop.append({'ImpuestoP': line['ImpuestoP'],
                                     'TipoFactorP': line['TipoFactorP'],
                                     'TasaOCuotaP': line['TasaOCuotaP'],
-                                    'ImporteP': self.set_decimals(line['ImporteP'],6) if line['TipoFactorP'] != 'Exento' else '',
-                                    'BaseP': self.set_decimals(line['BaseP'],6),
+                                    'ImporteP': line['ImporteP'] if line['TipoFactorP'] != 'Exento' else '',
+                                    'BaseP': line['BaseP'],
                                     })
                   if line['ImpuestoP'] == '002' and line['TasaOCuotaP'] == '0.160000':
-                       totales.update({'TotalTrasladosBaseIVA16': self.set_decimals(line['BaseP'] * float(self.tipocambiop),2),
-                                       'TotalTrasladosImpuestoIVA16': self.set_decimals(line['ImporteP'] * float(self.tipocambiop),2),})
+                       totales.update({'TotalTrasladosBaseIVA16': self.selectRoundseparate(line['BaseP'] * float(self.tipocambiop), 2, self.redondeo_t_base),
+                                       'TotalTrasladosImpuestoIVA16': self.selectRoundseparate(line['ImporteP'] * float(self.tipocambiop),2, self.redondeo_t_impuesto),})
                   if line['ImpuestoP'] == '002' and line['TasaOCuotaP'] == '0.080000':
-                       totales.update({'TotalTrasladosBaseIVA8': self.set_decimals(line['BaseP'] * float(self.tipocambiop),2),
-                                       'TotalTrasladosImpuestoIVA8': self.set_decimals(line['ImporteP'] * float(self.tipocambiop),2),})
+                       totales.update({'TotalTrasladosBaseIVA8': self.roundTraditional(line['BaseP'] * float(self.tipocambiop), 2),
+                                       'TotalTrasladosImpuestoIVA8': self.roundTraditional(line['ImporteP'] * float(self.tipocambiop), 2),})
                   if line['ImpuestoP'] == '002' and line['TasaOCuotaP'] == '0.000000':
-                       totales.update({'TotalTrasladosBaseIVA0': self.set_decimals(line['BaseP'] * float(self.tipocambiop),2),
-                                       'TotalTrasladosImpuestoIVA0': self.set_decimals(line['ImporteP'] * float(self.tipocambiop),2),})
+                       totales.update({'TotalTrasladosBaseIVA0': self.roundTraditional(line['BaseP'] * float(self.tipocambiop),2),
+                                       'TotalTrasladosImpuestoIVA0': self.roundTraditional(line['ImporteP'] * float(self.tipocambiop), 2),})
                   if line['ImpuestoP'] == '002' and line['TipoFactorP'] == 'Exento':
-                       totales.update({'TotalTrasladosBaseIVAExento': self.set_decimals(line['BaseP'] * float(self.tipocambiop),2),})
+                       totales.update({'TotalTrasladosBaseIVAExento': self.roundTraditional(line['BaseP'] * float(self.tipocambiop), 2),})
                   if line['TipoFactorP'] != 'Exento':
-                     self.total_pago += round(line['BaseP'] * float(self.tipocambiop),2) + round(line['ImporteP'] * float(self.tipocambiop),2)
+                     self.total_pago += round(line['BaseP'] * float(self.tipocambiop),2) + round(line['ImporteP'] * float(self.tipocambiop), 2)
                   else:
-                     self.total_pago += round(line['BaseP'] * float(self.tipocambiop),2)
+                     self.total_pago += round(line['BaseP'] * float(self.tipocambiop), 2)
               impuestosp.update({'TrasladosP': trasladop})
            if taxes_retenciones:
               for line in taxes_retenciones.values():
+                  line['ImporteP'] = self.roundTraditional(line['ImporteP'], 2)
                   retencionp.append({'ImpuestoP': line['ImpuestoP'],
-                                    'ImporteP': self.set_decimals(line['ImporteP'],6),
+                                    'ImporteP': line['ImporteP'],
                                     })
                   if line['ImpuestoP'] == '002':
-                       totales.update({'TotalRetencionesIVA': self.set_decimals(line['ImporteP'],2),})
+                       totales.update({'TotalRetencionesIVA': self.roundTraditional(line['ImporteP'] * float(self.tipocambiop), 2),})
                   if line['ImpuestoP'] == '001':
-                       totales.update({'TotalRetencionesISR': self.set_decimals(line['ImporteP'],2),})
+                       totales.update({'TotalRetencionesISR': self.roundTraditional(line['ImporteP'] * float(self.tipocambiop), 2),})
                   if line['ImpuestoP'] == '003':
-                       totales.update({'TotalRetencionesIEPS': self.set_decimals(line['ImporteP'],2),})
+                       totales.update({'TotalRetencionesIEPS': self.roundTraditional(line['ImporteP']* float(self.tipocambiop), 2),})
                   self.total_pago -= round(line['ImporteP'] * float(self.tipocambiop),2)
               impuestosp.update({'RetencionesP': retencionp})
-        totales.update({'MontoTotalPagos': self.set_decimals(self.amount, 2) if self.monedap == 'MXN' else self.set_decimals(self.amount * float(self.tipocambiop), 2),})
+        totales.update({'MontoTotalPagos': self.roundTraditional(self.amount, 2) if self.monedap == 'MXN' else self.selectRoundseparate(self.amount * float(self.tipocambiop), 2, self.redondeo_t_total),})
         #totales.update({'MontoTotalPagos': self.set_decimals(self.total_pago, 2),})
 
         pagos = []
@@ -427,9 +611,9 @@ class AccountPayment(models.Model):
         if self.reconciled_invoice_ids:
             request_params = {
                 'factura': {
-                      'serie': self.company_id.serie_complemento,
+                      'serie': self.journal_id.serie_diario or self.company_id.serie_complemento,
                       'folio': self.name.replace('CUST.IN','').replace('/',''),
-                      'fecha_expedicion': date_payment,
+                      'fecha_expedicion': date_cfdi,
                       'subtotal': '0',
                       'moneda': 'XXX',
                       'total': '0',
@@ -450,7 +634,7 @@ class AccountPayment(models.Model):
                       'NumRegIdTrib': self.partner_id.registro_tributario,
                       'UsoCFDI': 'CP01',
                       'RegimenFiscalReceptor': self.partner_id.regimen_fiscal,
-                      'DomicilioFiscalReceptor': self.partner_id.zip,
+                      'DomicilioFiscalReceptor': zipreceptor,
                 },
 
                 'informacion': {
@@ -501,6 +685,29 @@ class AccountPayment(models.Model):
             return None
         return '%.*f' % (precision, amount)
 
+    def roundTraditional(self, val, digits):
+       if val != 0:
+          return round(val + 10 ** (-len(str(val)) - 1), digits)
+       else:
+          return 0
+
+    def trunc(self, val, digits):
+       if val != 0:
+          x = 10 ** digits
+          return int(val*x)/(x)
+       else:
+          return 0
+
+    def selectRoundseparate(self, val, digits, r_option):
+       if r_option == '01':
+           return self.roundTraditional(val, digits)
+       elif r_option == '02':
+           return self.set_decimals(val, digits)
+       elif r_option == '03':
+           return math.ceil(val*100)/100
+       else:
+           return self.trunc(val, digits)
+
     def clean_text(self, text):
         clean_text = text.replace('\n', ' ').replace('\\', ' ').replace('-', ' ').replace('/', ' ').replace('|', ' ')
         clean_text = clean_text.replace(',', ' ').replace(';', ' ').replace('>', ' ').replace('<', ' ')
@@ -513,18 +720,15 @@ class AccountPayment(models.Model):
                  return True
 
             values = p.to_json()
-            if self.company_id.proveedor_timbrado == 'multifactura':
+            if p.company_id.proveedor_timbrado == 'multifactura':
                 url = '%s' % ('http://facturacion.itadmin.com.mx/api/payment')
-            elif self.company_id.proveedor_timbrado == 'multifactura2':
+            elif p.company_id.proveedor_timbrado == 'multifactura2':
                 url = '%s' % ('http://facturacion2.itadmin.com.mx/api/payment')
-            elif self.company_id.proveedor_timbrado == 'multifactura3':
+            elif p.company_id.proveedor_timbrado == 'multifactura3':
                 url = '%s' % ('http://facturacion3.itadmin.com.mx/api/payment')
-            elif self.company_id.proveedor_timbrado == 'gecoerp':
-                if self.company_id.modo_prueba:
-                    #url = '%s' % ('https://ws.gecoerp.com/itadmin/pruebas/payment/?handler=OdooHandler33')
-                    url = '%s' % ('https://itadmin.gecoerp.com/payment2/?handler=OdooHandler33')
-                else:
-                    url = '%s' % ('https://itadmin.gecoerp.com/payment2/?handler=OdooHandler33')
+            else:
+                raise UserError(_('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
+
             try:
                 response = requests.post(url , 
                                      auth=None,verify=False, data=json.dumps(values), 
@@ -549,24 +753,24 @@ class AccountPayment(models.Model):
                 p._set_data_from_xml(base64.b64decode(json_response['pago_xml']))
 
                 xml_file_name = p.name.replace('.','').replace('/', '_') + '.xml'
-                self.env['ir.attachment'].sudo().create(
+                p.env['ir.attachment'].sudo().create(
                                             {
                                                 'name': xml_file_name,
                                                 'datas': json_response['pago_xml'],
                                                 #'datas_fname': xml_file_name,
-                                                'res_model': self._name,
+                                                'res_model': p._name,
                                                 'res_id': p.id,
                                                 'type': 'binary'
                                             })
-                report = self.env['ir.actions.report']._get_report_from_name('cdfi_invoice.report_payment')
+                report = p.env['ir.actions.report']._get_report_from_name('cdfi_invoice.report_payment')
                 report_data = report.render_qweb_pdf([p.id])[0]
                 pdf_file_name = p.name.replace('.','').replace('/', '_') + '.pdf'
-                self.env['ir.attachment'].sudo().create(
+                p.env['ir.attachment'].sudo().create(
                                             {
                                                 'name': pdf_file_name,
                                                 'datas': base64.b64encode(report_data),
                                            #     'datas_fname': pdf_file_name,
-                                                'res_model': self._name,
+                                                'res_model': p._name,
                                                 'res_id': p.id,
                                                 'type': 'binary'
                                             })
@@ -589,7 +793,6 @@ class AccountPayment(models.Model):
                'res_id': rec.id,
            }
 
-    
     def _set_data_from_xml(self, xml_payment):
         if not xml_payment:
             return None
@@ -600,12 +803,8 @@ class AccountPayment(models.Model):
                  'pago20': 'http://www.sat.gob.mx/Pagos20',
                  }
         xml_data = etree.fromstring(xml_payment)
-        Complemento = xml_data.findall('cfdi:Complemento', NSMAP)
-
-        for complementos in Complemento:
-            TimbreFiscalDigital = complementos.find('tfd:TimbreFiscalDigital', NSMAP)
-            if TimbreFiscalDigital:
-                break
+        Complemento = xml_data.find('cfdi:Complemento', NSMAP)
+        TimbreFiscalDigital = Complemento.find('tfd:TimbreFiscalDigital', NSMAP)
 
         self.numero_cetificado = xml_data.attrib['NoCertificado']
         self.fecha_emision = xml_data.attrib['Fecha']
@@ -615,24 +814,21 @@ class AccountPayment(models.Model):
         self.selo_sat = TimbreFiscalDigital.attrib['SelloSAT']
         self.folio_fiscal = TimbreFiscalDigital.attrib['UUID']
         self.folio = xml_data.attrib['Folio']     
-        self.invoice_datetime = xml_data.attrib['Fecha']
         version = TimbreFiscalDigital.attrib['Version']
         self.cadena_origenal = '||%s|%s|%s|%s|%s||' % (version, self.folio_fiscal, self.fecha_certificacion, 
                                                          self.selo_digital_cdfi, self.cetificaso_sat)
         
         options = {'width': 275 * mm, 'height': 275 * mm}
-        amount_str = str(self.amount).split('.')
         qr_value = 'https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?&id=%s&re=%s&rr=%s&tt=%s.%s&fe=%s' % (self.folio_fiscal,
-                                                 self.company_id.vat, 
+                                                 self.company_id.vat,
                                                  self.partner_id.vat,
-                                                 amount_str[0].zfill(10),
-                                                 amount_str[1].ljust(6, '0'),
+                                                 '0000000000',
+                                                 '000000',
                                                  self.selo_digital_cdfi[-8:],
                                                  )
         self.qr_value = qr_value
         ret_val = createBarcodeDrawing('QR', value=qr_value, **options)
         self.qrcode_image = base64.encodestring(ret_val.asString('jpg'))
-        #self.folio_fiscal = TimbreFiscalDigital.attrib['UUID']
 
     def send_payment(self):
         self.ensure_one()
@@ -659,7 +855,6 @@ class AccountPayment(models.Model):
             'context': ctx,
         }
 
-    
     def action_cfdi_cancel(self):
         for p in self:
             #if invoice.factura_cfdi:
@@ -677,7 +872,7 @@ class AccountPayment(models.Model):
                      ('res_id', '=', p.id),
                      ('res_model', '=', p._name),
                      ('name', '=', p.name.replace('.','').replace('/', '_') + '.xml')]
-                xml_file = self.env['ir.attachment'].search(domain)[0]
+                xml_file = p.env['ir.attachment'].search(domain)[0]
                 if not xml_file:
                     raise UserError(_('No se encontró el archivo XML para enviar a cancelar.'))
                 values = {
@@ -693,8 +888,8 @@ class AccountPayment(models.Model):
                                   'contrasena': p.company_id.contrasena,
                             },
                           'xml': xml_file.datas.decode("utf-8"),
-                          'motivo': self.env.context.get('motivo_cancelacion',False),
-                          'foliosustitucion': self.env.context.get('foliosustitucion',''),
+                          'motivo': p.env.context.get('motivo_cancelacion','02'),
+                          'foliosustitucion': p.env.context.get('foliosustitucion',''),
                           }
                 if p.company_id.proveedor_timbrado == 'multifactura':
                     url = '%s' % ('http://facturacion.itadmin.com.mx/api/refund')
@@ -702,12 +897,9 @@ class AccountPayment(models.Model):
                     url = '%s' % ('http://facturacion2.itadmin.com.mx/api/refund')
                 elif p.company_id.proveedor_timbrado == 'multifactura3':
                     url = '%s' % ('http://facturacion3.itadmin.com.mx/api/refund')
-                elif p.company_id.proveedor_timbrado == 'gecoerp':
-                    if p.company_id.modo_prueba:
-                         #url = '%s' % ('https://ws.gecoerp.com/itadmin/pruebas/refund/?handler=OdooHandler33')
-                        url = '%s' % ('https://itadmin.gecoerp.com/refund/?handler=OdooHandler33')
-                    else:
-                        url = '%s' % ('https://itadmin.gecoerp.com/refund/?handler=OdooHandler33')
+                else:
+                    raise UserError(_('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
+
                 response = requests.post(url , 
                                          auth=None,verify=False, data=json.dumps(values), 
                                          headers={"Content-type": "application/json"})
@@ -718,12 +910,12 @@ class AccountPayment(models.Model):
                     raise UserError(_(json_response['problemas_message']))
                 elif json_response.get('factura_xml', False):
                     file_name = 'CANCEL_' + p.name.replace('.','').replace('/', '_') + '.xml'
-                    self.env['ir.attachment'].sudo().create(
+                    p.env['ir.attachment'].sudo().create(
                                                 {
                                                     'name': file_name,
                                                     'datas': json_response['factura_xml'],
                                                     #'datas_fname': file_name,
-                                                    'res_model': self._name,
+                                                    'res_model': p._name,
                                                     'res_id': p.id,
                                                     'type': 'binary'
                                                 })
@@ -748,17 +940,17 @@ class AccountPaymentMail(models.Model):
     _name = "account.payment.mail"
     _inherit = ['mail.thread']
     _description = "Payment Mail"
-    
+
     payment_id = fields.Many2one('account.payment', string='Payment')
     name = fields.Char(related='payment_id.name')
     xml_payment_link = fields.Char(related='payment_id.xml_payment_link')
     partner_id = fields.Many2one(related='payment_id.partner_id')
     company_id = fields.Many2one(related='payment_id.company_id')
-    
+
 class MailTemplate(models.Model):
     "Templates for sending email"
     _inherit = 'mail.template'
-    
+
     @api.model
     def _get_file(self, url):
         url = url.encode('utf8')
@@ -766,10 +958,9 @@ class MailTemplate(models.Model):
         fn, file_extension = os.path.splitext(filename)
         return  filename, file_extension.replace('.', '')
 
-    
     def generate_email(self, res_ids, fields=None):
         results = super(MailTemplate, self).generate_email(res_ids, fields=fields)
-        
+
         if isinstance(res_ids, (int)):
             res_ids = [res_ids]
         res_ids_to_templates = super(MailTemplate, self).get_email_template(res_ids)
@@ -803,7 +994,7 @@ class AccountPaymentTerm(models.Model):
     methodo_pago = fields.Selection(
         selection=[('PUE', _('Pago en una sola exhibición')),
                    ('PPD', _('Pago en parcialidades o diferido')),],
-        string=_('Método de pago'), 
+        string=_('Método de pago'),
     )
 
     forma_pago = fields.Selection(
@@ -831,3 +1022,20 @@ class AccountPaymentTerm(models.Model):
                    ('99', '99 - Por definir'),],
         string=_('Forma de pago'),
     )
+
+class FacturasPago(models.Model):
+    _name = "facturas.pago"
+    _description = 'Facturas ligadas a pago'
+
+    doc_id = fields.Many2one('account.payment', 'Pago ligado')
+    facturas_id = fields.Many2one('account.move', string='Factura')
+    parcialidad = fields.Integer("Parcialidad")
+    imp_saldo_ant = fields.Float("ImpSaldoAnt")
+    imp_pagado = fields.Float("ImpPagado")
+    imp_saldo_insoluto = fields.Float("ImpSaldoInsoluto", compute='_compute_insoluto')
+    equivalenciadr = fields.Float("EquivalenciaDR", digits = (12,10), default = 1)
+
+    @api.depends('imp_saldo_ant', 'imp_pagado')
+    def _compute_insoluto(self):
+        for rec in self:
+           rec.imp_saldo_insoluto = rec.imp_saldo_ant - rec.imp_pagado

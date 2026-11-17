@@ -105,7 +105,12 @@
 							</div>
 							<div>
 								<strong>Lugar de expedición: </strong>
-								<span t-field="o.company_id.partner_id.zip"/>
+								<t t-if="o.journal_id.codigo_postal">
+								    <span t-field="o.journal_id.codigo_postal"/>
+								</t>
+								<t t-if="not o.journal_id.codigo_postal">
+								    <span t-field="o.company_id.partner_id.zip"/>
+								</t>
 							</div>
 							<div>
 								<strong>Tipo de comprobante: </strong>
@@ -281,26 +286,26 @@
                                 </td>
                                 <td>
                                     <t t-if="row.get('saldo_pendiente')">
-                                      <span t-esc="float(row.get('saldo_pendiente'))" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                      <span t-esc="float(row.get('saldo_pendiente'))" />
                                     </t>
                                     <t t-if="row.get('ImpSaldoAnt')">
-                                       <span t-esc="float(row.get('ImpSaldoAnt'))" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                       <span t-esc="float(row.get('ImpSaldoAnt'))" />
                                     </t>
                                 </td>
                                 <td>
                                     <t t-if="row.get('monto_pagar')">
-                                      <span t-esc="float(row.get('monto_pagar'))" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                      <span t-esc="float(row.get('monto_pagar'))"/>
                                     </t>
                                     <t t-if="row.get('ImpPagado')">
-                                       <span t-esc="float(row.get('ImpPagado'))" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                       <span t-esc="float(row.get('ImpPagado'))"/>
                                     </t>
                                 </td>
                                 <td>
                                     <t t-if="row.get('saldo_restante')">
-                                      <span t-esc="float(row.get('saldo_restante'))" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                      <span t-esc="float(row.get('saldo_restante'))"/>
                                     </t>
                                     <t t-if="row.get('ImpSaldoInsoluto')">
-                                       <span t-esc="float(row.get('ImpSaldoInsoluto'))"  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                       <span t-esc="float(row.get('ImpSaldoInsoluto'))"/>
                                     </t>
                                 </td>
                            </tr>
@@ -318,7 +323,7 @@
 								<td>
 									<strong>Forma de pago</strong>
 								</td>
-								<td >
+								<td>
 									<span t-field="o.forma_pago" />
 								</td>
 								<td>
@@ -353,14 +358,7 @@
 									<strong>Tipo de cambio</strong>
 								</td>
 								<td >
-									<t t-if="o.monedap!='MXN'">
-										<span t-esc="'{0:,.2f}'.format((1/float(o.currency_id.rate)))"/>
-									</t>
-									<t t-if="o.monedap=='MXN'">
-										<span t-field="o.tipocambiop"/>
-									</t>
-
-									<!--<span t-field="o.tipocambiop" /> -->
+									<span t-field="o.tipocambiop" />
 								</td>
 							</tr>
 						</table>
