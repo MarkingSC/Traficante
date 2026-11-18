@@ -101,7 +101,7 @@ class ResCompany(models.Model):
                  }
         url=''
         if self.proveedor_timbrado == 'multifactura':
-            url = '%s' % ('http://facturacion.itadmin.com.mx/api/saldo')
+            url = '%s' % ('https://facturacion.itadmin.com.mx/api/saldo')
 
         if not url:
             return
@@ -135,11 +135,11 @@ class ResCompany(models.Model):
                  }
         url=''
         if self.proveedor_timbrado == 'multifactura':
-            url = '%s' % ('http://facturacion.itadmin.com.mx/api/validarcsd')
+            url = '%s' % ('https://facturacion.itadmin.com.mx/api/validarcsd')
         elif self.proveedor_timbrado == 'multifactura2':
-            url = '%s' % ('http://facturacion2.itadmin.com.mx/api/validarcsd')
+            url = '%s' % ('https://facturacion2.itadmin.com.mx/api/validarcsd')
         elif self.proveedor_timbrado == 'multifactura3':
-            url = '%s' % ('http://facturacion3.itadmin.com.mx/api/validarcsd')
+            url = '%s' % ('https://facturacion3.itadmin.com.mx/api/validarcsd')
         if not url:
             return
         try:
@@ -170,11 +170,11 @@ class ResCompany(models.Model):
                  }
         url=''
         if self.proveedor_timbrado == 'multifactura':
-            url = '%s' % ('http://facturacion.itadmin.com.mx/api/borrarcsd')
+            url = '%s' % ('https://facturacion.itadmin.com.mx/api/borrarcsd')
         elif self.proveedor_timbrado == 'multifactura2':
-            url = '%s' % ('http://facturacion2.itadmin.com.mx/api/borrarcsd')
+            url = '%s' % ('https://facturacion2.itadmin.com.mx/api/borrarcsd')
         elif self.proveedor_timbrado == 'multifactura3':
-            url = '%s' % ('http://facturacion3.itadmin.com.mx/api/borrarcsd')
+            url = '%s' % ('https://facturacion3.itadmin.com.mx/api/borrarcsd')
         if not url:
             return
         try:

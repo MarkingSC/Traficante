@@ -853,11 +853,11 @@ Si requiere timbrar la factura nuevamente deshabilite el checkbox de "Proceso de
                     'foliosustitucion': self.env.context.get('foliosustitucion', ''),
                 }
                 if invoice.company_id.proveedor_timbrado == 'multifactura':
-                    url = '%s' % ('http://facturacion.itadmin.com.mx/api/refund')
+                    url = '%s' % ('https://facturacion.itadmin.com.mx/api/refund')
                 elif invoice.company_id.proveedor_timbrado == 'multifactura2':
-                    url = '%s' % ('http://facturacion2.itadmin.com.mx/api/refund')
+                    url = '%s' % ('https://facturacion2.itadmin.com.mx/api/refund')
                 elif invoice.company_id.proveedor_timbrado == 'multifactura3':
-                    url = '%s' % ('http://facturacion3.itadmin.com.mx/api/refund')
+                    url = '%s' % ('https://facturacion3.itadmin.com.mx/api/refund')
                 else:
                     raise UserError(
                         _('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
@@ -931,11 +931,11 @@ Si requiere timbrar la factura nuevamente deshabilite el checkbox de "Proceso de
             }
 
             if invoice.company_id.proveedor_timbrado == 'multifactura':
-                url = '%s' % ('http://facturacion.itadmin.com.mx/api/consulta-cacelar')
+                url = '%s' % ('https://facturacion.itadmin.com.mx/api/consulta-cacelar')
             elif invoice.company_id.proveedor_timbrado == 'multifactura2':
-                url = '%s' % ('http://facturacion2.itadmin.com.mx/api/consulta-cacelar')
+                url = '%s' % ('https://facturacion2.itadmin.com.mx/api/consulta-cacelar')
             elif invoice.company_id.proveedor_timbrado == 'multifactura3':
-                url = '%s' % ('http://facturacion3.itadmin.com.mx/api/consulta-cacelar')
+                url = '%s' % ('https://facturacion3.itadmin.com.mx/api/consulta-cacelar')
             else:
                 raise UserError(
                     _('Error, falta seleccionar el servidor de timbrado en la configuración de la compañía.'))
@@ -999,11 +999,11 @@ Si requiere timbrar la factura nuevamente deshabilite el checkbox de "Proceso de
             }
             url = ''
             if invoice.company_id.proveedor_timbrado == 'multifactura':
-                url = '%s' % ('http://facturacion.itadmin.com.mx/api/command')
+                url = '%s' % ('https://facturacion.itadmin.com.mx/api/command')
             elif invoice.company_id.proveedor_timbrado == 'multifactura2':
-                url = '%s' % ('http://facturacion2.itadmin.com.mx/api/command')
+                url = '%s' % ('https://facturacion2.itadmin.com.mx/api/command')
             elif invoice.company_id.proveedor_timbrado == 'multifactura3':
-                url = '%s' % ('http://facturacion3.itadmin.com.mx/api/command')
+                url = '%s' % ('https://facturacion3.itadmin.com.mx/api/command')
             if not url:
                 return
             try:
