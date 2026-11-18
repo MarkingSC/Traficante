@@ -765,11 +765,11 @@ Si requiere timbrar la factura nuevamente deshabilite el checkbox de "Proceso de
 
             values = invoice.to_json()
             if invoice.company_id.proveedor_timbrado == 'multifactura':
-                url = '%s' % ('http://facturacion.itadmin.com.mx/api/invoice')
+                url = '%s' % ('https://facturacion.itadmin.com.mx/api/invoice')
             elif invoice.company_id.proveedor_timbrado == 'multifactura2':
-                url = '%s' % ('http://facturacion2.itadmin.com.mx/api/invoice')
+                url = '%s' % ('https://facturacion2.itadmin.com.mx/api/invoice')
             elif invoice.company_id.proveedor_timbrado == 'multifactura3':
-                url = '%s' % ('http://facturacion3.itadmin.com.mx/api/invoice')
+                url = '%s' % ('https://facturacion3.itadmin.com.mx/api/invoice')
             else:
                 invoice.write({'proceso_timbrado': False})
                 self.env.cr.commit()
